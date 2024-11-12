@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: #FAFBFF;
+}
+
+.primary-bg {
+  background-color: #E8EDF3;
+}
+.primary-border {
+  border-color: #E8EDF3;
+}
+.color-575757 {
+  color: #575757;
+}
+
+.container {
+  max-with: 1440px;
+}
+.input-bg {
+  background-color: #F5F7FA;
+}
