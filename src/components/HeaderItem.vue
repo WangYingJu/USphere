@@ -3,8 +3,8 @@
 </script>
 
 <template>
-  <header class="justify-center bg-white border border-gray-250 py-5">
-    <div class="container mx-auto max-w-screen-lg flex justify-between items-center">
+  <header class="justify-center bg-white border-b border-gray-250 py-5">
+    <div class="container container-customizing-1060 flex justify-between items-center">
       <!-- logo -->
       <RouterLink to="/">
         <img alt="USphere logo" class="logo" src="@/assets/USphere.svg" width="100" height="auto" />
@@ -26,15 +26,15 @@
       <!-- 會員區 -->
       <nav class="flex items-center gap-2">
         <!-- 回應通知 -->
-        <RouterLink to="/about" class="w-10 h-10 flex justify-center items-center">
+        <RouterLink to="/avatar" class="comment-icon relative w-10 h-10 flex justify-center items-center">
           <img alt="commentIcon" class="w-6 h-6 block" src="@/assets/commentIcon.svg">
         </RouterLink>
         <!-- 系統通知 -->
-        <RouterLink to="/about" class="w-10 h-10 flex justify-center items-center">
+        <RouterLink to="/avatar" class="bell-icon relative w-10 h-10 flex justify-center items-center">
           <img alt="bellIcon" class="w-6 h-6 block" src="@/assets/bellIcon.svg">
         </RouterLink>
         <!-- 會員 -->
-        <RouterLink to="/" class="w-10 h-10 rounded-full bg-slate-400">
+        <RouterLink to="/avatar" class="w-10 h-10 rounded-full bg-slate-400">
           <img src="../assets/member.png" alt="User Avatar" class="w-full h-full object-cover rounded-full" />
         </RouterLink>
       </nav>
