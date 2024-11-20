@@ -1,12 +1,12 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="avatar">
+    <h1 class="mx-auto">會員頁尚未開放！</h1>
   </div>
 </template>
 
 <style>
 @media (min-width: 1024px) {
-  .about {
+  .avatar {
     min-height: 100vh;
     display: flex;
     align-items: center;
