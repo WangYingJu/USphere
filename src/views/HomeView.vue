@@ -1,8 +1,8 @@
 <script setup>
-import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue';
-import HotTopicsList from '@/components/HotTopicsList.vue';
-import SidebarAd from '@/components/SidebarAd.vue';
-import TopicList from '@/components/TopicList.vue';
+import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
+import HotTopicsList from '@/components/HotTopicsList.vue'
+import SidebarAd from '@/components/SidebarAd.vue'
+import TopicList from '@/components/TopicList.vue'
 </script>
 
 <template>
