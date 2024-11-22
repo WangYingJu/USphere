@@ -2,7 +2,7 @@
 //
 </script>
 
-<template setup>
+<template>
   <div>
     <div class="mb-5">
       <button type="button"
