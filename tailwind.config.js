@@ -11,9 +11,18 @@ export default {
   theme: {
     extend: {
       spacing: {
+        '5px': '5px',
+        '13px': '13px',
         '30px': '30px',
         4.5: '18px'
       }
+    },
+    fontSize: {
+      '2.5xl': '2rem',
+    },
+    lineHeight: {
+      '11': '2.8125rem',
+      '6.5': '1.625rem',
     },
     container: {
       center: true,
@@ -34,7 +43,9 @@ export default {
         'input-bg': '#F5F7FA',
         250: '#E8EDF3',
         350: '#575757',
-        450: '#6B7280'
+        450: '#6B7280',
+        550: '#8F8F8F',
+        650: '#111624',
       },
       'primary-blue': '#3466F6',
     }
