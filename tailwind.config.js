@@ -14,6 +14,7 @@ export default {
         '5px': '5px',
         '13px': '13px',
         '30px': '30px',
+        '372px': '372px',
         4.5: '18px'
       }
     },
