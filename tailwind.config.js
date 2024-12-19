@@ -15,21 +15,22 @@ export default {
         '13px': '13px',
         '30px': '30px',
         '372px': '372px',
+        '512px': '512px',
         4.5: '18px'
-      }
-    },
-    fontSize: {
-      '2.5xl': '2rem',
-    },
-    lineHeight: {
-      '11': '2.8125rem',
-      '6.5': '1.625rem',
-    },
-    container: {
-      center: true,
-      screens: {
-        'customizing-1060': '1060px',
-      }
+      },
+      fontSize: {
+        '2.5xl': '2rem',
+      },
+      lineHeight: {
+        '11': '2.8125rem',
+        '6.5': '1.625rem',
+      },
+      container: {
+        center: true,
+        screens: {
+          'customizing-1060': '1060px',
+        }
+      },
     },
     colors: {
       transparent: 'transparent',
