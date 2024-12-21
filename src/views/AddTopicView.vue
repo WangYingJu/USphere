@@ -11,21 +11,50 @@ function addContentHeight(event) {
   // 設定textarea為自動增長的高度
   event.target.style.height = `${event.target.scrollHeight}px`
 }
-const showPopup = ref(false) // 控制彈窗顯示
+const showUnsavedPopup = ref(false)
+const showErrorPopup = ref(false)
+const tempTopicTitle = ref('')
+const tempTopicCotent = ref('')
 
+// 點擊'忍痛放棄'
 function handleAbandonClick() {
-  showPopup.value = true // 點擊忍痛放棄時顯示彈窗
+  if (tempTopicCotent.value && tempTopicTitle.value) {
+    showUnsavedPopup.value = true
+  } else {
+    showErrorPopup.value = true // 有空白出現錯誤
+  }
 }
 
+// 點擊'發表新話題'
+function handlePublishTopic() {
+  if (tempTopicCotent.value && tempTopicTitle.value) {
+    alert('已發佈')
+    clearTemp()
+    // 跳轉到已發佈的話題詳情頁邏輯（待補上）
+  } else {
+    showErrorPopup.value = true // 有空白出現錯誤
+  }
+}
+
+// 點擊'取消'
 function handleCancel() {
-  showPopup.value = false // 取消時隱藏彈窗
+  showUnsavedPopup.value = false
 }
 
+// 點擊'確定'
 function handleConfirm() {
-  showPopup.value = false // 點擊發表新話題時隱藏彈窗
-  // 後續待添加邏輯：
-  // 1.清空輸入框
-  // 2.跳轉到剛發表的話題詳情頁
+  if (tempTopicCotent.value && tempTopicTitle.value) {
+    showUnsavedPopup.value = false
+    clearTemp()
+  } else {
+    showErrorPopup.value = false
+  }
+}
+
+// 清空輸入框邏輯
+function clearTemp() {
+  tempTopicTitle.value = ''
+  tempTopicCotent.value = ''
 }
 </script>
 
@@ -52,6 +81,7 @@ function handleConfirm() {
         <!-- 主標 -->
         <h2 class="text-2.5xl leading-11 font-bold mb-2">
           <input
+            v-model="tempTopicTitle"
             type="text"
             placeholder="請輸入標題"
             class="w-full placeholder-black outline-none"
@@ -60,6 +90,7 @@ function handleConfirm() {
         <!-- 內文 -->
         <div class="w-full text-wrap mb-6">
           <textarea
+            v-model="tempTopicCotent"
             placeholder="請輸入內容"
             class="w-full h-auto resize-none overflow-hidden focus:outline-none text-base leading-6.5 text-gray-450 max-h-52"
             rows="5"
@@ -73,7 +104,9 @@ function handleConfirm() {
             <button type="button" class="text-sm text-gray-550" @click="handleAbandonClick">
               忍痛放棄
             </button>
-            <button type="button" class="text-sm text-primary-blue">發表新話題</button>
+            <button type="button" class="text-sm text-primary-blue" @click="handlePublishTopic">
+              發表新話題
+            </button>
           </div>
         </div>
       </div>
@@ -84,10 +117,26 @@ function handleConfirm() {
     </div>
     <!-- 彈窗 -->
     <PopupConfirm
-      :show="showPopup"
+      :show="showUnsavedPopup"
       title="尚未發佈"
       message="您的話題尚未發佈，確定要忍痛放棄嗎？"
-      :onCancel="handleCancel"
+      :onCancel="{
+        show: true,
+        name: '取消',
+        function: handleCancel,
+      }"
+      :onConfirm="handleConfirm"
+    />
+    <!-- 彈窗 -->
+    <PopupConfirm
+      :show="showErrorPopup"
+      title="出現錯誤"
+      message="您的話題及內容不得為空白"
+      :onCancel="{
+        show: false,
+        name: '',
+        function: handleCancel,
+      }"
       :onConfirm="handleConfirm"
     />
   </main>
