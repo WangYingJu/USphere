@@ -10,7 +10,7 @@
       type="button"
       class="text-base leading-5 border rounded border-primary-blue bg-white hover:bg-primary-blue text-primary-blue hover:text-white w-full py-2.5 mb-4"
     >
-      發表新話題
+      <RouterLink to="/add-topic">發表新話題</RouterLink>
     </button>
     <p class="text-base leading-5 text-center text-gray-350">喔 Yeah！</p>
   </div>
