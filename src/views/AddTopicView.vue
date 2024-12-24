@@ -3,6 +3,7 @@ import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
 import PopupConfirm from '@/components/PopupConfirm.vue'
+import router from '@/router'
 import { ref } from 'vue'
 
 function addContentHeight(event) {
@@ -15,19 +16,16 @@ const showUnsavedPopup = ref(false)
 const showErrorPopup = ref(false)
 const tempTopicTitle = ref('')
 const tempTopicCotent = ref('')
+const canPublish = () => tempTopicCotent.value && tempTopicTitle.value
 
 // 點擊'忍痛放棄'
 function handleAbandonClick() {
-  if (tempTopicCotent.value && tempTopicTitle.value) {
-    showUnsavedPopup.value = true
-  } else {
-    showErrorPopup.value = true // 有空白出現錯誤
-  }
+  showUnsavedPopup.value = true
 }
 
 // 點擊'發表新話題'
 function handlePublishTopic() {
-  if (tempTopicCotent.value && tempTopicTitle.value) {
+  if (canPublish()) {
     alert('已發佈')
     clearTemp()
     // 跳轉到已發佈的話題詳情頁邏輯（待補上）
@@ -41,14 +39,22 @@ function handleCancel() {
   showUnsavedPopup.value = false
 }
 
-// 點擊'確定'
+// 點擊showErrorPopup的'確定'
 function handleConfirm() {
-  if (tempTopicCotent.value && tempTopicTitle.value) {
-    showUnsavedPopup.value = false
-    clearTemp()
-  } else {
-    showErrorPopup.value = false
-  }
+  showErrorPopup.value = false
+}
+
+// 點擊showUnsavedPopup的'確定'
+function handleConfirmAbandon() {
+  showUnsavedPopup.value = false
+  clearTemp()
+  setTimeout(() => {
+    if (window.history.length > 1) {
+      router.back()
+    } else {
+      router.push('/')
+    }
+  }, 300)
 }
 
 // 清空輸入框邏輯
@@ -92,7 +98,7 @@ function clearTemp() {
           <textarea
             v-model="tempTopicCotent"
             placeholder="請輸入內容"
-            class="w-full h-auto resize-none overflow-hidden focus:outline-none text-base leading-6.5 text-gray-450 max-h-52"
+            class="w-full h-auto resize-none overflow-y-scroll scrollbar-hide focus:outline-none text-base leading-6.5 text-gray-450 max-h-52"
             rows="5"
             maxlength="100"
             @input="addContentHeight"
@@ -120,23 +126,19 @@ function clearTemp() {
       :show="showUnsavedPopup"
       title="尚未發佈"
       message="您的話題尚未發佈，確定要忍痛放棄嗎？"
-      :onCancel="{
-        show: true,
-        name: '取消',
-        function: handleCancel,
-      }"
-      :onConfirm="handleConfirm"
+      :showCancelButton="true"
+      CancelButtonName="取消"
+      :onCancel="handleCancel"
+      :onConfirm="handleConfirmAbandon"
     />
     <!-- 彈窗 -->
     <PopupConfirm
       :show="showErrorPopup"
       title="出現錯誤"
       message="您的話題及內容不得為空白"
-      :onCancel="{
-        show: false,
-        name: '',
-        function: handleCancel,
-      }"
+      :showCancelButton="false"
+      CancelButtonName=""
+      :onCancel="handleCancel"
       :onConfirm="handleConfirm"
     />
   </main>

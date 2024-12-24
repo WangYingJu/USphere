@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import colors from 'tailwindcss/colors'
+import scrollbarHide from 'tailwind-scrollbar-hide'
 
 export default {
   content: [
@@ -55,5 +56,7 @@ export default {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    scrollbarHide,
+  ],
 }
