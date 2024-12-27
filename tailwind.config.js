@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import colors from 'tailwindcss/colors'
+import scrollbarHide from 'tailwind-scrollbar-hide'
 
 export default {
   content: [
@@ -14,21 +15,23 @@ export default {
         '5px': '5px',
         '13px': '13px',
         '30px': '30px',
+        '372px': '372px',
+        '512px': '512px',
         4.5: '18px'
-      }
-    },
-    fontSize: {
-      '2.5xl': '2rem',
-    },
-    lineHeight: {
-      '11': '2.8125rem',
-      '6.5': '1.625rem',
-    },
-    container: {
-      center: true,
-      screens: {
-        'customizing-1060': '1060px',
-      }
+      },
+      fontSize: {
+        '2.5xl': '2rem',
+      },
+      lineHeight: {
+        '11': '2.8125rem',
+        '6.5': '1.625rem',
+      },
+      container: {
+        center: true,
+        screens: {
+          'customizing-1060': '1060px',
+        }
+      },
     },
     colors: {
       transparent: 'transparent',
@@ -53,5 +56,7 @@ export default {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    scrollbarHide,
+  ],
 }

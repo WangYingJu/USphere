@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   background-color: #fafbff;
 }
@@ -22,7 +26,7 @@ input[type='search']:focus {
   color: #fff;
   background-color: #ff4f4f;
   position: absolute;
-  z-index: 99;
+  z-index: 50;
   top: 4px;
   right: 4px;
 }
@@ -39,7 +43,7 @@ input[type='search']:focus {
   color: #fff;
   background-color: #ff4f4f;
   position: absolute;
-  z-index: 99;
+  z-index: 50;
   top: 4px;
   right: 4px;
 }
