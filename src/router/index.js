@@ -18,9 +18,10 @@ const router = createRouter({
       component: AvatarView,
     },
     {
-      path: '/topic',
+      path: '/topic/:id',
       name: 'topicDetail',
       component: TopicDetailView,
+      props: true,
     },
     {
       path: '/add-topic',

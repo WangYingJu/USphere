@@ -29,7 +29,7 @@ import CommentCard from './CommentCard.vue'
       </div>
     </div>
     <!-- 顯示已留言則數 -->
-    <ul :id="CardList">
+    <ul>
       <li>
         <CommentCard />
       </li>
