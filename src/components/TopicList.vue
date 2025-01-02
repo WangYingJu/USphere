@@ -1,33 +1,49 @@
 <script setup>
-import axios from 'axios'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import api from '@/api'
 
 // 啟用 dayjs 套件方法
 dayjs.extend(utc)
 dayjs.extend(relativeTime)
 
+// useRoute() 顯示目前路由位置
+const route = useRoute()
+// useRouter() 使用 Router
+const router = useRouter()
+
 // 存放 topics api 資料
 const topicsData = ref([])
 // 獲取 topics api 資料
-const getTopicsData = async () => {
+const getTopicsData = async (page) => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_API_DOMAIN}/topics`, { params: { page: 1 } })
+    const res = await api.get('/topics', { params: { page } })
     topicsData.value = res.data.data
+    // 僅在當前頁數改變時更新 URL
+    if (route.query.page !== String(page)) {
+      router.push({ path: '/topics', query: { page } })
+    }
   } catch (error) {
     console.log(error)
   }
 }
+// 初始 api 打的頁數
+let pageNum = parseInt(route.query.page, 10) || 1
 // 資料渲染初始化
 onMounted(() => {
-  getTopicsData()
+  getTopicsData(pageNum)
 })
 // 到現在為止的時間
 function timeToNow(time) {
-  const result = dayjs(time).toNow(true)
-  return result
+  return dayjs(time).toNow(true)
+}
+// 載入更多按鍵 變更 api page參數
+function more() {
+  pageNum++
+  getTopicsData(pageNum)
 }
 </script>
 
@@ -110,6 +126,8 @@ function timeToNow(time) {
         </RouterLink>
       </li>
     </ul>
-    <button type="button" class="block mx-auto text-xs text-primary-blue">載入更多話題</button>
+    <button @click="more" type="button" class="block mx-auto text-xs text-primary-blue">
+      載入更多話題
+    </button>
   </div>
 </template>

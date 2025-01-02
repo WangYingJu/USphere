@@ -2,7 +2,7 @@
 import CommentSection from '@/components/CommentSection.vue'
 import { useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '@/api'
 
 // useRoute() 顯示目前路由位置
 const route = useRoute()
@@ -11,7 +11,7 @@ const topicDetail = ref({})
 // 獲取 topics 詳細內容資料 api
 const getTopicDetail = async () => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_API_DOMAIN}/topics/${topicId}`)
+    const res = await api.get(`/topics/${topicId}`)
     topicDetail.value = res.data.data
   } catch (error) {
     console.log(error)
