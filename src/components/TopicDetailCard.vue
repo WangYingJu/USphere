@@ -2,12 +2,14 @@
 import CommentSection from '@/components/CommentSection.vue'
 import { useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
+import timeToNow from '@/time'
 import api from '@/api'
 
 // useRoute() 顯示目前路由位置
 const route = useRoute()
 const topicId = route.params.id
 const topicDetail = ref({})
+
 // 獲取 topics 詳細內容資料 api
 const getTopicDetail = async () => {
   try {
@@ -28,13 +30,13 @@ onMounted(() => {
     <!-- 發表者資訊 -->
     <div class="flex items-center mb-5">
       <img
-        :src="topicDetail.authorPic"
+        :src="topicDetail.author_pic"
         alt="User Avatar"
         class="w-10 h-10 object-cover rounded-full me-2"
       />
       <div>
         <p class="text-sm leading-4 font-medium">{{ topicDetail.author }}</p>
-        <time class="text-xs text-gray-450">10 小時前</time>
+        <time class="text-xs text-gray-450">{{ timeToNow(topicDetail.created_at) }}</time>
       </div>
     </div>
     <!-- 主標 -->

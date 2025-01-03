@@ -1,49 +1,15 @@
 <script setup>
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import api from '@/api'
+import timeToNow from '@/time'
 
-// 啟用 dayjs 套件方法
-dayjs.extend(utc)
-dayjs.extend(relativeTime)
+// 匯入 useTopicsStore
+import { useTopicsStore } from '@/stores/topicsAPI'
+// 寫入 Pinia store
+const store = useTopicsStore()
 
-// useRoute() 顯示目前路由位置
-const route = useRoute()
-// useRouter() 使用 Router
-const router = useRouter()
-
-// 存放 topics api 資料
-const topicsData = ref([])
-// 獲取 topics api 資料
-const getTopicsData = async (page) => {
-  try {
-    const res = await api.get('/topics', { params: { page } })
-    topicsData.value = res.data.data
-    // 僅在當前頁數改變時更新 URL
-    if (route.query.page !== String(page)) {
-      router.push({ path: '/topics', query: { page } })
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
-// 初始 api 打的頁數
-let pageNum = parseInt(route.query.page, 10) || 1
-// 資料渲染初始化
-onMounted(() => {
-  getTopicsData(pageNum)
-})
-// 到現在為止的時間
-function timeToNow(time) {
-  return dayjs(time).toNow(true)
-}
 // 載入更多按鍵 變更 api page參數
 function more() {
-  pageNum++
-  getTopicsData(pageNum)
+  store.pageNum++
+  store.getTopicsData(store.pageNum)
 }
 </script>
 
@@ -67,25 +33,25 @@ function more() {
     </div>
     <ul class="flex flex-col gap-5 mb-6" style="width: 520px">
       <li
-        v-for="topics in topicsData"
-        :key="topics.topicId"
+        v-for="topic in store.topicsData"
+        :key="topic.id"
         class="border rounded border-gray-250 bg-white p-5 w-full"
       >
-        <RouterLink :to="{ name: 'topicDetail', params: { id: topics.topicId } }">
+        <RouterLink :to="{ name: 'topicDetail', params: { id: topic.id } }">
           <div class="flex mb-4.5">
             <img
-              :src="topics.authorPic"
+              :src="topic.author_pic"
               alt="User Avatar"
               class="w-9 h-9 object-cover rounded-full me-2"
             />
             <div>
-              <p class="text-sm leading-4 font-medium">{{ topics.author }}</p>
-              <time class="text-xs text-gray-450">{{ timeToNow(topics.createdAt) }}</time>
+              <p class="text-sm leading-4 font-medium">{{ topic.author }}</p>
+              <time class="text-xs text-gray-450">{{ timeToNow(topic.created_at) }}</time>
             </div>
           </div>
-          <p class="text-lg font-semibold mb-3">{{ topics.title }}</p>
+          <p class="text-lg font-semibold mb-3">{{ topic.title }}</p>
           <div class="mb-3">
-            <small v-for="item in topics.tags" :key="item" class="text-sm text-gray-450 me-3"
+            <small v-for="item in topic.tags" :key="item" class="text-sm text-gray-450 me-3"
               >#{{ item }}</small
             >
           </div>
@@ -94,15 +60,15 @@ function more() {
             <div class="flex items-center gap-4">
               <div class="flex">
                 <img src="../assets/TopicCommentIcon.svg" alt="" class="w-5 h-auto me-1" />
-                <p class="text-sm font-medium">{{ topics.comments }}</p>
+                <p class="text-sm font-medium">{{ topic.comments }}</p>
               </div>
               <div class="flex">
                 <img src="../assets/TopicLikeIcon.svg" alt="" class="w-5 h-auto me-1" />
-                <p class="text-sm font-medium">{{ topics.likes }}</p>
+                <p class="text-sm font-medium">{{ topic.likes }}</p>
               </div>
               <div class="flex">
                 <img src="../assets/TopicBookmarkIcon.svg" alt="" class="w-5 h-auto me-1" />
-                <p class="text-sm font-medium">{{ topics.bookmarks }}</p>
+                <p class="text-sm font-medium">{{ topic.bookmarks }}</p>
               </div>
             </div>
             <!-- comment user -->
