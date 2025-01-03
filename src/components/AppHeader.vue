@@ -40,13 +40,6 @@
       </form>
       <!-- 會員區 -->
       <nav class="flex items-center gap-2">
-        <!-- 回應通知 -->
-        <RouterLink
-          to="/avatar"
-          class="comment-icon relative w-10 h-10 flex justify-center items-center"
-        >
-          <img alt="commentIcon" class="w-6 h-6 block" src="@/assets/commentIcon.svg" />
-        </RouterLink>
         <!-- 系統通知 -->
         <RouterLink
           to="/avatar"

@@ -13,14 +13,23 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/topics',
+      name: 'topics',
+      component: HomeView,
+      props: (route) => ({
+        page: route.query.page || 1,
+      }),
+    },
+    {
       path: '/avatar',
       name: 'avatar',
       component: AvatarView,
     },
     {
-      path: '/topic',
+      path: '/topics/:id',
       name: 'topicDetail',
       component: TopicDetailView,
+      props: true,
     },
     {
       path: '/add-topic',
