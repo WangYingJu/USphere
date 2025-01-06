@@ -24,8 +24,6 @@ function handleAbandonClick() {
   showUnsavedPopup.value = true
 }
 
-// 儲存取得的 id
-const topicId = ref('')
 // 點擊'發表新話題'
 function handlePublishTopic() {
   if (canPublish()) {
@@ -42,11 +40,12 @@ const postTopic = async () => {
       content: tempTopicCotent.value,
       tags: ['開發', '系統設計'],
     })
-    topicId.value = res.data.data.id
+    // 儲存取得的 id
+    const topicId = res.data.data.id
+    // topicId 取得值時前往該詳情頁
+    if (topicId) return router.replace(`/topics/${topicId}`)
     alert('已發佈')
     clearTemp()
-    // 跳轉到已發佈的話題詳情頁邏輯（待補上）
-    router.replace(`/topics/${topicId.value}`)
   } catch (error) {
     console.log(error)
   }
