@@ -1,4 +1,5 @@
 <script setup>
+import api from '@/api'
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
@@ -23,14 +24,31 @@ function handleAbandonClick() {
   showUnsavedPopup.value = true
 }
 
+// 儲存取得的 id
+const topicId = ref('')
 // 點擊'發表新話題'
 function handlePublishTopic() {
   if (canPublish()) {
+    postTopic()
+  } else {
+    showErrorPopup.value = true // 有空白出現錯誤
+  }
+}
+// 發布話題邏輯 post
+const postTopic = async () => {
+  try {
+    const res = await api.post('/topics', {
+      title: tempTopicTitle.value,
+      content: tempTopicCotent.value,
+      tags: ['開發', '系統設計'],
+    })
+    topicId.value = res.data.data.id
     alert('已發佈')
     clearTemp()
     // 跳轉到已發佈的話題詳情頁邏輯（待補上）
-  } else {
-    showErrorPopup.value = true // 有空白出現錯誤
+    router.replace(`/topics/${topicId.value}`)
+  } catch (error) {
+    console.log(error)
   }
 }
 
