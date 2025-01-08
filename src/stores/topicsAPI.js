@@ -28,6 +28,16 @@ export const useTopicsStore = defineStore('topicsAPI', () => {
       console.log(error)
     }
   }
+  // 獲取 sort topics api 資料
+  const getSortTopicsData = async (sort, limit) => {
+    try {
+      const res = await api.get('/topics', { params: { sort, limit } })
+      topicsData.value = res.data.data
+      router.push({ path: '/topics', query: { sort, limit } })
+    } catch (error) {
+      console.log(error)
+    }
+  }
   // 初始 api 打的頁數
   let pageNum = ref(parseInt(route.query.page, 10) || 1)
   // 資料渲染初始化
@@ -35,5 +45,5 @@ export const useTopicsStore = defineStore('topicsAPI', () => {
     getTopicsData(pageNum.value)
   })
 
-  return { topicsData, getTopicsData, pageNum }
+  return { topicsData, getTopicsData, pageNum, getSortTopicsData }
 })

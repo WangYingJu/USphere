@@ -11,12 +11,17 @@ function more() {
   store.pageNum++
   store.getTopicsData(store.pageNum)
 }
+// 點擊排序
+function sort(selectSort, limit) {
+  store.getSortTopicsData(selectSort, limit)
+}
 </script>
 
 <template>
   <div>
     <div class="mb-5">
       <button
+        @click="sort('newest', 5)"
         type="button"
         class="text-sm text-gray-450 focus:text-primary-blue hover:text-primary-blue border rounded-full border-gray-250 focus:border-primary-blue hover:border-primary-blue bg-white px-4 py-1 me-4"
         active
@@ -24,6 +29,7 @@ function more() {
         最新
       </button>
       <button
+        @click="sort('oldest', 5)"
         type="button"
         class="text-sm text-gray-450 focus:text-primary-blue hover:text-primary-blue border rounded-full border-gray-250 focus:border-primary-blue hover:border-primary-blue bg-white px-4 py-1"
         active
