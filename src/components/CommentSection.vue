@@ -29,11 +29,11 @@ import CommentCard from './CommentCard.vue'
       </div>
     </div>
     <!-- 顯示已留言則數 -->
-    <ul :id="CardList">
+    <ul>
       <li>
         <CommentCard />
       </li>
     </ul>
   </section>
-  <button type="button" class="block mx-auto text-xs text-primary-blue">載入更多話題</button>
+  <button type="button" class="block mx-auto text-xs text-primary-blue">載入更多留言</button>
 </template>
