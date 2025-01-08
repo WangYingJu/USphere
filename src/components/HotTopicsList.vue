@@ -4,10 +4,6 @@ import { onMounted, ref } from 'vue'
 
 const popularTopicsData = ref([])
 
-// 資料渲染初始化
-onMounted(() => {
-  getPopularTopics('popular', 5)
-})
 // 獲取 popularTopics 列表資料
 const getPopularTopics = async (sort, limit) => {
   try {
@@ -17,6 +13,10 @@ const getPopularTopics = async (sort, limit) => {
     console.log(error)
   }
 }
+// 資料渲染初始化
+onMounted(() => {
+  getPopularTopics('popular', 5)
+})
 </script>
 
 <template>
