@@ -7,6 +7,11 @@ import PopupConfirm from '@/components/PopupConfirm.vue'
 import router from '@/router'
 import { ref } from 'vue'
 
+// 匯入 useTopicsStore
+import { useTopicsStore } from '@/stores/topicsAPI'
+// 寫入 Pinia store
+const store = useTopicsStore()
+
 function addContentHeight(event) {
   // 重設textarea高度，防止高度不斷累加
   event.target.style.height = 'auto'
@@ -42,10 +47,14 @@ const postTopic = async () => {
     })
     // 儲存取得的 id
     const topicId = res.data.data.id
-    // topicId 取得值時前往該詳情頁
-    if (topicId) return router.replace(`/topics/${topicId}`)
-    alert('已發佈')
-    clearTemp()
+    // topicId 取得值時前往該詳情頁並儲存到 store
+    if (topicId) {
+      alert('已發佈')
+      clearTemp()
+      store.topicsData.unshift(res.data.data)
+      console.log(store.topicsData)
+      return router.replace(`/topics/${topicId}`)
+    }
   } catch (error) {
     console.log(error)
   }

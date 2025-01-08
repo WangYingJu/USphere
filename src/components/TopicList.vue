@@ -9,11 +9,12 @@ const store = useTopicsStore()
 // 載入更多按鍵 變更 api page參數
 function more() {
   store.pageNum++
-  store.getTopicsData(store.pageNum)
+  store.getTopicsData(store.sortSelect, 3, store.pageNum)
 }
 // 點擊排序
-function sort(selectSort, limit) {
-  store.getSortTopicsData(selectSort, limit)
+function sort(sortName) {
+  store.sortSelect = sortName
+  store.getTopicsData(store.sortSelect, 3, 1)
 }
 </script>
 
@@ -21,7 +22,7 @@ function sort(selectSort, limit) {
   <div>
     <div class="mb-5">
       <button
-        @click="sort('newest', 5)"
+        @click="sort('newest')"
         type="button"
         class="text-sm text-gray-450 focus:text-primary-blue hover:text-primary-blue border rounded-full border-gray-250 focus:border-primary-blue hover:border-primary-blue bg-white px-4 py-1 me-4"
         active
@@ -29,7 +30,7 @@ function sort(selectSort, limit) {
         最新
       </button>
       <button
-        @click="sort('oldest', 5)"
+        @click="sort('oldest')"
         type="button"
         class="text-sm text-gray-450 focus:text-primary-blue hover:text-primary-blue border rounded-full border-gray-250 focus:border-primary-blue hover:border-primary-blue bg-white px-4 py-1"
         active

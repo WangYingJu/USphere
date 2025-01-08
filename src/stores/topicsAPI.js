@@ -12,9 +12,9 @@ export const useTopicsStore = defineStore('topicsAPI', () => {
   // 存放 topics api 資料
   const topicsData = ref([])
   // 獲取 topics api 資料
-  const getTopicsData = async (page) => {
+  const getTopicsData = async (sort, limit, page) => {
     try {
-      const res = await api.get('/topics', { params: { page } })
+      const res = await api.get('/topics', { params: { sort, limit, page } })
       if (page > 1) {
         topicsData.value = [...topicsData.value, ...res.data.data]
       } else {
@@ -22,28 +22,21 @@ export const useTopicsStore = defineStore('topicsAPI', () => {
       }
       // 僅在當前頁數改變時更新 URL
       if (route.query.page !== String(page)) {
-        router.push({ path: '/topics', query: { page } })
+        router.push({ path: '/topics', query: { limit, page } })
       }
     } catch (error) {
       console.log(error)
     }
   }
-  // 獲取 sort topics api 資料
-  const getSortTopicsData = async (sort, limit) => {
-    try {
-      const res = await api.get('/topics', { params: { sort, limit } })
-      topicsData.value = res.data.data
-      router.push({ path: '/topics', query: { sort, limit } })
-    } catch (error) {
-      console.log(error)
-    }
-  }
+
   // 初始 api 打的頁數
   let pageNum = ref(parseInt(route.query.page, 10) || 1)
+  // 初始預設的排序
+  let sortSelect = ref('null')
   // 資料渲染初始化
   onMounted(() => {
-    getTopicsData(pageNum.value)
+    getTopicsData(sortSelect.value, 3, pageNum.value)
   })
 
-  return { topicsData, getTopicsData, pageNum, getSortTopicsData }
+  return { topicsData, getTopicsData, pageNum, sortSelect }
 })
