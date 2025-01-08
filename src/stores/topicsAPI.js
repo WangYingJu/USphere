@@ -22,7 +22,7 @@ export const useTopicsStore = defineStore('topicsAPI', () => {
       }
       // 僅在當前頁數改變時更新 URL
       if (route.query.page !== String(page)) {
-        router.push({ path: '/topics', query: { limit, page } })
+        router.push({ path: '/topics', query: { sort, limit, page } })
       }
     } catch (error) {
       console.log(error)
