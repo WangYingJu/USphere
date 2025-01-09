@@ -9,12 +9,12 @@ const store = useTopicsStore()
 // 載入更多按鍵 變更 api page參數
 function more() {
   store.pageNum++
-  store.getTopicsData(store.sortSelect, 3, store.pageNum)
+  store.getTopicsData(store.sortSelect, store.limitNum, store.pageNum)
 }
 // 點擊排序
 function sort(sortName) {
   store.sortSelect = sortName
-  store.getTopicsData(store.sortSelect, 3, 1)
+  store.getTopicsData(store.sortSelect, store.limitNum, store.pageNum)
 }
 </script>
 

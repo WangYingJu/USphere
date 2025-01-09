@@ -107,7 +107,7 @@ function clearTemp() {
           />
           <div>
             <p class="text-sm leading-4 font-medium">王小艾</p>
-            <time class="text-xs text-gray-450">10 小時前</time>
+            <span class="text-xs text-gray-450">正在輸入...</span>
           </div>
         </div>
         <!-- 主標 -->
