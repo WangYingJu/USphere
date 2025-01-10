@@ -1,7 +1,7 @@
 <script setup>
 import CommentSection from '@/components/CommentSection.vue'
 import { useRoute } from 'vue-router'
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, defineEmits, onMounted, watch, computed } from 'vue'
 import timeToNow from '@/time'
 import api from '@/api'
 
@@ -10,6 +10,8 @@ const route = useRoute()
 // computed() 響應式更新 topicId
 const topicId = computed(() => route.params.id)
 const topicDetail = ref({})
+// 自定義事件 命名為 update-data
+const emit = defineEmits(['update-data'])
 
 // 資料渲染初始化
 onMounted(() => {
@@ -20,6 +22,10 @@ const getTopicDetail = async () => {
   try {
     const res = await api.get(`/topics/${topicId.value}`)
     topicDetail.value = res.data.data
+    // 傳遞資料給父元件
+    if (topicDetail.value.title) {
+      emit('update-data', topicDetail.value.title)
+    }
   } catch (error) {
     console.log(error)
   }

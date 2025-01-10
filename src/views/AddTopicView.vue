@@ -93,7 +93,7 @@ function clearTemp() {
   <PopupConfirm />
   <main class="container container-customizing-1060 flex justify-between gap-5 my-[30px]">
     <div class="w-full">
-      <BreadcrumbNav />
+      <BreadcrumbNav bread-first-name="首頁" bread-first-path="/" bread-send-name="新增話題頁" />
       <div
         class="border rounded border-gray-250 bg-white py-[30px] px-10 mb-[30px] flex flex-col justify-between"
       >
