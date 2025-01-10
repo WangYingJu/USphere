@@ -7,6 +7,11 @@ import PopupConfirm from '@/components/PopupConfirm.vue'
 import router from '@/router'
 import { ref } from 'vue'
 
+// 匯入 useTopicsStore
+import { useTopicsStore } from '@/stores/topicsAPI'
+// 寫入 Pinia store
+const store = useTopicsStore()
+
 function addContentHeight(event) {
   // 重設textarea高度，防止高度不斷累加
   event.target.style.height = 'auto'
@@ -42,10 +47,13 @@ const postTopic = async () => {
     })
     // 儲存取得的 id
     const topicId = res.data.data.id
-    // topicId 取得值時前往該詳情頁
-    if (topicId) return router.replace(`/topics/${topicId}`)
-    alert('已發佈')
-    clearTemp()
+    // topicId 取得值時前往該詳情頁並儲存到 store
+    if (topicId) {
+      alert('已發佈')
+      clearTemp()
+      store.topicsData.unshift(res.data.data)
+      return router.replace(`/topics/${topicId}`)
+    }
   } catch (error) {
     console.log(error)
   }
@@ -98,7 +106,7 @@ function clearTemp() {
           />
           <div>
             <p class="text-sm leading-4 font-medium">王小艾</p>
-            <time class="text-xs text-gray-450">10 小時前</time>
+            <span class="text-xs text-gray-450">正在輸入...</span>
           </div>
         </div>
         <!-- 主標 -->
