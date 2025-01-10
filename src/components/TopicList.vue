@@ -14,7 +14,7 @@ function more() {
 // 點擊排序
 function sort(sortName) {
   store.sortSelect = sortName
-  store.getTopicsData(store.sortSelect, store.limitNum, store.pageNum)
+  store.getTopicsData(store.sortSelect, store.limitNum, 1)
 }
 </script>
 
