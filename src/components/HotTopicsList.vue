@@ -1,25 +1,36 @@
 <script setup>
-//
+import api from '@/api'
+import { onMounted, ref } from 'vue'
+
+const popularTopicsData = ref([])
+
+// 獲取 popularTopics 列表資料
+const getPopularTopics = async (sort, limit) => {
+  try {
+    const res = await api.get('/topics', { params: { sort, limit } })
+    popularTopicsData.value = res.data.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+// 資料渲染初始化
+onMounted(() => {
+  getPopularTopics('popular', 5)
+})
 </script>
 
 <template>
   <div class="border rounded border-gray-250 bg-white p-5" style="width: 250px">
     <h3 class="text-sm font-bold">熱門話題</h3>
     <ul>
-      <li class="pt-5 pb-3 border-b hover:text-primary-blue">
-        <RouterLink to="/">AI 技術對工作市場的影響</RouterLink>
-      </li>
-      <li class="pt-5 pb-3 border-b hover:text-primary-blue">
-        <RouterLink to="/">AI 2025 年奧斯卡入圍名單揭曉</RouterLink>
-      </li>
-      <li class="pt-5 pb-3 border-b hover:text-primary-blue">
-        <RouterLink to="/">AI 如何有效減壓？專家分享 5 個小技巧</RouterLink>
-      </li>
-      <li class="pt-5 pb-3 border-b hover:text-primary-blue">
-        <RouterLink to="/">AI 探索宇宙的終極秘密</RouterLink>
-      </li>
-      <li class="pt-5 pb-3 hover:text-primary-blue">
-        <RouterLink to="/">AI 新手健身指南：如何開始健身之旅？</RouterLink>
+      <li
+        v-for="topic in popularTopicsData"
+        :key="topic.id"
+        class="pt-5 pb-3 border-b hover:text-primary-blue"
+      >
+        <RouterLink :to="{ name: 'topicDetail', params: { id: topic.id } }">{{
+          topic.title
+        }}</RouterLink>
       </li>
     </ul>
   </div>
