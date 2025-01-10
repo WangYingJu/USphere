@@ -52,7 +52,6 @@ const postTopic = async () => {
       alert('已發佈')
       clearTemp()
       store.topicsData.unshift(res.data.data)
-      console.log(store.topicsData)
       return router.replace(`/topics/${topicId}`)
     }
   } catch (error) {
