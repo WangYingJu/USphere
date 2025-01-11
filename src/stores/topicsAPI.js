@@ -18,6 +18,8 @@ export const useTopicsStore = defineStore('topicsAPI', () => {
   const topicsData = ref([])
   // 獲取 topics api 資料
   const getTopicsData = async (sort, limit, page) => {
+    pageNum.value = page
+    sortSelect.value = sort
     try {
       const res = await api.get('/topics', { params: { sort, limit, page } })
       if (page > 1) {
