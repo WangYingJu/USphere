@@ -13,10 +13,6 @@ const topicDetail = ref({})
 // 自定義事件 命名為 update-data
 const emit = defineEmits(['update-data'])
 
-// 資料渲染初始化
-onMounted(() => {
-  getTopicDetail()
-})
 // 獲取 topics 詳細內容資料 api
 const getTopicDetail = async () => {
   try {
@@ -30,10 +26,13 @@ const getTopicDetail = async () => {
     console.log(error)
   }
 }
-
 // 監聽路由變化
 watch(topicId, (newId, oldId) => {
   if (newId !== oldId) return getTopicDetail()
+})
+// 資料渲染初始化
+onMounted(() => {
+  getTopicDetail()
 })
 </script>
 

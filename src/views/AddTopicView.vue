@@ -5,7 +5,7 @@ import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
 import PopupConfirm from '@/components/PopupConfirm.vue'
 import router from '@/router'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 // 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/topicsAPI'
@@ -87,13 +87,18 @@ function clearTemp() {
   tempTopicTitle.value = ''
   tempTopicCotent.value = ''
 }
+
+const breadData = computed(() => [
+  { name: '首頁', path: '/' },
+  { name: '新增話題頁', path: null },
+])
 </script>
 
 <template>
   <PopupConfirm />
   <main class="container container-customizing-1060 flex justify-between gap-5 my-[30px]">
     <div class="w-full">
-      <BreadcrumbNav bread-first-name="首頁" bread-first-path="/" bread-send-name="新增話題頁" />
+      <BreadcrumbNav :breadcrumbs="breadData" />
       <div
         class="border rounded border-gray-250 bg-white py-[30px] px-10 mb-[30px] flex flex-col justify-between"
       >
