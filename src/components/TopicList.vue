@@ -12,7 +12,7 @@ function more() {
 }
 // 點擊排序
 function sort(sortName) {
-  store.getTopicsData(sortName, store.limitNum, 1)
+  store.getTopicsData('', sortName, store.limitNum, 1)
 }
 </script>
 
