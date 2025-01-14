@@ -8,7 +8,7 @@ const store = useTopicsStore()
 
 // 載入更多按鍵 變更 api page參數
 function more() {
-  store.getTopicsData(store.sortSelect, store.limitNum, store.pageNum + 1)
+  store.getTopicsData(store.keywordString, store.sortSelect, store.limitNum, store.pageNum + 1)
 }
 // 點擊排序
 function sort(sortName) {
