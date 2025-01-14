@@ -1,5 +1,19 @@
 <script setup>
-//
+// 匯入 useTopicsStore
+import { useTopicsStore } from '@/stores/topicsAPI'
+
+// 寫入 Pinia store
+const store = useTopicsStore()
+// 搜尋按鍵 變更 api 參數
+const handleSearch = () => {
+  store.getTopicsData(store.keywordString.trim(), 'null', 3, 1)
+}
+// store.keywordString 值為空字串時執行
+const handleChange = (e) => {
+  if (e.target.value !== '') return
+
+  handleSearch()
+}
 </script>
 
 <template>
@@ -11,10 +25,12 @@
       </RouterLink>
       <!-- 搜尋bar -->
       <form
+        @submit.prevent
         class="container flex justify-between items-center border rounded-full bg-gray-input-bg border-gray-250 py-3 px-4"
         style="width: 520px"
       >
         <input
+          v-model="store.keywordString"
           type="search"
           action="/search"
           method="get"
@@ -22,8 +38,9 @@
           id="search-bar"
           placeholder="尋找話題？試著輸入......寶可夢！"
           class="w-full bg-gray-input-bg placeholder-gray-300"
+          @input="handleChange"
         />
-        <button type="button">
+        <button type="button" @click="handleSearch">
           <svg
             class="h-auto w-4 text-gray-300"
             viewBox="0 0 24 24"
