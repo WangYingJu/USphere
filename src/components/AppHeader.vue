@@ -8,6 +8,12 @@ const store = useTopicsStore()
 const handleSearch = () => {
   store.getTopicsData(store.keywordString.trim(), 'null', 3, 1)
 }
+// store.keywordString 值為空字串時執行
+const handleChange = (e) => {
+  if (e.target.value !== '') return
+
+  handleSearch()
+}
 </script>
 
 <template>
@@ -32,6 +38,7 @@ const handleSearch = () => {
           id="search-bar"
           placeholder="尋找話題？試著輸入......寶可夢！"
           class="w-full bg-gray-input-bg placeholder-gray-300"
+          @input="handleChange"
         />
         <button type="button" @click="handleSearch">
           <svg
