@@ -11,7 +11,7 @@ const topicTitle = ref('')
 function handleTitleUpdate(newTitle) {
   topicTitle.value = newTitle
 }
-const breadData = computed(() => [
+const breadcrumbData = computed(() => [
   { name: '首頁', path: '/' },
   { name: topicTitle.value || '載入中...', path: null },
 ])
@@ -20,7 +20,7 @@ const breadData = computed(() => [
 <template>
   <main class="container container-customizing-1060 flex justify-between gap-5 my-[30px]">
     <div class="w-full">
-      <BreadcrumbNav :breadcrumbs="breadData" />
+      <BreadcrumbNav :breadcrumbs="breadcrumbData" />
       <TopicDetailCard @update-data="handleTitleUpdate" />
     </div>
     <div class="right-sidebar">

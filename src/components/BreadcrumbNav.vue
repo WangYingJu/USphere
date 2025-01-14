@@ -20,7 +20,7 @@ const props = defineProps({
         >
         <span v-else>{{ item.name }}</span>
         <!-- 如果不是最後一項，添加分隔符號 -->
-        <span v-if="idx < breadcrumbs.length - 1" class="px-1">></span>
+        <span v-if="idx < breadcrumbs.length - 1" class="px-1">&#062;</span>
       </li>
     </ul>
   </section>
