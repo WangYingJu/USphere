@@ -32,15 +32,18 @@ function handleAbandonClick() {
 // 點擊'發表新話題'
 function handlePublishTopic() {
   if (canPublish()) {
-    postTopic(tempTopicTitle.value, tempTopicCotent.value)
+    postTopic({
+      title: tempTopicTitle.value,
+      content: tempTopicCotent.value,
+    })
   } else {
     showErrorPopup.value = true // 有空白出現錯誤
   }
 }
 // 發布話題邏輯 post
-const postTopic = async (title, content) => {
+const postTopic = async (params) => {
   try {
-    const res = await fetchPostTopic(title, content)
+    const res = await fetchPostTopic(params)
     // 儲存取得的 id
     const topicId = res.id
     // topicId 取得值時前往該詳情頁並儲存到 store
