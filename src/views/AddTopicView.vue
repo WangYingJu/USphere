@@ -8,7 +8,7 @@ import router from '@/router'
 import { ref } from 'vue'
 
 // 匯入 useTopicsStore
-import { useTopicsStore } from '@/stores/topicsAPI'
+import { useTopicsStore } from '@/stores/useTopicsStore'
 // 寫入 Pinia store
 const store = useTopicsStore()
 
