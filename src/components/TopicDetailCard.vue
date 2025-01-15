@@ -3,7 +3,7 @@ import CommentSection from '@/components/CommentSection.vue'
 import { useRoute } from 'vue-router'
 import { ref, defineEmits, onMounted, watch } from 'vue'
 import timeToNow from '@/time'
-import api from '@/api'
+import { fetchTopicDetail } from '@/apis/topicDetail'
 
 // useRoute() 顯示目前路由位置
 const route = useRoute()
@@ -14,8 +14,8 @@ const emit = defineEmits(['update-data'])
 // 獲取 topics 詳細內容資料 api
 const getTopicDetail = async () => {
   try {
-    const res = await api.get(`/topics/${route.params.id}`)
-    topicDetail.value = res.data.data
+    const res = await fetchTopicDetail(route.params.id)
+    topicDetail.value = res
     // 傳遞資料給父元件
     if (topicDetail.value.title) {
       emit('update-data', topicDetail.value.title)
