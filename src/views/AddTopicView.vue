@@ -5,7 +5,7 @@ import HotTopicsList from '@/components/HotTopicsList.vue'
 import PopupConfirm from '@/components/PopupConfirm.vue'
 import router from '@/router'
 import { ref } from 'vue'
-import { fetchPostTopic } from '@/apis/postTopic'
+import { createTopic } from '@/apis/postTopic'
 
 // 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
@@ -43,7 +43,7 @@ function handlePublishTopic() {
 // 發布話題邏輯 post
 const postTopic = async (params) => {
   try {
-    const res = await fetchPostTopic(params)
+    const res = await createTopic(params)
     // 儲存取得的 id
     const topicId = res.id
     // topicId 取得值時前往該詳情頁並儲存到 store
