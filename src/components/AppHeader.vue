@@ -1,12 +1,17 @@
 <script setup>
 // 匯入 useTopicsStore
-import { useTopicsStore } from '@/stores/topicsAPI'
+import { useTopicsStore } from '@/stores/useTopicsStore'
 
 // 寫入 Pinia store
 const store = useTopicsStore()
 // 搜尋按鍵 變更 api 參數
 const handleSearch = () => {
-  store.getTopicsData(store.keywordString.trim(), 'null', 3, 1)
+  store.getTopicsData({
+    keyword: store.keywordString.trim(),
+    sort: 'null',
+    limit: 3,
+    page: 1,
+  })
 }
 // store.keywordString 值為空字串時執行
 const handleChange = (e) => {

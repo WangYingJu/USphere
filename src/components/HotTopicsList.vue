@@ -1,21 +1,19 @@
 <script setup>
-import api from '@/api'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 
-const popularTopicsData = ref([])
+// 匯入 usePopularTopicsStore
+import { usePopularTopicsStore } from '@/stores/usePopularTopicsStore'
+// 寫入 Pinia store
+const store = usePopularTopicsStore()
 
-// 獲取 popularTopics 列表資料
-const getPopularTopics = async (sort, limit) => {
-  try {
-    const res = await api.get('/topics', { params: { sort, limit } })
-    popularTopicsData.value = res.data.data
-  } catch (error) {
-    console.log(error)
-  }
-}
 // 資料渲染初始化
 onMounted(() => {
-  getPopularTopics('popular', 5)
+  store.getPopularTopics({
+    keyword: '',
+    sort: 'popular',
+    limit: 5,
+    page: 1,
+  })
 })
 </script>
 
@@ -24,7 +22,7 @@ onMounted(() => {
     <h3 class="text-sm font-bold">熱門話題</h3>
     <ul>
       <li
-        v-for="topic in popularTopicsData"
+        v-for="topic in store.popularTopicsData"
         :key="topic.id"
         class="pt-5 pb-3 border-b hover:text-primary-blue"
       >

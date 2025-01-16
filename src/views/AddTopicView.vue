@@ -1,14 +1,14 @@
 <script setup>
-import api from '@/api'
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
 import PopupConfirm from '@/components/PopupConfirm.vue'
 import router from '@/router'
 import { ref } from 'vue'
+import { createTopic } from '@/apis/postTopic'
 
 // 匯入 useTopicsStore
-import { useTopicsStore } from '@/stores/topicsAPI'
+import { useTopicsStore } from '@/stores/useTopicsStore'
 // 寫入 Pinia store
 const store = useTopicsStore()
 
@@ -32,26 +32,25 @@ function handleAbandonClick() {
 // 點擊'發表新話題'
 function handlePublishTopic() {
   if (canPublish()) {
-    postTopic()
+    postTopic({
+      title: tempTopicTitle.value,
+      content: tempTopicCotent.value,
+    })
   } else {
     showErrorPopup.value = true // 有空白出現錯誤
   }
 }
 // 發布話題邏輯 post
-const postTopic = async () => {
+const postTopic = async (params) => {
   try {
-    const res = await api.post('/topics', {
-      title: tempTopicTitle.value,
-      content: tempTopicCotent.value,
-      tags: ['開發', '系統設計'],
-    })
+    const res = await createTopic(params)
     // 儲存取得的 id
-    const topicId = res.data.data.id
+    const topicId = res.id
     // topicId 取得值時前往該詳情頁並儲存到 store
     if (topicId) {
       alert('已發佈')
       clearTemp()
-      store.topicsData.unshift(res.data.data)
+      store.topicsData.unshift(res)
       return router.replace(`/topics/${topicId}`)
     }
   } catch (error) {

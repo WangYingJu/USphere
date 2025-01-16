@@ -1,19 +1,37 @@
 <script setup>
 import timeToNow from '@/time'
+import { onMounted } from 'vue'
 
 // 匯入 useTopicsStore
-import { useTopicsStore } from '@/stores/topicsAPI'
+import { useTopicsStore } from '@/stores/useTopicsStore'
 // 寫入 Pinia store
 const store = useTopicsStore()
 
 // 載入更多按鍵 變更 api page參數
-function more() {
-  store.getTopicsData(store.keywordString, store.sortSelect, store.limitNum, store.pageNum + 1)
+const more = () => {
+  store.getTopicsData({
+    keyword: store.keywordString,
+    sort: store.sortSelect,
+    limit: 3,
+    page: store.pageNum + 1,
+  })
 }
 // 點擊排序
-function sort(sortName) {
-  store.getTopicsData('', sortName, store.limitNum, 1)
+const sort = (sortName) => {
+  store.getTopicsData({
+    sort: sortName,
+    limit: 3,
+    page: 1,
+  })
 }
+
+// 資料渲染初始化
+onMounted(() => {
+  store.getTopicsData({
+    limit: 3,
+    page: 1,
+  })
+})
 </script>
 
 <template>
@@ -77,23 +95,6 @@ function sort(sortName) {
                 <p class="text-sm font-medium">{{ topic.bookmarks }}</p>
               </div>
             </div>
-            <!-- comment user -->
-            <ul class="flex comment-user">
-              <li>
-                <img
-                  src="../assets/member.png"
-                  alt="User Avatar"
-                  class="w-30px h-30px object-cover rounded-full border-2 border-white"
-                />
-              </li>
-              <li>
-                <img
-                  src="../assets/member.png"
-                  alt="User Avatar"
-                  class="w-30px h-30px object-cover rounded-full border-2 border-white"
-                />
-              </li>
-            </ul>
           </div>
         </RouterLink>
       </li>
