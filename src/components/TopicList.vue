@@ -5,6 +5,7 @@ import { ref, onMounted } from 'vue'
 
 // 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
+import TopicMenu from './TopicMenu.vue'
 // 寫入 Pinia store
 const store = useTopicsStore()
 
@@ -133,5 +134,13 @@ onMounted(() => {
     <button @click="more" type="button" class="block mx-auto text-xs text-primary-blue">
       載入更多話題
     </button>
+    <!-- 菜單 -->
+    <div
+      v-if="isBoardVisible"
+      :style="{ top: `${boardPosition.top}px`, left: `${boardPosition.left}px` }"
+      class="absolute popup-container z-50 bg-white border border-gray-250 shadow-lg rounded"
+    >
+      <TopicMenu />
+    </div>
   </div>
 </template>
