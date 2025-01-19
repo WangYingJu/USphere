@@ -1,10 +1,10 @@
 <script setup>
+import MenuIcon from './MenuIcon.vue'
 import timeToNow from '@/time'
 import { ref, onMounted } from 'vue'
 
 // 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
-import TopicMenu from './TopicMenu.vue'
 // 寫入 Pinia store
 const store = useTopicsStore()
 
@@ -29,22 +29,15 @@ const sort = (sortName) => {
 const managentTopic = (string) => {
   console.log(`${string}被點擊了`)
 }
-// 點擊菜單
-// 狀態：控制菜單顯示與位置
-const isBoardVisible = ref(false)
-const boardPosition = ref({ top: 0, left: 0 })
-// 控制菜單顯示與位置計算
-const toggleBoard = (event) => {
-  const buttonRect = event.target.getBoundingClientRect()
-  console.log(buttonRect)
-  isBoardVisible.value = !isBoardVisible.value
-  boardPosition.value = isBoardVisible.value
-    ? { top: buttonRect.bottom + window.scrollY, left: buttonRect.left + window.scrollX }
-    : { top: 0, left: 0 }
+// 菜單要帶入的貼文資料
+const topicData = ref({})
+const addData = (topic) => {
+  topicData.value = topic
 }
 
 // 資料渲染初始化
 onMounted(() => {
+  if (store.topicsData.length) return
   store.getTopicsData({
     limit: 3,
     page: 1,
@@ -93,15 +86,7 @@ onMounted(() => {
             <time class="text-xs text-gray-450">{{ timeToNow(topic.created_at) }}</time>
           </div>
           <!-- 管理貼文 -->
-          <div class="ms-auto relative">
-            <button
-              type="button"
-              class="w-5 h-5 relative"
-              @click.stop.prevent="toggleBoard($event)"
-            >
-              <img src="../assets/moreIcon.svg" alt="管理" class="w-full h-full" />
-            </button>
-          </div>
+          <MenuIcon :topicData="topic" @click="addData(topic)" />
         </div>
         <p class="text-lg font-semibold mb-3">{{ topic.title }}</p>
         <p class="text-base leading-6.5 text-gray-450 mb-3 truncate">{{ topic.content }}</p>
@@ -148,13 +133,5 @@ onMounted(() => {
     <button @click="more" type="button" class="block mx-auto text-xs text-primary-blue">
       載入更多話題
     </button>
-    <!-- 菜單 -->
-    <div
-      v-if="isBoardVisible"
-      :style="{ top: `${boardPosition.top}px`, left: `${boardPosition.left}px` }"
-      class="absolute popup-container z-50 bg-white border border-gray-250 shadow-lg rounded"
-    >
-      <TopicMenu />
-    </div>
   </div>
 </template>
