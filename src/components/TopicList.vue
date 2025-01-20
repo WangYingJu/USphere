@@ -1,5 +1,5 @@
 <script setup>
-import MenuIcon from './MenuIcon.vue'
+import TopicMenuButton from './TopicMenuButton.vue'
 import timeToNow from '@/time'
 import { ref, onMounted } from 'vue'
 
@@ -86,7 +86,7 @@ onMounted(() => {
             <time class="text-xs text-gray-450">{{ timeToNow(topic.created_at) }}</time>
           </div>
           <!-- 管理貼文 -->
-          <MenuIcon :topicData="topic" @click="addData(topic)" />
+          <TopicMenuButton :topicData="topic" @click="addData(topic)" />
         </div>
         <p class="text-lg font-semibold mb-3">{{ topic.title }}</p>
         <p class="text-base leading-6.5 text-gray-450 mb-3 truncate">{{ topic.content }}</p>

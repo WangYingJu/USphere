@@ -2,23 +2,23 @@
 import { defineProps, ref } from 'vue'
 import TopicMenu from './TopicMenu.vue'
 
-// 控制菜單顯示
-const isMenuVisible = ref(false)
-// 開關菜單
-const toggleMenu = () => {
-  !isMenuVisible.value ? (isMenuVisible.value = true) : (isMenuVisible.value = false)
-}
-// 關閉菜單
-const closeMenu = () => {
-  isMenuVisible.value = false
-}
-
 const { topicData } = defineProps({
   topicData: {
     type: Object,
     required: true,
   },
 })
+
+// 控制菜單顯示
+const isMenuVisible = ref(false)
+// 開關菜單
+const toggleMenu = () => {
+  isMenuVisible.value = !isMenuVisible.value
+}
+// 關閉菜單
+const closeMenu = () => {
+  isMenuVisible.value = false
+}
 </script>
 
 <template>
@@ -32,7 +32,7 @@ const { topicData } = defineProps({
       v-if="isMenuVisible"
       class="absolute end-0 -translate-x-5 w-max popup-container z-50 bg-white border border-gray-250 shadow-lg rounded"
     >
-      <TopicMenu :topic="topicData" @close-menu="closeMenu" />
+      <TopicMenu :topic="topicData" @topic-deleted="closeMenu" />
     </div>
   </div>
 </template>

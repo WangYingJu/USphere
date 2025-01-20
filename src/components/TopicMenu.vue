@@ -22,7 +22,8 @@ const edit = () => {
   console.log('編輯')
 }
 // 定義 關閉菜單 事件
-const emit = defineEmits(['close-menu', 'topic-deleted'])
+const emit = defineEmits(['topic-deleted'])
+
 // 點擊刪除
 const handleDeleteConfirm = async (id) => {
   try {
@@ -32,7 +33,6 @@ const handleDeleteConfirm = async (id) => {
       page: 1,
     }),
     alert('刪除成功')
-    emit('close-menu')
     emit('topic-deleted')
     // 在話題詳情頁處理刪除話題後的導航
     if (router.currentRoute.value.path === `/topics/${id}`) {
