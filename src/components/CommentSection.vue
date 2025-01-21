@@ -1,16 +1,43 @@
 <script setup>
+import { ref, watch } from 'vue'
+import CommentCard from './CommentCard.vue'
+import { fetchComments } from '@/apis/getComments'
+
+const props = defineProps({
+  topic: {
+    type: Object,
+    required: true,
+  },
+})
+
+const commentsList = ref([])
+const getCommentsList = async (id) => {
+  try {
+    const res = await fetchComments(id)
+    commentsList.value = res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+watch(
+  () => props.topic,
+  () => {
+    getCommentsList(props.topic.id)
+  },
+)
+
 function adjustHeight(event) {
   // 重設textarea高度，防止高度不斷累加
   event.target.style.height = 'auto'
   // 設定textarea為自動增長的高度
   event.target.style.height = `${event.target.scrollHeight}px`
 }
-import CommentCard from './CommentCard.vue'
 </script>
 
 <template>
   <section class="border rounded border-gray-250 bg-white p-10 mb-4">
-    <h3 class="text-lg font-bold mb-[30px]">留言 (3)</h3>
+    <h3 class="text-lg font-bold mb-[30px]">留言 ({{ props.topic.comments }})</h3>
     <!-- 寫下留言 -->
     <div class="flex mb-5">
       <img
@@ -32,11 +59,7 @@ import CommentCard from './CommentCard.vue'
       </div>
     </div>
     <!-- 顯示已留言則數 -->
-    <ul>
-      <li>
-        <CommentCard />
-      </li>
-    </ul>
+    <CommentCard :commentsList="commentsList" />
   </section>
   <button type="button" class="block mx-auto text-xs text-primary-blue">載入更多留言</button>
 </template>
