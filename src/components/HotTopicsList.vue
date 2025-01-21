@@ -8,6 +8,7 @@ const store = usePopularTopicsStore()
 
 // 資料渲染初始化
 onMounted(() => {
+  if (store.popularTopicsData.length) return
   store.getPopularTopics({
     keyword: '',
     sort: 'popular',

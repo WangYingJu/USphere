@@ -1,5 +1,6 @@
 <script setup>
 import CommentSection from '@/components/CommentSection.vue'
+import TopicMenuButton from './TopicMenuButton.vue'
 import { useRoute } from 'vue-router'
 import { ref, defineEmits, onMounted, watch } from 'vue'
 import timeToNow from '@/time'
@@ -50,6 +51,8 @@ onMounted(() => {
         <p class="text-sm leading-4 font-medium">{{ topicDetail.author }}</p>
         <time class="text-xs text-gray-450">{{ timeToNow(topicDetail.created_at) }}</time>
       </div>
+      <!-- 管理貼文 -->
+      <TopicMenuButton :topicData="topicDetail" />
     </div>
     <!-- 主標 -->
     <h2 class="text-2.5xl leading-11 font-bold mb-2">{{ topicDetail.title }}</h2>
