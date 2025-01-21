@@ -26,6 +26,9 @@ import CommentCard from './CommentCard.vue'
           maxlength="100"
           @input="adjustHeight"
         ></textarea>
+        <div class="flex justify-end">
+          <button type="button" class="text-base leading-5 text-primary-blue">送出留言</button>
+        </div>
       </div>
     </div>
     <!-- 顯示已留言則數 -->
