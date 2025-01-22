@@ -22,6 +22,7 @@ const getCommentsList = async (id) => {
 }
 
 const tempComment = ref('')
+const charCount = ref(0)
 
 const addComment = async () => {
   try {
@@ -29,6 +30,7 @@ const addComment = async () => {
       await createComment(props.topic.id, tempComment.value)
       alert('留言成功')
       tempComment.value = ''
+      charCount.value = 0
       await getCommentsList(props.topic.id)
     } else {
       alert('請輸入留言內容')
@@ -46,12 +48,14 @@ watch(
   },
 )
 
-function adjustHeight(event) {
-  // 重設textarea高度，防止高度不斷累加
-  event.target.style.height = 'auto'
-  // 設定textarea為自動增長的高度
-  event.target.style.height = `${event.target.scrollHeight}px`
-}
+// unicode範圍 包含中日韓文字
+// match() 會返回陣列
+// 因為英文每兩個字母為一個字元，所以要 Math.ceil() 會將小數點後的數字無條件進位
+watch(tempComment, (newVal) => {
+  const chineseCharCount = (newVal.match(/[\u2e80-\u9fff]/g) || []).length
+  const englishCharCount = newVal.length - chineseCharCount
+  charCount.value = chineseCharCount + Math.ceil(englishCharCount / 2)
+})
 </script>
 
 <template>
@@ -68,12 +72,12 @@ function adjustHeight(event) {
         <textarea
           v-model="tempComment"
           placeholder="寫下你的留言...(英文字元280個、中文140字)"
-          class="w-full max-h-52 resize-none overflow-x-hidden focus:outline-none text-base leading-none text-gray-550"
-          rows="5"
-          maxlength="280"
-          @input="adjustHeight"
+          class="w-full max-h-52 resize-none overflow-x-hidden focus:outline-none text-base text-gray-550"
+          rows="4"
+          maxlength="140"
         ></textarea>
-        <div class="flex justify-end">
+        <div class="flex justify-between">
+          <span class="text-sm text-gray-500">{{ charCount }}/140</span>
           <button type="button" @click="addComment" class="text-base leading-5 text-primary-blue">
             送出留言
           </button>
