@@ -4,7 +4,7 @@ import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
 import PopupConfirm from '@/components/PopupConfirm.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { createTopic } from '@/apis/postTopic'
 import { updateTopic } from '@/apis/patchTopic'
 
@@ -139,13 +139,13 @@ function clearTemp() {
 }
 
 // 判斷麵包屑名稱
-const handleBreadcrumbName = () => {
+const pageName = computed(() => {
   return route.query.id ? '編輯話題頁' : '新增話題頁'
-}
+})
 
 const breadcrumbData = [
   { name: '首頁', path: '/' },
-  { name: handleBreadcrumbName(), path: null },
+  { name: pageName, path: null },
 ]
 
 onMounted(() => {
