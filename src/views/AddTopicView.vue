@@ -138,9 +138,14 @@ function clearTemp() {
   tempTopicCotent.value = ''
 }
 
+// 判斷麵包屑名稱
+const handleBreadcrumbName = () => {
+  return route.query.id ? '編輯話題頁' : '新增話題頁'
+}
+
 const breadcrumbData = [
   { name: '首頁', path: '/' },
-  { name: '新增話題頁', path: null },
+  { name: handleBreadcrumbName(), path: null },
 ]
 
 onMounted(() => {

@@ -39,8 +39,8 @@ const handleDeleteConfirm = async (id) => {
     store.getTopicsData({
       limit: 3,
       page: 1,
-    }),
-      alert('刪除成功')
+    })
+    alert('刪除成功')
     emit('topic-deleted')
     // 在話題詳情頁處理刪除話題後的導航
     if (router.currentRoute.value.path === `/topics/${id}`) {
