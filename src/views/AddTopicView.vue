@@ -3,9 +3,13 @@ import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
 import PopupConfirm from '@/components/PopupConfirm.vue'
-import router from '@/router'
-import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
 import { createTopic } from '@/apis/postTopic'
+import { updateTopic } from '@/apis/patchTopic'
+
+const route = useRoute()
+const router = useRouter()
 
 // 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
@@ -20,6 +24,7 @@ function addContentHeight(event) {
 }
 const showUnsavedPopup = ref(false)
 const showErrorPopup = ref(false)
+const showUnsavedEditPopup = ref(false)
 const tempTopicTitle = ref('')
 const tempTopicCotent = ref('')
 const canPublish = () => tempTopicCotent.value && tempTopicTitle.value
@@ -40,6 +45,7 @@ function handlePublishTopic() {
     showErrorPopup.value = true // 有空白出現錯誤
   }
 }
+
 // 發布話題邏輯 post
 const postTopic = async (params) => {
   try {
@@ -81,16 +87,73 @@ function handleConfirmAbandon() {
   }, 300)
 }
 
+// 點擊 showUnsavedEditPopup的'取消'
+function handleCancelEdit() {
+  showUnsavedEditPopup.value = false
+}
+
+// 點擊 showUnsavedEditPopup的'確定'
+function handleConfirmAbandonEdit() {
+  router.back()
+}
+
+// 點擊 儲存編輯
+function handleSaveEdit() {
+  if (canPublish()) {
+    patchTopic(route.query.id, {
+      title: tempTopicTitle.value,
+      content: tempTopicCotent.value,
+    })
+  } else {
+    showErrorPopup.value = true // 有空白出現錯誤
+  }
+}
+
+// 更新話題邏輯 patch
+const patchTopic = async (id, params) => {
+  try {
+    await updateTopic(id, params)
+    // store 中如果有找到該 id 的話題則更新
+    const topic = store.topicsData.find((topic) => topic.id === id)
+    if (topic) {
+      topic.title = params.title
+      topic.content = params.content
+    }
+    alert('儲存成功')
+    return router.replace(`/topics/${id}`)
+  } catch (error) {
+    console.log(error)
+    alert('儲存失敗')
+  }
+}
+
+// 點擊 放棄編輯
+function handleUnsavedEdit() {
+  showUnsavedEditPopup.value = true
+}
+
 // 清空輸入框邏輯
 function clearTemp() {
   tempTopicTitle.value = ''
   tempTopicCotent.value = ''
 }
 
+// 判斷麵包屑名稱
+const pageName = computed(() => {
+  return route.query.id ? '編輯話題頁' : '新增話題頁'
+})
+
 const breadcrumbData = [
   { name: '首頁', path: '/' },
-  { name: '新增話題頁', path: null },
+  { name: pageName, path: null },
 ]
+
+onMounted(() => {
+  if (route.query.id) {
+    tempTopicTitle.value = route.query.titile
+    tempTopicCotent.value = route.query.content
+  }
+})
 </script>
 
 <template>
@@ -136,11 +199,19 @@ const breadcrumbData = [
         <!-- 編輯選項 -->
         <div class="mt-auto">
           <div class="flex justify-end items-center gap-10">
-            <button type="button" class="text-sm text-gray-550" @click="handleAbandonClick">
-              忍痛放棄
+            <button
+              type="button"
+              class="text-sm text-gray-550"
+              @click="route.query.id ? handleUnsavedEdit() : handleAbandonClick()"
+            >
+              {{ route.query.id ? '放棄編輯' : '忍痛放棄' }}
             </button>
-            <button type="button" class="text-sm text-primary-blue" @click="handlePublishTopic">
-              發表新話題
+            <button
+              type="button"
+              class="text-sm text-primary-blue"
+              @click="route.query.id ? handleSaveEdit() : handlePublishTopic()"
+            >
+              {{ route.query.id ? '儲存編輯' : '發表新話題' }}
             </button>
           </div>
         </div>
@@ -150,6 +221,16 @@ const breadcrumbData = [
       <HotTopicQuickAdd />
       <HotTopicsList />
     </div>
+    <!-- 彈窗 -->
+    <PopupConfirm
+      :show="showUnsavedEditPopup"
+      title="尚未儲存"
+      message="您的話題尚未儲存，確定要放棄編輯嗎？"
+      :showCancelButton="true"
+      CancelButtonName="取消"
+      :onCancel="handleCancelEdit"
+      :onConfirm="handleConfirmAbandonEdit"
+    />
     <!-- 彈窗 -->
     <PopupConfirm
       :show="showUnsavedPopup"

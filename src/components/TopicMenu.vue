@@ -18,10 +18,18 @@ const props = defineProps({
 })
 
 // 點擊編輯
-const edit = () => {
-  console.log('編輯')
+const handleEditConfirm = async (topic) => {
+  try {
+    await router.push({
+      path: '/add-topic',
+      query: { id: topic.id, titile: topic.title, content: topic.content },
+    })
+  } catch (error) {
+    console.log(error)
+  }
 }
-// 定義 關閉菜單 事件
+
+// 定義 關閉菜單 編輯菜單 事件
 const emit = defineEmits(['topic-deleted'])
 
 // 點擊刪除
@@ -31,7 +39,7 @@ const handleDeleteConfirm = async (id) => {
     store.getTopicsData({
       limit: 3,
       page: 1,
-    }),
+    })
     alert('刪除成功')
     emit('topic-deleted')
     // 在話題詳情頁處理刪除話題後的導航
@@ -43,6 +51,7 @@ const handleDeleteConfirm = async (id) => {
     alert('刪除失敗')
   }
 }
+
 // 點擊檢舉
 const reportTopic = () => {
   console.log('檢舉')
@@ -53,7 +62,9 @@ const reportTopic = () => {
   <!-- menu -->
   <ul class="rounded border border-gray-250 bg-white">
     <li class="py-2 px-5 hover:bg-gray-250 cursor-pointer">
-      <a @click.prevent="edit" class="inline-flex items-center gap-2 text-sm"
+      <a
+        @click.prevent="handleEditConfirm(props.topic)"
+        class="inline-flex items-center gap-2 text-sm"
         >編輯<img src="../assets/edit.svg" alt="編輯" class="w-4 h-4"
       /></a>
     </li>
