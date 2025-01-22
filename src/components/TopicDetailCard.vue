@@ -25,7 +25,7 @@ const getTopicDetail = async () => {
     console.log(error)
   }
 }
-// 監聽路由變化
+// 監聽路由變化，因為當點擊熱門話題列表時會改變路由 id，並取得相應的詳細資料儲存到 topicDetail
 watch(
   () => route.params.id,
   (newId, oldId) => {

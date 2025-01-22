@@ -38,6 +38,7 @@ const addComment = async () => {
   }
 }
 
+// 點擊熱門話題的時候父元件有 watch router.query.id 就會去重新拿話題資料，所以變數 topicDetail 會跟著更新，所以需要 watch props.topic
 watch(
   () => props.topic,
   () => {
