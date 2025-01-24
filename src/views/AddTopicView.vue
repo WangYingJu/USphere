@@ -5,6 +5,7 @@ import HotTopicsList from '@/components/HotTopicsList.vue'
 import PopupConfirm from '@/components/PopupConfirm.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { computed, onMounted, ref } from 'vue'
+import { watch } from 'vue'
 import { createTopic } from '@/apis/postTopic'
 import { updateTopic } from '@/apis/patchTopic'
 
@@ -26,8 +27,8 @@ const showUnsavedPopup = ref(false)
 const showErrorPopup = ref(false)
 const showUnsavedEditPopup = ref(false)
 const tempTopicTitle = ref('')
-const tempTopicCotent = ref('')
-const canPublish = () => tempTopicCotent.value && tempTopicTitle.value
+const tempTopicContent = ref('')
+const canPublish = () => tempTopicContent.value && tempTopicTitle.value
 
 // 點擊'忍痛放棄'
 function handleAbandonClick() {
@@ -39,7 +40,7 @@ function handlePublishTopic() {
   if (canPublish()) {
     postTopic({
       title: tempTopicTitle.value,
-      content: tempTopicCotent.value,
+      content: tempTopicContent.value,
     })
   } else {
     showErrorPopup.value = true // 有空白出現錯誤
@@ -102,7 +103,7 @@ function handleSaveEdit() {
   if (canPublish()) {
     patchTopic(route.query.id, {
       title: tempTopicTitle.value,
-      content: tempTopicCotent.value,
+      content: tempTopicContent.value,
     })
   } else {
     showErrorPopup.value = true // 有空白出現錯誤
@@ -135,7 +136,8 @@ function handleUnsavedEdit() {
 // 清空輸入框邏輯
 function clearTemp() {
   tempTopicTitle.value = ''
-  tempTopicCotent.value = ''
+  tempTopicContent.value = ''
+  console.log('清除暫存資料')
 }
 
 // 判斷麵包屑名稱
@@ -145,14 +147,39 @@ const pageName = computed(() => {
 
 const breadcrumbData = [
   { name: '首頁', path: '/' },
-  { name: pageName, path: null },
+  { name: pageName.value, path: null },
 ]
 
 onMounted(() => {
   if (route.query.id) {
-    tempTopicTitle.value = route.query.titile
-    tempTopicCotent.value = route.query.content
+    tempTopicTitle.value = route.query.title
+    tempTopicContent.value = route.query.content
   }
+})
+
+const checkLeaving = () => {
+  if (route.path === '/add-topic' && route.query.id) {
+    alert('請完成當前頁面後再離開。')
+    return false
+  }
+  if (route.path === '/add-topic') {
+    alert('已在新增話題頁面。')
+    return false
+  }
+  return true
+}
+
+// 接收來自子元件 HotTopicQuickAdd 的自定義事件
+// 點擊 新增話題按鈕 導航至 新增話題頁面
+const handleNavigate = () => {
+  if (checkLeaving()) {
+    router.push('/add-topic')
+  }
+}
+
+// 監聽路由變化
+watch(route, () => {
+  checkLeaving()
 })
 </script>
 
@@ -188,7 +215,7 @@ onMounted(() => {
         <!-- 內文 -->
         <div class="w-full text-wrap mb-6">
           <textarea
-            v-model="tempTopicCotent"
+            v-model="tempTopicContent"
             placeholder="請輸入內容"
             class="w-full h-auto resize-none overflow-y-scroll scrollbar-hide focus:outline-none text-base leading-6.5 text-gray-450 max-h-52"
             rows="5"
@@ -218,7 +245,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="right-sidebar">
-      <HotTopicQuickAdd />
+      <HotTopicQuickAdd @navigate="handleNavigate" />
       <HotTopicsList />
     </div>
     <!-- 彈窗 -->

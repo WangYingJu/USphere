@@ -3,11 +3,13 @@ import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import TopicDetailCard from '@/components/TopicDetailCard.vue'
 import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
-import { computed, ref } from 'vue'
+import { computed, provide, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const topicTitle = ref('')
 
-// 接收來自子元件的資料
+// 接收來自子元件 TopicDetailCard 的資料
 function handleTitleUpdate(newTitle) {
   topicTitle.value = newTitle
 }
@@ -15,6 +17,25 @@ const breadcrumbData = computed(() => [
   { name: '首頁', path: '/' },
   { name: topicTitle.value || '載入中...', path: null },
 ])
+
+const isFormDirty = ref(false)
+// 提供 isFormDirty 資料給子元件
+provide('isFormDirty', isFormDirty)
+const checkLeaving = () => {
+  if (isFormDirty.value) {
+    alert('請完成當前頁面後再離開。')
+    return false
+  } else {
+    return true
+  }
+}
+// 接收來自子元件 HotTopicQuickAdd 的自定義事件
+// 點擊 新增話題按鈕 導航至 新增話題頁面
+const handleNavigate = () => {
+  if (checkLeaving()) {
+    router.push('/add-topic')
+  }
+}
 </script>
 
 <template>
@@ -24,7 +45,7 @@ const breadcrumbData = computed(() => [
       <TopicDetailCard @update-data="handleTitleUpdate" />
     </div>
     <div class="right-sidebar">
-      <HotTopicQuickAdd />
+      <HotTopicQuickAdd @navigate="handleNavigate" />
       <HotTopicsList />
     </div>
   </main>

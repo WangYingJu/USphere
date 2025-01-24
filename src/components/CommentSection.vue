@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { inject, ref, watch } from 'vue'
 import CommentCard from './CommentCard.vue'
 import { fetchComments } from '@/apis/getComments'
 import { createComment } from '@/apis/postComment'
@@ -56,6 +56,21 @@ watch(tempComment, (newVal) => {
   const englishHalfCharCount = newVal.length - chineseFullCharCount
   // 中文與全形符號佔 2 字元，英文與半形符號佔 1 字元
   charCount.value = chineseFullCharCount * 2 + englishHalfCharCount
+})
+
+// 接收 父元件提供的 isFormDirty 資料，並預設為 false
+const isFormDirty = inject('isFormDirty', false)
+const check = () => {
+  if (tempComment.value) {
+    Ｆ
+    isFormDirty.value = true
+  } else {
+    isFormDirty.value = false
+  }
+}
+// 監聽 tempComment 的變化來變更 isFormDirty
+watch(tempComment, () => {
+  check()
 })
 </script>
 
