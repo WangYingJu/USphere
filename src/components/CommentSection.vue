@@ -73,6 +73,10 @@ watch(tempComment, () => {
 onUnmounted(() => {
   formDirtyStore.setFormDirty(false)
 })
+// 在頁面離開時將 isFormDirty 設為 false
+onUnmounted(() => {
+  formDirtyStore.setFormDirty(false)
+})
 </script>
 
 <template>
