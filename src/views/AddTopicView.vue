@@ -4,10 +4,10 @@ import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
 import PopupConfirm from '@/components/PopupConfirm.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { computed, onMounted, ref } from 'vue'
-import { watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { createTopic } from '@/apis/postTopic'
 import { updateTopic } from '@/apis/patchTopic'
+import { useFormDirty } from '@/stores/useFormDirty'
 
 const route = useRoute()
 const router = useRouter()
@@ -157,29 +157,29 @@ onMounted(() => {
   }
 })
 
-const checkLeaving = () => {
-  if (route.path === '/add-topic' && route.query.id) {
+const formDirtyStore = useFormDirty()
+const check = () => {
+  if (formDirtyStore.isFormDirty && route.query.id) {
     alert('請完成當前頁面後再離開。')
-    return false
-  }
-  if (route.path === '/add-topic') {
+  } else {
     alert('已在新增話題頁面。')
-    return false
   }
-  return true
+  return false
 }
-
 // 接收來自子元件 HotTopicQuickAdd 的自定義事件
 // 點擊 新增話題按鈕 導航至 新增話題頁面
 const handleNavigate = () => {
-  if (checkLeaving()) {
+  if (check()) {
     router.push('/add-topic')
   }
 }
-
-// 監聽路由變化
-watch(route, () => {
-  checkLeaving()
+// 初始渲染時將 isFormDirty 設為 true
+onMounted(() => {
+  formDirtyStore.setFormDirty(route.path.startsWith('/add-topic'))
+})
+// 在頁面離開時將 isFormDirty 設為 false
+onUnmounted(() => {
+  formDirtyStore.setFormDirty(false)
 })
 </script>
 

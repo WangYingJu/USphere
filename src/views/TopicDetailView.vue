@@ -3,8 +3,9 @@ import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import TopicDetailCard from '@/components/TopicDetailCard.vue'
 import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
-import { computed, provide, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useFormDirty } from '@/stores/useFormDirty'
 
 const router = useRouter()
 const topicTitle = ref('')
@@ -18,21 +19,18 @@ const breadcrumbData = computed(() => [
   { name: topicTitle.value || '載入中...', path: null },
 ])
 
-const isFormDirty = ref(false)
-// 提供 isFormDirty 資料給子元件
-provide('isFormDirty', isFormDirty)
-const checkLeaving = () => {
-  if (isFormDirty.value) {
+const formDirtyStore = useFormDirty()
+const check = () => {
+  if (formDirtyStore.isFormDirty) {
     alert('請完成當前頁面後再離開。')
     return false
-  } else {
-    return true
   }
+  return true
 }
 // 接收來自子元件 HotTopicQuickAdd 的自定義事件
 // 點擊 新增話題按鈕 導航至 新增話題頁面
 const handleNavigate = () => {
-  if (checkLeaving()) {
+  if (check()) {
     router.push('/add-topic')
   }
 }
