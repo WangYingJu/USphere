@@ -22,6 +22,8 @@ const getCommentsList = async (id) => {
 }
 
 const tempComment = ref('')
+const charCount = ref(0)
+const maxLength = 280
 
 const addComment = async () => {
   try {
@@ -29,6 +31,7 @@ const addComment = async () => {
       await createComment(props.topic.id, tempComment.value)
       alert('留言成功')
       tempComment.value = ''
+      charCount.value = 0
       await getCommentsList(props.topic.id)
     } else {
       alert('請輸入留言內容')
@@ -46,12 +49,14 @@ watch(
   },
 )
 
-function adjustHeight(event) {
-  // 重設textarea高度，防止高度不斷累加
-  event.target.style.height = 'auto'
-  // 設定textarea為自動增長的高度
-  event.target.style.height = `${event.target.scrollHeight}px`
-}
+watch(tempComment, (newVal) => {
+  // unicode範圍：\u2e80-\u9fff 為中日韓文字 \uff00-\uffef 為全形符號
+  // match() 會返回陣列
+  const chineseFullCharCount = (newVal.match(/[\u2e80-\u9fff\uff00-\uffef]/g) || []).length
+  const englishHalfCharCount = newVal.length - chineseFullCharCount
+  // 中文與全形符號佔 2 字元，英文與半形符號佔 1 字元
+  charCount.value = chineseFullCharCount * 2 + englishHalfCharCount
+})
 </script>
 
 <template>
@@ -68,13 +73,19 @@ function adjustHeight(event) {
         <textarea
           v-model="tempComment"
           placeholder="寫下你的留言...(英文字元280個、中文140字)"
-          class="w-full max-h-52 resize-none overflow-x-hidden focus:outline-none text-base leading-none text-gray-550"
-          rows="5"
-          maxlength="280"
-          @input="adjustHeight"
+          class="w-full max-h-52 resize-none overflow-x-hidden focus:outline-none text-base text-gray-550"
+          rows="4"
         ></textarea>
-        <div class="flex justify-end">
-          <button type="button" @click="addComment" class="text-base leading-5 text-primary-blue">
+        <div class="flex justify-between">
+          <span class="text-sm text-gray-500" :class="{ 'text-red-500': charCount > maxLength }"
+            >{{ charCount }}/{{ maxLength }}</span
+          >
+          <button
+            type="button"
+            @click="addComment"
+            :disabled="charCount > maxLength"
+            class="text-base leading-5 text-primary-blue disabled:opacity-50"
+          >
             送出留言
           </button>
         </div>
