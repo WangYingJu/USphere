@@ -22,7 +22,7 @@ const handleEditConfirm = async (topic) => {
   try {
     await router.push({
       path: '/add-topic',
-      query: { id: topic.id, titile: topic.title, content: topic.content },
+      query: { id: topic.id, title: topic.title, content: topic.content },
     })
   } catch (error) {
     console.log(error)
