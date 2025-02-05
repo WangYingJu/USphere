@@ -20,7 +20,7 @@ const breadcrumbData = computed(() => [
 ])
 
 const formDirtyStore = useFormDirty()
-const check = () => {
+const canLeavePage = () => {
   if (formDirtyStore.isFormDirty) {
     alert('請完成當前頁面後再離開。')
     return false
@@ -30,7 +30,7 @@ const check = () => {
 // 接收來自子元件 HotTopicQuickAdd 的自定義事件
 // 點擊 新增話題按鈕 導航至 新增話題頁面
 const handleNavigate = () => {
-  if (check()) {
+  if (canLeavePage()) {
     router.push('/add-topic')
   }
 }

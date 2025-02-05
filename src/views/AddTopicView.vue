@@ -137,7 +137,6 @@ function handleUnsavedEdit() {
 function clearTemp() {
   tempTopicTitle.value = ''
   tempTopicContent.value = ''
-  console.log('清除暫存資料')
 }
 
 // 判斷麵包屑名稱
@@ -158,19 +157,13 @@ onMounted(() => {
 })
 
 const formDirtyStore = useFormDirty()
-const check = () => {
+// 接收來自子元件 HotTopicQuickAdd 的自定義事件
+// 點擊 新增話題按鈕
+const handleNavigate = () => {
   if (formDirtyStore.isFormDirty && route.query.id) {
     alert('請完成當前頁面後再離開。')
   } else {
     alert('已在新增話題頁面。')
-  }
-  return false
-}
-// 接收來自子元件 HotTopicQuickAdd 的自定義事件
-// 點擊 新增話題按鈕 導航至 新增話題頁面
-const handleNavigate = () => {
-  if (check()) {
-    router.push('/add-topic')
   }
 }
 // 初始渲染時將 isFormDirty 設為 true

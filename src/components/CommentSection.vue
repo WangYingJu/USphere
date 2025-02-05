@@ -62,12 +62,12 @@ watch(tempComment, (newVal) => {
 })
 
 const formDirtyStore = useFormDirty()
-const check = () => {
+const checkFormStatus = () => {
   formDirtyStore.setFormDirty(tempComment.value.length > 0)
 }
 // 監聽 tempComment 的變化來變更 isFormDirty
 watch(tempComment, () => {
-  check()
+  checkFormStatus()
 })
 // 在頁面離開時將 isFormDirty 設為 false
 onUnmounted(() => {
