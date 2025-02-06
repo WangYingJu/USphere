@@ -168,7 +168,7 @@ const handleNavigate = () => {
 }
 // 初始渲染時將 isFormDirty 設為 true
 onMounted(() => {
-  formDirtyStore.setFormDirty(route.path.startsWith('/add-topic'))
+  formDirtyStore.setFormDirty(true)
 })
 // 在頁面離開時將 isFormDirty 設為 false
 onUnmounted(() => {
