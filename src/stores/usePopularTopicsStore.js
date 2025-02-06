@@ -2,7 +2,6 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { fetchTopics } from '@/apis/topics'
 
-
 export const usePopularTopicsStore = defineStore('usePopularTopicsStore', () => {
   // 存放 popular topics api 資料
   const popularTopicsData = ref([])

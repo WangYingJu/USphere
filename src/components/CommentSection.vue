@@ -81,7 +81,9 @@ onUnmounted(() => {
 
 <template>
   <section class="border rounded border-gray-250 bg-white p-10 mb-4">
-    <h3 class="text-lg font-bold mb-[30px]">留言 ({{ props.topic.comments }})</h3>
+    <h3 class="text-lg font-bold mb-[30px]">
+      留言 ({{ props.topic.comments ? props.topic.comments : 0 }})
+    </h3>
     <!-- 寫下留言 -->
     <div class="flex mb-5">
       <img
