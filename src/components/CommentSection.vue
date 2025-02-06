@@ -4,6 +4,7 @@ import CommentCard from './CommentCard.vue'
 import { fetchComments } from '@/apis/getComments'
 import { createComment } from '@/apis/postComment'
 import { useFormDirty } from '@/stores/useFormDirty'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps({
   topic: {
@@ -26,21 +27,27 @@ const getCommentsList = async (id) => {
 const tempComment = ref('')
 const charCount = ref(0)
 const maxLength = 280
+const isSubimtComment = ref(false)
+const toast = useToast()
 
 // 點擊 送出留言
 const addComment = async () => {
+  isSubimtComment.value = true
   try {
-    if (tempComment.value) {
+    if (tempComment.value.trim() !== '') {
       await createComment(props.topic.id, tempComment.value)
-      alert('留言成功')
+      toast.success('留言成功')
       tempComment.value = ''
       charCount.value = 0
       await getCommentsList(props.topic.id)
     } else {
-      alert('請輸入留言內容')
+      toast.warning('留言不能為空白')
     }
   } catch (error) {
     console.log(error)
+    toast.error('留言失敗')
+  } finally {
+    isSubimtComment.value = false
   }
 }
 
@@ -105,7 +112,7 @@ onUnmounted(() => {
           <button
             type="button"
             @click="addComment"
-            :disabled="charCount > maxLength"
+            :disabled="charCount > maxLength || isSubimtComment"
             class="text-base leading-5 text-primary-blue disabled:opacity-50"
           >
             送出留言
