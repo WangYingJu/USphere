@@ -3,6 +3,14 @@ import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
 import SidebarAd from '@/components/SidebarAd.vue'
 import TopicList from '@/components/TopicList.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+// 接收來自子元件 HotTopicQuickAdd 的自定義事件
+// 點擊 新增話題按鈕 導航至 新增話題頁面
+const handleNavigate = () => {
+  router.push('/add-topic')
+}
 </script>
 
 <template>
@@ -10,7 +18,7 @@ import TopicList from '@/components/TopicList.vue'
     <SidebarAd />
     <TopicList />
     <div class="right-sidebar">
-      <HotTopicQuickAdd />
+      <HotTopicQuickAdd @navigate="handleNavigate" />
       <HotTopicsList />
     </div>
   </main>

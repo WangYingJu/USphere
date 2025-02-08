@@ -1,8 +1,9 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { onUnmounted, ref, watch } from 'vue'
 import CommentCard from './CommentCard.vue'
 import { fetchComments } from '@/apis/getComments'
 import { createComment } from '@/apis/postComment'
+import { useFormDirty } from '@/stores/useFormDirty'
 
 const props = defineProps({
   topic: {
@@ -11,6 +12,7 @@ const props = defineProps({
   },
 })
 
+// 獲取 留言列表
 const commentsList = ref([])
 const getCommentsList = async (id) => {
   try {
@@ -25,6 +27,7 @@ const tempComment = ref('')
 const charCount = ref(0)
 const maxLength = 280
 
+// 點擊 送出留言
 const addComment = async () => {
   try {
     if (tempComment.value) {
@@ -56,6 +59,19 @@ watch(tempComment, (newVal) => {
   const englishHalfCharCount = newVal.length - chineseFullCharCount
   // 中文與全形符號佔 2 字元，英文與半形符號佔 1 字元
   charCount.value = chineseFullCharCount * 2 + englishHalfCharCount
+})
+
+const formDirtyStore = useFormDirty()
+const checkFormStatus = () => {
+  formDirtyStore.setFormDirty(tempComment.value.length > 0)
+}
+// 監聽 tempComment 的變化來變更 isFormDirty
+watch(tempComment, () => {
+  checkFormStatus()
+})
+// 在頁面離開時將 isFormDirty 設為 false
+onUnmounted(() => {
+  formDirtyStore.setFormDirty(false)
 })
 </script>
 
