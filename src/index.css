@@ -41,3 +41,11 @@ input[type='search']:focus {
   width: 16px;
   cursor: pointer;
 }
+
+.Vue-Toastification__toast.toast-custom {
+  border-radius: 0.25rem;
+}
+
+.Vue-Toastification__close-button.close-toast-button {
+  font-weight: unset;
+}
