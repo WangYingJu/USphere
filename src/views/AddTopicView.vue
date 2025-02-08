@@ -8,7 +8,9 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { createTopic } from '@/apis/postTopic'
 import { updateTopic } from '@/apis/patchTopic'
 import { useFormDirty } from '@/stores/useFormDirty'
+import { useToast } from 'vue-toastification'
 
+const toast = useToast()
 const route = useRoute()
 const router = useRouter()
 
@@ -24,11 +26,11 @@ function addContentHeight(event) {
   event.target.style.height = `${event.target.scrollHeight}px`
 }
 const showUnsavedPopup = ref(false)
-const showErrorPopup = ref(false)
 const showUnsavedEditPopup = ref(false)
 const tempTopicTitle = ref('')
 const tempTopicContent = ref('')
 const canPublish = () => tempTopicContent.value && tempTopicTitle.value
+const isSubmit = ref(false)
 
 // 點擊'忍痛放棄'
 function handleAbandonClick() {
@@ -38,12 +40,13 @@ function handleAbandonClick() {
 // 點擊'發表新話題'
 function handlePublishTopic() {
   if (canPublish()) {
+    isSubmit.value = true
     postTopic({
       title: tempTopicTitle.value,
       content: tempTopicContent.value,
     })
   } else {
-    showErrorPopup.value = true // 有空白出現錯誤
+    toast.warning('話題及內容不得為空白')
   }
 }
 
@@ -55,24 +58,22 @@ const postTopic = async (params) => {
     const topicId = res.id
     // topicId 取得值時前往該詳情頁並儲存到 store
     if (topicId) {
-      alert('已發佈')
+      toast.success('發佈成功')
       clearTemp()
       store.topicsData.unshift(res)
       return router.replace(`/topics/${topicId}`)
     }
   } catch (error) {
     console.log(error)
+    toast.error('發佈失敗')
+  } finally {
+    isSubmit.value = false
   }
 }
 
 // 點擊'取消'
 function handleCancel() {
   showUnsavedPopup.value = false
-}
-
-// 點擊showErrorPopup的'確定'
-function handleConfirm() {
-  showErrorPopup.value = false
 }
 
 // 點擊showUnsavedPopup的'確定'
@@ -101,12 +102,13 @@ function handleConfirmAbandonEdit() {
 // 點擊 儲存編輯
 function handleSaveEdit() {
   if (canPublish()) {
+    isSubmit.value = true
     patchTopic(route.query.id, {
       title: tempTopicTitle.value,
       content: tempTopicContent.value,
     })
   } else {
-    showErrorPopup.value = true // 有空白出現錯誤
+    toast.warning('話題及內容不得為空白')
   }
 }
 
@@ -120,11 +122,13 @@ const patchTopic = async (id, params) => {
       topic.title = params.title
       topic.content = params.content
     }
-    alert('儲存成功')
+    toast.success('儲存成功')
     return router.replace(`/topics/${id}`)
   } catch (error) {
     console.log(error)
-    alert('儲存失敗')
+    toast.error('儲存失敗')
+  } finally {
+    isSubmit.value = false
   }
 }
 
@@ -228,6 +232,7 @@ onUnmounted(() => {
             </button>
             <button
               type="button"
+              :disabled="isSubmit"
               class="text-sm text-primary-blue"
               @click="route.query.id ? handleSaveEdit() : handlePublishTopic()"
             >
@@ -260,16 +265,6 @@ onUnmounted(() => {
       CancelButtonName="取消"
       :onCancel="handleCancel"
       :onConfirm="handleConfirmAbandon"
-    />
-    <!-- 彈窗 -->
-    <PopupConfirm
-      :show="showErrorPopup"
-      title="出現錯誤"
-      message="您的話題及內容不得為空白"
-      :showCancelButton="false"
-      CancelButtonName=""
-      :onCancel="handleCancel"
-      :onConfirm="handleConfirm"
     />
   </main>
 </template>

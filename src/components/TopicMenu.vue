@@ -2,8 +2,11 @@
 import { deleteTopic } from '@/apis/deleteTopic'
 import { defineEmits, defineProps } from 'vue'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 const router = useRouter()
+const toast = useToast()
 
 // 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
@@ -33,22 +36,27 @@ const handleEditConfirm = async (topic) => {
 const emit = defineEmits(['topic-deleted'])
 
 // 點擊刪除
+const isClicked = ref(false)
 const handleDeleteConfirm = async (id) => {
   try {
+    if (isClicked.value) return
+    isClicked.value = true
     await deleteTopic(id)
     store.getTopicsData({
       limit: 3,
       page: 1,
     })
-    alert('刪除成功')
+    toast.success('刪除成功')
     emit('topic-deleted')
     // 在話題詳情頁處理刪除話題後的導航
     if (router.currentRoute.value.path === `/topics/${id}`) {
       router.push('/')
     }
   } catch (error) {
-    console.log('handleDeleteConfirm:刪除失敗', error)
-    alert('刪除失敗')
+    console.log(error)
+    toast.error('刪除失敗')
+  } finally {
+    isClicked.value = false
   }
 }
 
@@ -71,6 +79,7 @@ const reportTopic = () => {
     <li class="py-2 px-5 hover:bg-gray-250 cursor-pointer">
       <a
         @click.prevent="handleDeleteConfirm(props.topic.id)"
+        :disabled="isClicked"
         class="inline-flex items-center gap-2 text-sm"
         >刪除<img src="../assets/trash.svg" alt="刪除" class="w-4 h-4"
       /></a>
