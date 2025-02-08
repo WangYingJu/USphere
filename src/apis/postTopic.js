@@ -6,5 +6,6 @@ export const createTopic = async (params) => {
     return res.data.data
   } catch (error) {
     console.log(error)
+    throw error
   }
 }

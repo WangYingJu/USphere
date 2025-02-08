@@ -201,14 +201,15 @@ onUnmounted(() => {
           </div>
         </div>
         <!-- 主標 -->
-        <h2 class="text-2.5xl leading-11 font-bold mb-2">
-          <input
+        <div class="mb-2">
+          <textarea
             v-model="tempTopicTitle"
-            type="text"
             placeholder="請輸入標題"
-            class="w-full placeholder-black outline-none"
-          />
-        </h2>
+            class="w-full text-2.5xl leading-11 font-bold placeholder-black outline-none break-words whitespace-pre-wrap resize-none overflow-y-auto"
+            rows="1"
+            @input="addContentHeight"
+          ></textarea>
+        </div>
         <!-- 內文 -->
         <div class="w-full text-wrap mb-6">
           <textarea

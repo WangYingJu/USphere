@@ -13,14 +13,20 @@ const props = defineProps({
   },
 })
 
+const isLoading = ref(false)
+const loadingCount = ref(0)
+
 // 獲取 留言列表
 const commentsList = ref([])
 const getCommentsList = async (id) => {
+  isLoading.value = true
   try {
     const res = await fetchComments(id)
     commentsList.value = res
+    isLoading.value = false
   } catch (error) {
     console.log(error)
+    isLoading.value = false
   }
 }
 
@@ -55,7 +61,13 @@ const addComment = async () => {
 watch(
   () => props.topic,
   () => {
-    getCommentsList(props.topic.id)
+    if (props.topic.comments > 0) {
+      loadingCount.value = props.topic.comments
+      getCommentsList(props.topic.id)
+    } else {
+      commentsList.value = []
+      return
+    }
   },
 )
 
@@ -80,10 +92,6 @@ watch(tempComment, () => {
 onUnmounted(() => {
   formDirtyStore.setFormDirty(false)
 })
-// 在頁面離開時將 isFormDirty 設為 false
-onUnmounted(() => {
-  formDirtyStore.setFormDirty(false)
-})
 </script>
 
 <template>
@@ -98,11 +106,11 @@ onUnmounted(() => {
         alt="User Avatar"
         class="w-10 h-10 object-cover rounded-full me-2"
       />
-      <div class="w-full min-h-20 border-2 rounded border-gray-250 bg-white p-3 text-wrap">
+      <div class="w-full min-h-20 border-2 rounded border-gray-250 bg-white p-3">
         <textarea
           v-model="tempComment"
           placeholder="寫下你的留言...(英文字元280個、中文140字)"
-          class="w-full max-h-52 resize-none overflow-x-hidden focus:outline-none text-base text-gray-550"
+          class="w-full max-h-52 resize-none overflow-x-hidden focus:outline-none text-base text-gray-550 break-words whitespace-pre-wrap truncate text-wrap"
           rows="4"
         ></textarea>
         <div class="flex justify-between">
@@ -121,7 +129,6 @@ onUnmounted(() => {
       </div>
     </div>
     <!-- 顯示已留言則數 -->
-    <CommentCard :commentsList="commentsList" />
+    <CommentCard :commentsList="commentsList" :isLoading="isLoading" :loadingCount="loadingCount" />
   </section>
-  <button type="button" class="block mx-auto text-xs text-primary-blue">載入更多留言</button>
 </template>
