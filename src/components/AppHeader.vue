@@ -6,6 +6,8 @@ import { useTopicsStore } from '@/stores/useTopicsStore'
 const store = useTopicsStore()
 // 搜尋按鍵 變更 api 參數
 const handleSearch = () => {
+  if (store.keywordString.trim() === '') return
+
   store.getTopicsData({
     keyword: store.keywordString.trim(),
     sort: 'null',
