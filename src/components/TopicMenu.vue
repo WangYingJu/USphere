@@ -21,11 +21,11 @@ const props = defineProps({
 })
 
 // 點擊編輯
-const handleEditConfirm = async (topic) => {
+const handleEditConfirm = async ({ id, title, content, author, author_pic }) => {
   try {
     await router.push({
       path: '/add-topic',
-      query: { id: topic.id, title: topic.title, content: topic.content },
+      query: { id, title, content, author, author_pic },
     })
   } catch (error) {
     console.log(error)
