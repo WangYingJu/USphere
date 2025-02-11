@@ -5,6 +5,9 @@ import { useRoute } from 'vue-router'
 import { ref, defineEmits, onMounted, watch } from 'vue'
 import timeToNow from '@/time'
 import { fetchTopicDetail } from '@/apis/topicDetail'
+import { createLike } from '@/apis/postLike'
+import { useTopicsStore } from '@/stores/useTopicsStore'
+const topicsStore = useTopicsStore()
 
 // useRoute() 顯示目前路由位置
 const route = useRoute()
@@ -12,6 +15,7 @@ const topicDetail = ref({})
 // 自定義事件 命名為 update-data
 const emit = defineEmits(['update-data'])
 const isLoading = ref(false)
+const isClickLike = ref(false)
 
 // 獲取 topics 詳細內容資料 api
 const getTopicDetail = async () => {
@@ -39,6 +43,28 @@ watch(
 onMounted(() => {
   getTopicDetail()
 })
+
+// 對話題按讚 post
+const postLike = async (type) => {
+  isClickLike.value = true
+  const id = topicDetail.value.id
+  try {
+    const res = await createLike({ id, type })
+    // 如果 store 有找到該 id 的話題 更新按讚數
+    if (topicsStore.topicsData.length) {
+      const topic = topicsStore.topicsData.find((topic) => topic.id === id)
+      if (topic) {
+        topic.likes = res.likes
+      }
+    }
+    return res
+  } catch (error) {
+    console.log(error)
+  } finally {
+    getTopicDetail()
+    isClickLike.value = false
+  }
+}
 </script>
 
 <template>
@@ -103,7 +129,7 @@ onMounted(() => {
         </div>
         <!-- 按讚數 -->
         <div class="flex">
-          <button type="button">
+          <button type="button" @click="postLike('topic')" :disabled="isClickLike">
             <img src="../assets/TopicLikeIcon.svg" alt="" class="w-5 h-auto me-1" />
           </button>
           <p class="text-sm font-medium">{{ topicDetail.likes }}</p>
