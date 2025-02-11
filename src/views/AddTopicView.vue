@@ -29,6 +29,11 @@ const showUnsavedPopup = ref(false)
 const showUnsavedEditPopup = ref(false)
 const tempTopicTitle = ref('')
 const tempTopicContent = ref('')
+const authorName = ref('')
+const authorPic = ref('')
+const authorPicSrc = computed(() =>
+  authorPic.value ? authorPic.value : '/USphere/src/assets/member.png',
+)
 const canPublish = () => tempTopicContent.value && tempTopicTitle.value
 const isSubmit = ref(false)
 
@@ -96,7 +101,8 @@ function handleCancelEdit() {
 
 // 點擊 showUnsavedEditPopup的'確定'
 function handleConfirmAbandonEdit() {
-  router.back()
+  const id = route.query.id
+  router.replace(`/topics/${id}`)
 }
 
 // 點擊 儲存編輯
@@ -155,8 +161,11 @@ const breadcrumbData = [
 
 onMounted(() => {
   if (route.query.id) {
+    authorName.value = route.query.author
+    authorPic.value = route.query.author_pic
     tempTopicTitle.value = route.query.title
     tempTopicContent.value = route.query.content
+    router.push({ query: { id: route.query.id } })
   }
 })
 
@@ -191,13 +200,17 @@ onUnmounted(() => {
         <!-- 發表者資訊 -->
         <div class="flex items-center mb-5">
           <img
-            src="../assets/member.png"
+            :src="authorPicSrc"
             alt="User Avatar"
             class="w-10 h-10 object-cover rounded-full me-2"
           />
           <div>
-            <p class="text-sm leading-4 font-medium">王小艾</p>
-            <span class="text-xs text-gray-450">正在輸入...</span>
+            <p class="text-sm leading-4 font-medium">
+              {{ authorName ? authorName : '王小艾' }}
+            </p>
+            <span class="text-xs text-gray-450">{{
+              route.query.id ? '編輯中...' : '正在輸入...'
+            }}</span>
           </div>
         </div>
         <!-- 主標 -->
