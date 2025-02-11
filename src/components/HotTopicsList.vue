@@ -18,10 +18,7 @@ onMounted(() => {
       limit: 5,
       page: 1,
     })
-    .then(() => {
-      isLoading.value = false
-    })
-    .catch(() => {
+    .finally(() => {
       isLoading.value = false
     })
 })
