@@ -46,7 +46,7 @@ function handlePublishTopic() {
       content: tempTopicContent.value,
     })
   } else {
-    toast.warning('話題及內容不得為空白')
+    toast.warning('標題及內容不得為空白')
   }
 }
 

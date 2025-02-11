@@ -23,9 +23,9 @@ const getCommentsList = async (id) => {
   try {
     const res = await fetchComments(id)
     commentsList.value = res
-    isLoading.value = false
   } catch (error) {
     console.log(error)
+  } finally {
     isLoading.value = false
   }
 }
@@ -66,7 +66,6 @@ watch(
       getCommentsList(props.topic.id)
     } else {
       commentsList.value = []
-      return
     }
   },
 )

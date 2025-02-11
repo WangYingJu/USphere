@@ -19,10 +19,7 @@ const more = () => {
       limit: 3,
       page: topicsStore.pageNum + 1,
     })
-    .then(() => {
-      isLoading.value = false
-    })
-    .catch(() => {
+    .finally(() => {
       isLoading.value = false
     })
 }
@@ -37,10 +34,7 @@ const sort = (sortName) => {
       limit: 3,
       page: 1,
     })
-    .then(() => {
-      isLoading.value = false
-    })
-    .catch(() => {
+    .finally(() => {
       isLoading.value = false
     })
 }
@@ -63,10 +57,7 @@ onMounted(() => {
       limit: 3,
       page: 1,
     })
-    .then(() => {
-      isLoading.value = false
-    })
-    .catch(() => {
+    .finally(() => {
       isLoading.value = false
     })
 })
