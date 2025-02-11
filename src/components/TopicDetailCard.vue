@@ -5,24 +5,25 @@ import { useRoute } from 'vue-router'
 import { ref, defineEmits, onMounted, watch } from 'vue'
 import timeToNow from '@/time'
 import { fetchTopicDetail } from '@/apis/topicDetail'
-import { useLoadingStore } from '@/stores/useLoadingStore'
 
 // useRoute() 顯示目前路由位置
 const route = useRoute()
 const topicDetail = ref({})
-const store = useLoadingStore()
 // 自定義事件 命名為 update-data
 const emit = defineEmits(['update-data'])
+const isLoading = ref(false)
 
 // 獲取 topics 詳細內容資料 api
 const getTopicDetail = async () => {
   try {
+    isLoading.value = true
     const res = await fetchTopicDetail(route.params.id)
     topicDetail.value = res
-    // 傳遞資料給父元件
+    // 傳遞資料給父元件 TopicDetailView.vue
     if (topicDetail.value.title) {
       emit('update-data', topicDetail.value.title)
     }
+    isLoading.value = false
   } catch (error) {
     console.log(error)
   }
@@ -43,7 +44,7 @@ onMounted(() => {
 <template>
   <div class="w-full border rounded border-gray-250 bg-white py-[30px] px-10 mb-[30px]">
     <!-- loading UI -->
-    <div v-if="store.isLoading || topicDetail.title === undefined" class="animate-pulse">
+    <div v-if="isLoading" class="animate-pulse">
       <div class="flex mb-5">
         <svg
           class="w-10 h-10 me-2 text-gray-200"
@@ -84,9 +85,13 @@ onMounted(() => {
         <TopicMenuButton :topicData="topicDetail" />
       </div>
       <!-- 主標 -->
-      <h2 class="text-2.5xl leading-11 font-bold mb-2">{{ topicDetail.title }}</h2>
+      <h2 class="text-2.5xl leading-11 font-bold mb-2 break-words whitespace-pre-wrap truncate">
+        {{ topicDetail.title }}
+      </h2>
       <!-- 內文 -->
-      <p class="text-base leading-6.5 text-gray-450 mb-6">{{ topicDetail.content }}</p>
+      <p class="text-base leading-6.5 text-gray-450 mb-6 break-words whitespace-pre-wrap truncate">
+        {{ topicDetail.content }}
+      </p>
       <!-- icon -->
       <div class="flex items-center gap-4">
         <!-- 留言數 -->

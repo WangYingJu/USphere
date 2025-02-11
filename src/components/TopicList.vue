@@ -5,27 +5,38 @@ import { ref, onMounted } from 'vue'
 
 // 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
-import { useLoadingStore } from '@/stores/useLoadingStore'
 // 寫入 Pinia store
 const topicsStore = useTopicsStore()
-const loadingStore = useLoadingStore()
+const isLoading = ref(false)
 
 // 載入更多按鍵 變更 api page參數
 const more = () => {
-  topicsStore.getTopicsData({
-    keyword: topicsStore.keywordString,
-    sort: topicsStore.sortSelect,
-    limit: 3,
-    page: topicsStore.pageNum + 1,
-  })
+  isLoading.value = true
+  topicsStore
+    .getTopicsData({
+      keyword: topicsStore.keywordString,
+      sort: topicsStore.sortSelect,
+      limit: 3,
+      page: topicsStore.pageNum + 1,
+    })
+    .finally(() => {
+      isLoading.value = false
+    })
 }
+const activeSort = ref('')
 // 點擊排序
 const sort = (sortName) => {
-  topicsStore.getTopicsData({
-    sort: sortName,
-    limit: 3,
-    page: 1,
-  })
+  isLoading.value = true
+  activeSort.value = sortName
+  topicsStore
+    .getTopicsData({
+      sort: sortName,
+      limit: 3,
+      page: 1,
+    })
+    .finally(() => {
+      isLoading.value = false
+    })
 }
 // 點擊讚、回覆、珍藏
 const managentTopic = (string) => {
@@ -40,10 +51,15 @@ const addData = (topic) => {
 // 資料渲染初始化
 onMounted(() => {
   if (topicsStore.topicsData.length) return
-  topicsStore.getTopicsData({
-    limit: 3,
-    page: 1,
-  })
+  isLoading.value = true
+  topicsStore
+    .getTopicsData({
+      limit: 3,
+      page: 1,
+    })
+    .finally(() => {
+      isLoading.value = false
+    })
 })
 </script>
 
@@ -53,61 +69,29 @@ onMounted(() => {
       <button
         @click="sort('newest')"
         type="button"
-        class="text-sm text-gray-450 focus:text-primary-blue hover:text-primary-blue border rounded-full border-gray-250 focus:border-primary-blue hover:border-primary-blue bg-white px-4 py-1 me-4"
-        active
+        :class="{
+          'text-sm text-gray-450 hover:text-primary-blue border rounded-full border-gray-250 hover:border-primary-blue bg-white px-4 py-1 me-4': true,
+          'text-primary-blue border-primary-blue': activeSort === 'newest',
+        }"
       >
         最新
       </button>
       <button
         @click="sort('oldest')"
         type="button"
-        class="text-sm text-gray-450 focus:text-primary-blue hover:text-primary-blue border rounded-full border-gray-250 focus:border-primary-blue hover:border-primary-blue bg-white px-4 py-1"
-        active
+        :class="{
+          'text-sm text-gray-450 hover:text-primary-blue border rounded-full border-gray-250 hover:border-primary-blue bg-white px-4 py-1 me-4': true,
+          'text-primary-blue border-primary-blue': activeSort === 'oldest',
+        }"
       >
         最舊
       </button>
     </div>
-    <!-- loading UI -->
-    <ul
-      v-if="loadingStore.isLoading || topicsStore.topicsData.length === 0"
-      class="animate-pulse flex flex-col gap-5 mb-6"
-      style="width: 520px"
-    >
-      <li
-        v-for="item in loadingStore.loadingCount"
-        :key="item"
-        class="border rounded border-gray-250 bg-white p-5 w-full"
-      >
-        <div class="flex mb-4.5">
-          <svg
-            class="w-9 h-9 me-2 text-gray-200"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z"
-            />
-          </svg>
-          <div class="flex flex-col justify-between">
-            <div class="w-16 h-3.5 bg-gray-200 rounded-full"></div>
-            <div class="w-12 h-3 bg-gray-200 rounded-full"></div>
-          </div>
-        </div>
-        <div class="flex flex-col gap-3">
-          <div class="bg-gray-200 h-4.5 w-48 rounded-full"></div>
-          <div class="bg-gray-200 h-4 w-full rounded-full"></div>
-          <div class="bg-gray-200 h-4 w-full rounded-full"></div>
-          <div class="bg-gray-200 h-4 w-3/4 rounded-full"></div>
-        </div>
-      </li>
-    </ul>
-    <ul v-else class="flex flex-col gap-5 mb-6" style="width: 520px">
+    <ul class="flex flex-col" style="width: 520px">
       <li
         v-for="topic in topicsStore.topicsData"
         :key="topic.id"
-        class="border rounded border-gray-250 bg-white p-5 w-full relative"
+        class="border rounded border-gray-250 bg-white p-5 mb-5 w-full relative"
       >
         <RouterLink
           :to="{ name: 'topicDetail', params: { id: topic.id } }"
@@ -168,7 +152,39 @@ onMounted(() => {
         </div>
       </li>
     </ul>
-    <button @click="more" type="button" class="block mx-auto text-xs text-primary-blue">
+    <!-- loading UI -->
+    <ul v-if="isLoading" class="animate-pulse flex flex-col" style="width: 520px">
+      <li
+        v-for="item in 3"
+        :key="item"
+        class="border rounded border-gray-250 bg-white p-5 mb-5 w-full"
+      >
+        <div class="flex mb-4.5">
+          <svg
+            class="w-9 h-9 me-2 text-gray-200"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z"
+            />
+          </svg>
+          <div class="flex flex-col justify-between">
+            <div class="w-16 h-3.5 bg-gray-200 rounded-full"></div>
+            <div class="w-12 h-3 bg-gray-200 rounded-full"></div>
+          </div>
+        </div>
+        <div class="flex flex-col gap-3">
+          <div class="bg-gray-200 h-4.5 w-48 rounded-full"></div>
+          <div class="bg-gray-200 h-4 w-full rounded-full"></div>
+          <div class="bg-gray-200 h-4 w-full rounded-full"></div>
+          <div class="bg-gray-200 h-4 w-3/4 rounded-full"></div>
+        </div>
+      </li>
+    </ul>
+    <button @click="more" type="button" class="block mx-auto mt-1 text-xs text-primary-blue">
       載入更多話題
     </button>
   </div>

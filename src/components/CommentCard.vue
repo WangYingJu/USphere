@@ -1,21 +1,25 @@
 <script setup>
 import timeToNow from '@/time'
-import { useLoadingStore } from '@/stores/useLoadingStore'
-
-const store = useLoadingStore()
 
 const props = defineProps({
   commentsList: {
     type: Array,
     required: true,
   },
+  isLoading: {
+    type: Boolean,
+    required: true,
+  },
+  loadingCount: {
+    type: Number,
+  },
 })
 </script>
 
 <template>
   <!-- loading UI -->
-  <ul v-if="store.isLoading || props.commentsList.length === 0" class="animate-pulse">
-    <li v-for="item in store.loadingCount" :key="item" class="flex mb-5">
+  <ul v-if="isLoading" class="animate-pulse">
+    <li v-for="item in loadingCount" :key="item" class="flex mb-5">
       <svg
         class="w-10 h-10 me-2 text-gray-200"
         aria-hidden="true"
@@ -52,7 +56,7 @@ const props = defineProps({
           <time class="text-sm text-gray-450">{{ timeToNow(comment.updated_at) }}</time>
         </div>
         <!-- 留言內容 -->
-        <p class="text-sm text-gray-650 mb-2">
+        <p class="text-sm text-gray-650 mb-2 break-words whitespace-pre-wrap truncate text-wrap">
           {{ comment.content }}
         </p>
         <!-- 對留言的操作 -->
