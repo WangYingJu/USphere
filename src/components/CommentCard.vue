@@ -1,5 +1,8 @@
 <script setup>
+import { ref } from 'vue'
 import timeToNow from '@/time'
+import { createLike } from '@/apis/postLike'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps({
   commentsList: {
@@ -14,6 +17,35 @@ const props = defineProps({
     type: Number,
   },
 })
+
+const toast = useToast()
+const disabledCommentId = ref({})
+const handleClickLike = (id) => {
+  disabledCommentId.value[id] = !disabledCommentId.value[id]
+}
+
+// 對留言按讚 post
+const postLike = async (id, type) => {
+  try {
+    const res = await createLike({ id, type })
+    if (res.message === '按讚成功') {
+      toast.success('按讚成功')
+    } else {
+      toast.success('收回讚成功')
+    }
+    // commentsList 留言列表找到該留言並更新讚數
+    props.commentsList.map((item) => {
+      if (item.id === id) {
+        item.likes = res.data.likes
+      }
+    })
+    handleClickLike(id)
+    return res
+  } catch (error) {
+    console.log(error)
+    toast.error('操作失敗')
+  }
+}
 </script>
 
 <template>
@@ -60,7 +92,12 @@ const props = defineProps({
           {{ comment.content }}
         </p>
         <!-- 對留言的操作 -->
-        <button type="button" class="text-[13px] font-medium text-gray-450">
+        <button
+          type="button"
+          @click="postLike(comment.id, 'comment'), handleClickLike(comment.id)"
+          :disabled="disabledCommentId[comment.id]"
+          class="text-[13px] font-medium text-gray-450 disabled:opacity-50"
+        >
           讚({{ comment.likes }})
         </button>
       </div>
