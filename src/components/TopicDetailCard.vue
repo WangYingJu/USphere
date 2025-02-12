@@ -6,8 +6,12 @@ import { ref, defineEmits, onMounted, watch } from 'vue'
 import timeToNow from '@/time'
 import { fetchTopicDetail } from '@/apis/topicDetail'
 import { createLike } from '@/apis/postLike'
+
 import { useTopicsStore } from '@/stores/useTopicsStore'
 const topicsStore = useTopicsStore()
+
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 // useRoute() 顯示目前路由位置
 const route = useRoute()
@@ -50,6 +54,8 @@ const postLike = async (type) => {
   const id = topicDetail.value.id
   try {
     const res = await createLike({ id, type })
+    // 更新按讚數
+    topicDetail.value.likes = res.likes
     // 如果 store 有找到該 id 的話題 更新按讚數
     if (topicsStore.topicsData.length) {
       const topic = topicsStore.topicsData.find((topic) => topic.id === id)
@@ -57,11 +63,16 @@ const postLike = async (type) => {
         topic.likes = res.likes
       }
     }
+    if (res.message === '按讚成功') {
+      toast.success('按讚成功')
+    } else {
+      toast.success('收回讚成功')
+    }
     return res
   } catch (error) {
     console.log(error)
+    toast.error('操作失敗')
   } finally {
-    getTopicDetail()
     isClickLike.value = false
   }
 }
