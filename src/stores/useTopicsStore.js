@@ -28,6 +28,10 @@ export const useTopicsStore = defineStore('useTopicsStore', () => {
       console.log(error)
     }
   }
+  // 清空 topics api 資料
+  const clearTopicsData = () => {
+    topicsData.value = []
+  }
 
-  return { topicsData, getTopicsData, pageNum, sortSelect, limitNum, keywordString }
+  return { topicsData, getTopicsData, pageNum, sortSelect, limitNum, keywordString, clearTopicsData }
 })
