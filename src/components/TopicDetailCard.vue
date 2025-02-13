@@ -5,14 +5,12 @@ import { useRoute } from 'vue-router'
 import { ref, defineEmits, onMounted, watch } from 'vue'
 import timeToNow from '@/time'
 import { fetchTopicDetail } from '@/apis/topicDetail'
-import { createLike } from '@/apis/postLike'
-
+import { triggerLike } from '@/apis/like'
 import { useTopicsStore } from '@/stores/useTopicsStore'
-const topicsStore = useTopicsStore()
-
 import { useToast } from 'vue-toastification'
-const toast = useToast()
 
+const topicsStore = useTopicsStore()
+const toast = useToast()
 // useRoute() 顯示目前路由位置
 const route = useRoute()
 const topicDetail = ref({})
@@ -43,31 +41,22 @@ watch(
     if (newId !== oldId) return getTopicDetail()
   },
 )
-// 資料渲染初始化
-onMounted(() => {
-  getTopicDetail()
-})
 
 // 對話題按讚 post
 const postLike = async (type) => {
   isClickLike.value = true
   const id = topicDetail.value.id
   try {
-    const res = await createLike({ id, type })
+    const res = await triggerLike({ id, type })
     // 更新按讚數
-    topicDetail.value.likes = res.likes
+    topicDetail.value.likes = res.data.likes
     // 如果 store 有找到該 id 的話題 更新按讚數
-    if (topicsStore.topicsData.length) {
-      const topic = topicsStore.topicsData.find((topic) => topic.id === id)
-      if (topic) {
-        topic.likes = res.likes
+    topicsStore.topicsData.forEach((item) => {
+      if (item.id === id) {
+        item.likes = res.data.likes
       }
-    }
-    if (res.message === '按讚成功') {
-      toast.success('按讚成功')
-    } else {
-      toast.success('收回讚成功')
-    }
+    })
+    toast.success(res.message)
     return res
   } catch (error) {
     console.log(error)
@@ -76,6 +65,11 @@ const postLike = async (type) => {
     isClickLike.value = false
   }
 }
+
+// 資料渲染初始化
+onMounted(() => {
+  getTopicDetail()
+})
 </script>
 
 <template>
@@ -140,7 +134,12 @@ const postLike = async (type) => {
         </div>
         <!-- 按讚數 -->
         <div class="flex">
-          <button type="button" @click="postLike('topic')" :disabled="isClickLike">
+          <button
+            type="button"
+            @click="postLike('topic')"
+            :disabled="isClickLike"
+            class="disabled:opacity-50"
+          >
             <img src="../assets/TopicLikeIcon.svg" alt="" class="w-5 h-auto me-1" />
           </button>
           <p class="text-sm font-medium">{{ topicDetail.likes }}</p>
