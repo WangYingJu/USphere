@@ -66,6 +66,16 @@ const postLike = async (type) => {
   }
 }
 
+// 獲取 子元件 commentSection.vue 給的留言串長度
+const getCommentsCount = (newVal) => {
+  topicDetail.value.comments = newVal
+  // 尋找 store 的 topicData是否有該話題並更新
+  const topic = topicsStore.topicsData.find((item) => item.id === route.params.id)
+  if (topic) {
+    topic.comments = newVal
+  }
+}
+
 // 資料渲染初始化
 onMounted(() => {
   getTopicDetail()
@@ -155,6 +165,6 @@ onMounted(() => {
     </div>
   </div>
   <div class="mb-4">
-    <CommentSection :topic="topicDetail" />
+    <CommentSection :topic="topicDetail" @update-comments="getCommentsCount" />
   </div>
 </template>
