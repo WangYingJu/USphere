@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import timeToNow from '@/time'
-import { createLike } from '@/apis/postLike'
+import { triggerLike } from '@/apis/like'
 import { useToast } from 'vue-toastification'
 
 const props = defineProps({
@@ -26,24 +26,22 @@ const handleClickLike = (id) => {
 
 // 對留言按讚 post
 const postLike = async (id, type) => {
+  handleClickLike(id) // 防止重複點擊
   try {
-    const res = await createLike({ id, type })
-    if (res.message === '按讚成功') {
-      toast.success('按讚成功')
-    } else {
-      toast.success('收回讚成功')
-    }
+    const res = await triggerLike({ id, type })
+    toast.success(res.message)
     // commentsList 留言列表找到該留言並更新讚數
-    props.commentsList.map((item) => {
+    props.commentsList.forEach((item) => {
       if (item.id === id) {
         item.likes = res.data.likes
       }
     })
-    handleClickLike(id)
     return res
   } catch (error) {
     console.log(error)
     toast.error('操作失敗')
+  } finally {
+    handleClickLike(id) // 解除防止重複點擊
   }
 }
 </script>
@@ -94,7 +92,7 @@ const postLike = async (id, type) => {
         <!-- 對留言的操作 -->
         <button
           type="button"
-          @click="postLike(comment.id, 'comment'), handleClickLike(comment.id)"
+          @click="postLike(comment.id, 'comment')"
           :disabled="disabledCommentId[comment.id]"
           class="text-[13px] font-medium text-gray-450 disabled:opacity-50"
         >
