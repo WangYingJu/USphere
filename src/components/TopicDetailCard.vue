@@ -5,13 +5,19 @@ import { useRoute } from 'vue-router'
 import { ref, defineEmits, onMounted, watch } from 'vue'
 import timeToNow from '@/time'
 import { fetchTopicDetail } from '@/apis/topicDetail'
+import { triggerLike } from '@/apis/like'
+import { useTopicsStore } from '@/stores/useTopicsStore'
+import { useToast } from 'vue-toastification'
 
+const topicsStore = useTopicsStore()
+const toast = useToast()
 // useRoute() 顯示目前路由位置
 const route = useRoute()
 const topicDetail = ref({})
 // 自定義事件 命名為 update-data
 const emit = defineEmits(['update-data'])
 const isLoading = ref(false)
+const isClickLike = ref(false)
 
 // 獲取 topics 詳細內容資料 api
 const getTopicDetail = async () => {
@@ -35,6 +41,31 @@ watch(
     if (newId !== oldId) return getTopicDetail()
   },
 )
+
+// 對話題按讚 post
+const postLike = async (type) => {
+  isClickLike.value = true
+  const id = topicDetail.value.id
+  try {
+    const res = await triggerLike({ id, type })
+    // 更新按讚數
+    topicDetail.value.likes = res.data.likes
+    // 如果 store 有找到該 id 的話題 更新按讚數
+    topicsStore.topicsData.forEach((item) => {
+      if (item.id === id) {
+        item.likes = res.data.likes
+      }
+    })
+    toast.success(res.message)
+    return res
+  } catch (error) {
+    console.log(error)
+    toast.error('操作失敗')
+  } finally {
+    isClickLike.value = false
+  }
+}
+
 // 資料渲染初始化
 onMounted(() => {
   getTopicDetail()
@@ -103,7 +134,12 @@ onMounted(() => {
         </div>
         <!-- 按讚數 -->
         <div class="flex">
-          <button type="button">
+          <button
+            type="button"
+            @click="postLike('topic')"
+            :disabled="isClickLike"
+            class="disabled:opacity-50"
+          >
             <img src="../assets/TopicLikeIcon.svg" alt="" class="w-5 h-auto me-1" />
           </button>
           <p class="text-sm font-medium">{{ topicDetail.likes }}</p>
