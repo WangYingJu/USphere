@@ -5,7 +5,9 @@ import { useRoute } from 'vue-router'
 import { ref, defineEmits, onMounted, watch } from 'vue'
 import timeToNow from '@/time'
 import { fetchTopicDetail } from '@/apis/topicDetail'
+import { useTopicsStore } from '@/stores/useTopicsStore'
 
+const topicsStore = useTopicsStore()
 // useRoute() 顯示目前路由位置
 const route = useRoute()
 const topicDetail = ref({})
@@ -35,6 +37,17 @@ watch(
     if (newId !== oldId) return getTopicDetail()
   },
 )
+
+// 獲取 子元件 commentSection.vue 給的留言串長度
+const getCommentsCount = (newVal) => {
+  topicDetail.value.comments = newVal
+  // 尋找 store 的 topicData是否有該話題並更新
+  const topic = topicsStore.topicsData.find((item) => item.id === route.params.id)
+  if (topic) {
+    topic.comments = newVal
+  }
+}
+
 // 資料渲染初始化
 onMounted(() => {
   getTopicDetail()
@@ -119,6 +132,6 @@ onMounted(() => {
     </div>
   </div>
   <div class="mb-4">
-    <CommentSection :topic="topicDetail" />
+    <CommentSection :topic="topicDetail" @update-comments="getCommentsCount" />
   </div>
 </template>
