@@ -28,6 +28,7 @@ const activeSort = ref('')
 const sort = (sortName) => {
   isLoading.value = true
   activeSort.value = sortName
+  topicsStore.clearTopicsData()
   topicsStore
     .getTopicsData({
       sort: sortName,
