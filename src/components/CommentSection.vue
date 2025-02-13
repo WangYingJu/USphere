@@ -5,6 +5,7 @@ import { fetchComments } from '@/apis/getComments'
 import { createComment } from '@/apis/postComment'
 import { useFormDirty } from '@/stores/useFormDirty'
 import { useToast } from 'vue-toastification'
+import { defineEmits } from 'vue'
 
 const props = defineProps({
   topic: {
@@ -13,6 +14,7 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['update-comments'])
 const isLoading = ref(false)
 const loadingCount = ref(0)
 
@@ -46,6 +48,8 @@ const addComment = async () => {
       tempComment.value = ''
       charCount.value = 0
       await getCommentsList(props.topic.id)
+      // 傳遞 新的留言串長度給父元件 TopicDetailCard.vue
+      emit('update-comments', commentsList.value.length)
     } else {
       toast.warning('留言不能為空白')
     }
