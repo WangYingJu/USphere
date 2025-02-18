@@ -1,15 +1,30 @@
 <script setup>
 import { defineEmits } from 'vue'
+import LoginDialog from './LoginDialog.vue'
+import { ref } from 'vue'
+
+// 顯示登入視窗
+const showDialog = ref(false)
+const setDialogState = () => {
+  showDialog.value = !showDialog.value
+}
 
 // 自定義事件
 const emit = defineEmits(['navigate'])
 function handleAbandonClick() {
+  //  檢查是否有 token
+  const token = localStorage.getItem('usphere-token')
+  if (token === null) {
+    setDialogState()
+    return
+  }
   // 自定義事件傳遞給父元件
   emit('navigate')
 }
 </script>
 
 <template>
+  <LoginDialog v-if="showDialog" :show-dialog="showDialog" :set-dialog-state="setDialogState" />
   <div class="border rounded border-gray-250 bg-white p-5 mb-8" style="width: 250px">
     <h2 class="text-lg font-extrabold leading-6 mb-4">USphere<br />這是屬於我們的圈子</h2>
     <p class="text-base leading-6 text-gray-350 mb-4">快來發起新話題，加入我們的圈子吧！</p>

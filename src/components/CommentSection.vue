@@ -6,6 +6,7 @@ import { createComment } from '@/apis/postComment'
 import { useFormDirty } from '@/stores/useFormDirty'
 import { useToast } from 'vue-toastification'
 import { defineEmits } from 'vue'
+import LoginDialog from './LoginDialog.vue'
 
 const props = defineProps({
   topic: {
@@ -43,6 +44,12 @@ const addComment = async () => {
   isSubimtComment.value = true
   try {
     if (tempComment.value.trim() !== '') {
+      // 檢查是否有 token
+      const token = localStorage.getItem('usphere-token')
+      if (token === null) {
+        setDialogState()
+        return
+      }
       await createComment(props.topic.id, tempComment.value)
       toast.success('留言成功')
       tempComment.value = ''
@@ -91,6 +98,13 @@ const checkFormStatus = () => {
 watch(tempComment, () => {
   checkFormStatus()
 })
+
+// 顯示登入視窗
+const showDialog = ref(false)
+const setDialogState = () => {
+  showDialog.value = !showDialog.value
+}
+
 // 在頁面離開時將 isFormDirty 設為 false
 onUnmounted(() => {
   formDirtyStore.setFormDirty(false)
@@ -98,6 +112,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <LoginDialog v-if="showDialog" :show-dialog="showDialog" :set-dialog-state="setDialogState" />
   <section class="border rounded border-gray-250 bg-white p-10 mb-4">
     <h3 class="text-lg font-bold mb-[30px]">
       留言 ({{ props.topic.comments ? props.topic.comments : 0 }})
