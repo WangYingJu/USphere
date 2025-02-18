@@ -81,6 +81,7 @@ const getCommentsCount = (newVal) => {
   if (topic) {
     topic.comments = newVal
   }
+}
 
 // 顯示登入視窗
 const showDialog = ref(false)
