@@ -111,7 +111,7 @@ onMounted(() => {
           <!-- 管理貼文 -->
           <TopicMenuButton :topicData="topic" @click="addData(topic)" />
         </div>
-        <p class="text-lg font-semibold mb-3">{{ topic.title }}</p>
+        <p class="text-lg font-semibold mb-3 truncate">{{ topic.title }}</p>
         <p class="text-base leading-6.5 text-gray-450 mb-3 truncate">{{ topic.content }}</p>
         <div class="mb-3">
           <small v-for="item in topic.tags" :key="item" class="text-sm text-gray-450 me-3"

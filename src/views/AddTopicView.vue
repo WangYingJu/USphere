@@ -4,7 +4,7 @@ import HotTopicQuickAdd from '@/components/HotTopicQuickAdd.vue'
 import HotTopicsList from '@/components/HotTopicsList.vue'
 import PopupConfirm from '@/components/PopupConfirm.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { createTopic } from '@/apis/postTopic'
 import { updateTopic } from '@/apis/patchTopic'
 import { useFormDirty } from '@/stores/useFormDirty'
@@ -26,12 +26,33 @@ function addContentHeight(event) {
   // 設定textarea為自動增長的高度
   event.target.style.height = `${event.target.scrollHeight}px`
 }
+
+const titleCharCount = ref(0)
+const titleMaxLength = 50
+const contentCharCount = ref(0)
+const contentMaxLength = 600
 const showUnsavedPopup = ref(false)
 const showUnsavedEditPopup = ref(false)
 const tempTopicTitle = ref('')
 const tempTopicContent = ref('')
-const canPublish = () => tempTopicContent.value && tempTopicTitle.value
+
+const canPublish = () =>
+  tempTopicContent.value <= contentMaxLength && tempTopicTitle.value <= titleMaxLength
 const isSubmit = ref(false)
+
+// 標題字數計算
+watch(tempTopicTitle, (newVal) => {
+  const chineseFullCharCount = (newVal.match(/[\u2e80-\u9fff\uff00-\uffef]/g) || []).length
+  const englishHalfCharCount = newVal.length - chineseFullCharCount
+  titleCharCount.value = chineseFullCharCount * 2 + englishHalfCharCount
+})
+
+// 內文字數計算
+watch(tempTopicContent, (newVal) => {
+  const chineseFullCharCount = (newVal.match(/[\u2e80-\u9fff\uff00-\uffef]/g) || []).length
+  const englishHalfCharCount = newVal.length - chineseFullCharCount
+  contentCharCount.value = chineseFullCharCount * 2 + englishHalfCharCount
+})
 
 // 點擊'忍痛放棄'
 function handleAbandonClick() {
@@ -47,7 +68,7 @@ function handlePublishTopic() {
       content: tempTopicContent.value,
     })
   } else {
-    toast.warning('標題及內容不得為空白')
+    toast.warning('標題及內容不符合規定')
   }
 }
 
@@ -114,7 +135,7 @@ function handleSaveEdit() {
       content: tempTopicContent.value,
     })
   } else {
-    toast.warning('話題及內容不得為空白')
+    toast.warning('標題及內容不符合規定')
   }
 }
 
@@ -195,7 +216,7 @@ onUnmounted(() => {
 <template>
   <PopupConfirm />
   <main class="container container-customizing-1060 flex justify-between gap-5 my-[30px]">
-    <div class="w-full">
+    <div style="width: 790px">
       <BreadcrumbNav :breadcrumbs="breadcrumbData" />
       <div
         class="border rounded border-gray-250 bg-white py-[30px] px-10 mb-[30px] flex flex-col justify-between"
@@ -220,22 +241,31 @@ onUnmounted(() => {
         <div class="mb-2">
           <textarea
             v-model="tempTopicTitle"
-            placeholder="請輸入標題"
+            placeholder="請輸入標題(英文字元50個、中文25字)"
             class="w-full text-2.5xl leading-11 font-bold placeholder-black outline-none break-words whitespace-pre-wrap resize-none overflow-y-auto"
             rows="1"
             @input="addContentHeight"
           ></textarea>
+          <span
+            class="text-sm text-gray-500"
+            :class="{ 'text-red-500': titleCharCount > titleMaxLength }"
+            >{{ titleCharCount }}/{{ titleMaxLength }}</span
+          >
         </div>
         <!-- 內文 -->
         <div class="w-full text-wrap mb-6">
           <textarea
             v-model="tempTopicContent"
-            placeholder="請輸入內容"
+            placeholder="請輸入內容(英文字元600個、中文300字)"
             class="w-full h-auto resize-none overflow-y-scroll scrollbar-hide focus:outline-none text-base leading-6.5 text-gray-450 max-h-52"
             rows="5"
-            maxlength="100"
             @input="addContentHeight"
           ></textarea>
+          <span
+            class="text-sm text-gray-500"
+            :class="{ 'text-red-500': contentCharCount > contentMaxLength }"
+            >{{ contentCharCount }}/{{ contentMaxLength }}</span
+          >
         </div>
         <!-- 編輯選項 -->
         <div class="mt-auto">

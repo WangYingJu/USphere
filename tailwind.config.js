@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import colors from 'tailwindcss/colors'
 import scrollbarHide from 'tailwind-scrollbar-hide'
+import lineClamp from '@tailwindcss/line-clamp'
 
 export default {
   content: [
@@ -61,5 +62,6 @@ export default {
   },
   plugins: [
     scrollbarHide,
+    lineClamp,
   ],
 }
