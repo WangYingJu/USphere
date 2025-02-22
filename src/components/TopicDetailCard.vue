@@ -8,8 +8,9 @@ import { fetchTopicDetail } from '@/apis/topicDetail'
 import { triggerLike } from '@/apis/like'
 import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useToast } from 'vue-toastification'
-import LoginDialog from './LoginDialog.vue'
+import { useLoginDialog } from '@/stores/useLoginDialog'
 
+const loginDialogStore = useLoginDialog()
 const topicsStore = useTopicsStore()
 const toast = useToast()
 // useRoute() 顯示目前路由位置
@@ -47,13 +48,7 @@ watch(
 const postLike = async (type) => {
   isClickLike.value = true
   const id = topicDetail.value.id
-  const token = localStorage.getItem('usphere-token')
   try {
-    //  檢查是否有 token
-    if (token === null) {
-      setDialogState()
-      return
-    }
     const res = await triggerLike({ id, type })
     // 更新按讚數
     topicDetail.value.likes = res.data.likes
@@ -67,6 +62,10 @@ const postLike = async (type) => {
     return res
   } catch (error) {
     console.log(error)
+    if (error.status === 403) {
+      toast.warning('請先登入')
+      return loginDialogStore.openDialog()
+    }
     toast.error('操作失敗')
   } finally {
     isClickLike.value = false
@@ -83,12 +82,6 @@ const getCommentsCount = (newVal) => {
   }
 }
 
-// 顯示登入視窗
-const showDialog = ref(false)
-const setDialogState = () => {
-  showDialog.value = !showDialog.value
-}
-
 // 資料渲染初始化
 onMounted(() => {
   getTopicDetail()
@@ -96,7 +89,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <LoginDialog v-if="showDialog" :show-dialog="showDialog" :set-dialog-state="setDialogState" />
   <div class="w-full border rounded border-gray-250 bg-white py-[30px] px-10 mb-[30px]">
     <!-- loading UI -->
     <div v-if="isLoading" class="animate-pulse">

@@ -1,12 +1,13 @@
 <script setup>
-import { onUnmounted, ref, watch } from 'vue'
+import { onUnmounted, ref, watch, computed } from 'vue'
 import CommentCard from './CommentCard.vue'
 import { fetchComments } from '@/apis/getComments'
 import { createComment } from '@/apis/postComment'
 import { useFormDirty } from '@/stores/useFormDirty'
 import { useToast } from 'vue-toastification'
 import { defineEmits } from 'vue'
-import LoginDialog from './LoginDialog.vue'
+import { useLoginUser } from '@/stores/useLoginUser'
+import { useLoginDialog } from '@/stores/useLoginDialog'
 
 const props = defineProps({
   topic: {
@@ -15,6 +16,9 @@ const props = defineProps({
   },
 })
 
+const loginUserStore = useLoginUser()
+const loginDialogStore = useLoginDialog()
+const userPic = computed(() => loginUserStore.userInfo.pic ?? '/USphere/src/assets/member.png')
 const emit = defineEmits(['update-comments'])
 const isLoading = ref(false)
 const loadingCount = ref(0)
@@ -44,12 +48,6 @@ const addComment = async () => {
   isSubimtComment.value = true
   try {
     if (tempComment.value.trim() !== '') {
-      // 檢查是否有 token
-      const token = localStorage.getItem('usphere-token')
-      if (token === null) {
-        setDialogState()
-        return
-      }
       await createComment(props.topic.id, tempComment.value)
       toast.success('留言成功')
       tempComment.value = ''
@@ -62,6 +60,10 @@ const addComment = async () => {
     }
   } catch (error) {
     console.log(error)
+    if (error.status === 403) {
+      toast.warning('請先登入')
+      return loginDialogStore.openDialog()
+    }
     toast.error('留言失敗')
   } finally {
     isSubimtComment.value = false
@@ -99,12 +101,6 @@ watch(tempComment, () => {
   checkFormStatus()
 })
 
-// 顯示登入視窗
-const showDialog = ref(false)
-const setDialogState = () => {
-  showDialog.value = !showDialog.value
-}
-
 // 在頁面離開時將 isFormDirty 設為 false
 onUnmounted(() => {
   formDirtyStore.setFormDirty(false)
@@ -112,18 +108,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <LoginDialog v-if="showDialog" :show-dialog="showDialog" :set-dialog-state="setDialogState" />
   <section class="border rounded border-gray-250 bg-white p-10 mb-4">
     <h3 class="text-lg font-bold mb-[30px]">
       留言 ({{ props.topic.comments ? props.topic.comments : 0 }})
     </h3>
     <!-- 寫下留言 -->
     <div class="flex mb-5">
-      <img
-        src="../assets/member.png"
-        alt="User Avatar"
-        class="w-10 h-10 object-cover rounded-full me-2"
-      />
+      <img :src="userPic" alt="User Avatar" class="w-10 h-10 object-cover rounded-full me-2" />
       <div class="w-full min-h-20 border-2 rounded border-gray-250 bg-white p-3">
         <textarea
           v-model="tempComment"

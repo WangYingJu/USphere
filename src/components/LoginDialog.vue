@@ -5,23 +5,29 @@ import * as Yup from 'yup'
 import { fetchLogin } from '@/apis/login'
 import { useToast } from 'vue-toastification'
 import { defineProps } from 'vue'
+import { useLoginUser } from '@/stores/useLoginUser'
+import { useLoginDialog } from '@/stores/useLoginDialog'
 
-const props = defineProps({
+defineProps({
   showDialog: { type: Boolean, required: true, default: true },
   setDialogState: { type: Function, required: true },
 })
 
 const toast = useToast()
+const loginUserStore = useLoginUser()
+const loginDialogStore = useLoginDialog()
 
 // 提交成功時的處理
 const onSubmit = async (params) => {
   try {
     const res = await fetchLogin(params)
-    props.setDialogState()
-    toast.success('登入成功')
+    loginDialogStore.closeDialog()
+    toast.success(res.message)
     // 將 token 存入 localStorage
     const token = res.access_token
     localStorage.setItem('usphere-token', token)
+    // 將 user 資料存入 store
+    loginUserStore.userInfo = res.user
     return res
   } catch (error) {
     console.error(error)
@@ -103,7 +109,7 @@ const schema = Yup.object().shape({
             >還不是會員嗎?</RouterLink
           >
         </Form>
-        <button type="button" @click="props.setDialogState()">
+        <button type="button" @click="loginDialogStore.closeDialog()">
           <img src="../assets/CloseIcon.svg" alt="" class="absolute top-5 right-5 w-6 h-auto" />
         </button>
       </div>

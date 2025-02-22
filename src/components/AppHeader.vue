@@ -1,9 +1,12 @@
 <script setup>
-// 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
+import { useLoginUser } from '@/stores/useLoginUser'
+import { computed } from 'vue'
 
-// 寫入 Pinia store
 const store = useTopicsStore()
+const loginUserStore = useLoginUser()
+const userPic = computed(() => loginUserStore.userInfo.pic ?? '/USphere/src/assets/member.png')
+
 // 搜尋按鍵 變更 api 參數
 const handleSearch = () => {
   if (store.keywordString.trim() === '') return
@@ -73,11 +76,7 @@ const handleChange = (e) => {
         </RouterLink>
         <!-- 會員 -->
         <RouterLink to="/avatar" class="w-10 h-10 rounded-full bg-slate-400">
-          <img
-            src="../assets/member.png"
-            alt="User Avatar"
-            class="w-full h-full object-cover rounded-full"
-          />
+          <img :src="userPic" alt="User Avatar" class="w-full h-full object-cover rounded-full" />
         </RouterLink>
       </nav>
     </div>

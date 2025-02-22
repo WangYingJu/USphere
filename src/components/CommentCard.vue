@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import timeToNow from '@/time'
 import { triggerLike } from '@/apis/like'
 import { useToast } from 'vue-toastification'
+import { useLoginDialog } from '@/stores/useLoginDialog'
 
 const props = defineProps({
   commentsList: {
@@ -19,6 +20,8 @@ const props = defineProps({
 })
 
 const toast = useToast()
+const loginDialogStore = useLoginDialog()
+
 const disabledCommentId = ref({})
 const handleClickLike = (id) => {
   disabledCommentId.value[id] = !disabledCommentId.value[id]
@@ -39,6 +42,10 @@ const postLike = async (id, type) => {
     return res
   } catch (error) {
     console.log(error)
+    if (error.status === 403) {
+      toast.warning('請先登入')
+      return loginDialogStore.openDialog()
+    }
     toast.error('操作失敗')
   } finally {
     handleClickLike(id) // 解除防止重複點擊
