@@ -4,14 +4,8 @@ import { defineEmits, defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
-
-const router = useRouter()
-const toast = useToast()
-
-// 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
-// 寫入 Pinia store
-const store = useTopicsStore()
+import { useLoginDialog } from '@/stores/useLoginDialog'
 
 const props = defineProps({
   topic: {
@@ -19,6 +13,11 @@ const props = defineProps({
     required: true,
   },
 })
+
+const router = useRouter()
+const toast = useToast()
+const store = useTopicsStore()
+const loginDialogStore = useLoginDialog()
 
 // 點擊編輯
 const handleEditConfirm = async ({ id, title, content, author, author_pic }) => {
@@ -54,6 +53,10 @@ const handleDeleteConfirm = async (id) => {
     }
   } catch (error) {
     console.log(error)
+    if (error.status === 403) {
+      toast.warning('請先登入')
+      return loginDialogStore.openDialog()
+    }
     toast.error('刪除失敗')
   } finally {
     isClicked.value = false

@@ -8,7 +8,9 @@ import { fetchTopicDetail } from '@/apis/topicDetail'
 import { triggerLike } from '@/apis/like'
 import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useToast } from 'vue-toastification'
+import { useLoginDialog } from '@/stores/useLoginDialog'
 
+const loginDialogStore = useLoginDialog()
 const topicsStore = useTopicsStore()
 const toast = useToast()
 // useRoute() 顯示目前路由位置
@@ -60,6 +62,10 @@ const postLike = async (type) => {
     return res
   } catch (error) {
     console.log(error)
+    if (error.status === 403) {
+      toast.warning('請先登入')
+      return loginDialogStore.openDialog()
+    }
     toast.error('操作失敗')
   } finally {
     isClickLike.value = false

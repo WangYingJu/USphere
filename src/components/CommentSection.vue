@@ -6,6 +6,8 @@ import { createComment } from '@/apis/postComment'
 import { useFormDirty } from '@/stores/useFormDirty'
 import { useToast } from 'vue-toastification'
 import { defineEmits } from 'vue'
+import { useLoginUser } from '@/stores/useLoginUser'
+import { useLoginDialog } from '@/stores/useLoginDialog'
 
 const props = defineProps({
   topic: {
@@ -14,6 +16,8 @@ const props = defineProps({
   },
 })
 
+const loginUserStore = useLoginUser()
+const loginDialogStore = useLoginDialog()
 const emit = defineEmits(['update-comments'])
 const isLoading = ref(false)
 const loadingCount = ref(0)
@@ -55,6 +59,10 @@ const addComment = async () => {
     }
   } catch (error) {
     console.log(error)
+    if (error.status === 403) {
+      toast.warning('請先登入')
+      return loginDialogStore.openDialog()
+    }
     toast.error('留言失敗')
   } finally {
     isSubimtComment.value = false
@@ -91,6 +99,7 @@ const checkFormStatus = () => {
 watch(tempComment, () => {
   checkFormStatus()
 })
+
 // 在頁面離開時將 isFormDirty 設為 false
 onUnmounted(() => {
   formDirtyStore.setFormDirty(false)
@@ -105,7 +114,7 @@ onUnmounted(() => {
     <!-- 寫下留言 -->
     <div class="flex mb-5">
       <img
-        src="../assets/member.png"
+        :src="loginUserStore.userPic"
         alt="User Avatar"
         class="w-10 h-10 object-cover rounded-full me-2"
       />

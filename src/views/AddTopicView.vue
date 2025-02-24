@@ -9,15 +9,16 @@ import { createTopic } from '@/apis/postTopic'
 import { updateTopic } from '@/apis/patchTopic'
 import { useFormDirty } from '@/stores/useFormDirty'
 import { useToast } from 'vue-toastification'
+import { useTopicsStore } from '@/stores/useTopicsStore'
+import { useLoginUser } from '@/stores/useLoginUser'
+import { useLoginDialog } from '@/stores/useLoginDialog'
 
 const toast = useToast()
 const route = useRoute()
 const router = useRouter()
-
-// 匯入 useTopicsStore
-import { useTopicsStore } from '@/stores/useTopicsStore'
-// 寫入 Pinia store
 const store = useTopicsStore()
+const loginUserStore = useLoginUser()
+const loginDialogStore = useLoginDialog()
 
 function addContentHeight(event) {
   // 重設textarea高度，防止高度不斷累加
@@ -29,11 +30,6 @@ const showUnsavedPopup = ref(false)
 const showUnsavedEditPopup = ref(false)
 const tempTopicTitle = ref('')
 const tempTopicContent = ref('')
-const authorName = ref('')
-const authorPic = ref('')
-const authorPicSrc = computed(() =>
-  authorPic.value ? authorPic.value : '/USphere/src/assets/member.png',
-)
 const canPublish = () => tempTopicContent.value && tempTopicTitle.value
 const isSubmit = ref(false)
 
@@ -70,6 +66,10 @@ const postTopic = async (params) => {
     }
   } catch (error) {
     console.log(error)
+    if (error.status === 403) {
+      toast.warning('請先登入')
+      return loginDialogStore.openDialog()
+    }
     toast.error('發佈失敗')
   } finally {
     isSubmit.value = false
@@ -132,6 +132,10 @@ const patchTopic = async (id, params) => {
     return router.replace(`/topics/${id}`)
   } catch (error) {
     console.log(error)
+    if (error.status === 403) {
+      toast.warning('請先登入')
+      return loginDialogStore.openDialog()
+    }
     toast.error('儲存失敗')
   } finally {
     isSubmit.value = false
@@ -160,9 +164,8 @@ const breadcrumbData = [
 ]
 
 onMounted(() => {
+  // 如果有 id 則代表是編輯話題頁面
   if (route.query.id) {
-    authorName.value = route.query.author
-    authorPic.value = route.query.author_pic
     tempTopicTitle.value = route.query.title
     tempTopicContent.value = route.query.content
     router.push({ query: { id: route.query.id } })
@@ -200,13 +203,13 @@ onUnmounted(() => {
         <!-- 發表者資訊 -->
         <div class="flex items-center mb-5">
           <img
-            :src="authorPicSrc"
+            :src="loginUserStore.userPic"
             alt="User Avatar"
             class="w-10 h-10 object-cover rounded-full me-2"
           />
           <div>
             <p class="text-sm leading-4 font-medium">
-              {{ authorName ? authorName : '王小艾' }}
+              {{ loginUserStore.userName }}
             </p>
             <span class="text-xs text-gray-450">{{
               route.query.id ? '編輯中...' : '正在輸入...'

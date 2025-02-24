@@ -1,9 +1,17 @@
 <script setup>
 import { defineEmits } from 'vue'
+import { useLoginDialog } from '@/stores/useLoginDialog'
+
+const loginDialog = useLoginDialog()
 
 // 自定義事件
 const emit = defineEmits(['navigate'])
 function handleAbandonClick() {
+  //  檢查是否有 token
+  const token = localStorage.getItem('usphere-token')
+  if (token === null) {
+    return loginDialog.openDialog()
+  }
   // 自定義事件傳遞給父元件
   emit('navigate')
 }

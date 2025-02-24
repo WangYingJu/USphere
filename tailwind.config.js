@@ -15,6 +15,7 @@ export default {
         '5px': '5px',
         '13px': '13px',
         '30px': '30px',
+        '340px': '340px',
         '372px': '372px',
         '512px': '512px',
         4.5: '18px'
@@ -40,6 +41,7 @@ export default {
       white: colors.white,
       indigo: colors.indigo,
       red: colors.rose,
+      green: colors.green,
       yellow: colors.amber,
       gray: {
         ...colors.gray,
@@ -51,6 +53,7 @@ export default {
         650: '#111624',
       },
       'primary-blue': '#3466F6',
+      'primary-bg': '#FAFBFF',
     }
   },
   variants: {
