@@ -1,13 +1,13 @@
 import api from '@/api'
 
-export const fetchTopics = async (params) => {
+export const fetchUserInfo = async () => {
   try {
-    const res = await api.get('/topics', { params }, {
+    const res = await api.get('/auth/whoami', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('usphere-token')}`,
       }
     })
-    return res.data.data
+    return res.data
   } catch (error) {
     console.log(error);
     throw error
