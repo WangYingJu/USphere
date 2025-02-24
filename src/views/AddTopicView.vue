@@ -30,8 +30,6 @@ const showUnsavedPopup = ref(false)
 const showUnsavedEditPopup = ref(false)
 const tempTopicTitle = ref('')
 const tempTopicContent = ref('')
-const authorName = computed(() => loginUserStore.userInfo.name ?? '匿名使用者')
-const authorPic = computed(() => loginUserStore.userInfo.pic ?? '/USphere/src/assets/member.png')
 const canPublish = () => tempTopicContent.value && tempTopicTitle.value
 const isSubmit = ref(false)
 
@@ -205,13 +203,13 @@ onUnmounted(() => {
         <!-- 發表者資訊 -->
         <div class="flex items-center mb-5">
           <img
-            :src="authorPic"
+            :src="loginUserStore.userPic"
             alt="User Avatar"
             class="w-10 h-10 object-cover rounded-full me-2"
           />
           <div>
             <p class="text-sm leading-4 font-medium">
-              {{ authorName ? authorName : '王小艾' }}
+              {{ loginUserStore.userName }}
             </p>
             <span class="text-xs text-gray-450">{{
               route.query.id ? '編輯中...' : '正在輸入...'

@@ -4,14 +4,8 @@ import TextInput from './TextInput.vue'
 import * as Yup from 'yup'
 import { fetchLogin } from '@/apis/login'
 import { useToast } from 'vue-toastification'
-import { defineProps } from 'vue'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
-
-defineProps({
-  showDialog: { type: Boolean, required: true, default: true },
-  setDialogState: { type: Function, required: true },
-})
 
 const toast = useToast()
 const loginUserStore = useLoginUser()
@@ -27,7 +21,7 @@ const onSubmit = async (params) => {
     const token = res.access_token
     localStorage.setItem('usphere-token', token)
     // 將 user 資料存入 store
-    loginUserStore.userInfo = res.user
+    loginUserStore.setUserInfo(res.user.name, res.user.pic)
     return res
   } catch (error) {
     console.error(error)

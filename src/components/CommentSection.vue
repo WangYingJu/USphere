@@ -1,5 +1,5 @@
 <script setup>
-import { onUnmounted, ref, watch, computed } from 'vue'
+import { onUnmounted, ref, watch } from 'vue'
 import CommentCard from './CommentCard.vue'
 import { fetchComments } from '@/apis/getComments'
 import { createComment } from '@/apis/postComment'
@@ -18,7 +18,6 @@ const props = defineProps({
 
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
-const userPic = computed(() => loginUserStore.userInfo.pic ?? '/USphere/src/assets/member.png')
 const emit = defineEmits(['update-comments'])
 const isLoading = ref(false)
 const loadingCount = ref(0)
@@ -114,7 +113,11 @@ onUnmounted(() => {
     </h3>
     <!-- 寫下留言 -->
     <div class="flex mb-5">
-      <img :src="userPic" alt="User Avatar" class="w-10 h-10 object-cover rounded-full me-2" />
+      <img
+        :src="loginUserStore.userPic"
+        alt="User Avatar"
+        class="w-10 h-10 object-cover rounded-full me-2"
+      />
       <div class="w-full min-h-20 border-2 rounded border-gray-250 bg-white p-3">
         <textarea
           v-model="tempComment"
