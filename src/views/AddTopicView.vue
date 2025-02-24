@@ -37,21 +37,22 @@ const tempTopicTitle = ref('')
 const tempTopicContent = ref('')
 
 const canPublish = () =>
-  tempTopicContent.value <= contentMaxLength && tempTopicTitle.value <= titleMaxLength
+  tempTopicContent.value <= contentMaxLength && tempTopicTitle.value.length <= titleMaxLength
 const isSubmit = ref(false)
 
+// 字數計算方法
+const calculateCharCount = (text) => {
+  const chineseFullCharCount = (text.match(/[\u2e80-\u9fff\uff00-\uffef]/g) || []).length
+  const englishHalfCharCount = text.length - chineseFullCharCount
+  return chineseFullCharCount * 2 + englishHalfCharCount
+}
 // 標題字數計算
 watch(tempTopicTitle, (newVal) => {
-  const chineseFullCharCount = (newVal.match(/[\u2e80-\u9fff\uff00-\uffef]/g) || []).length
-  const englishHalfCharCount = newVal.length - chineseFullCharCount
-  titleCharCount.value = chineseFullCharCount * 2 + englishHalfCharCount
+  titleCharCount.value = calculateCharCount(newVal)
 })
-
 // 內文字數計算
 watch(tempTopicContent, (newVal) => {
-  const chineseFullCharCount = (newVal.match(/[\u2e80-\u9fff\uff00-\uffef]/g) || []).length
-  const englishHalfCharCount = newVal.length - chineseFullCharCount
-  contentCharCount.value = chineseFullCharCount * 2 + englishHalfCharCount
+  contentCharCount.value = calculateCharCount(newVal)
 })
 
 // 點擊'忍痛放棄'
