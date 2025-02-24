@@ -38,7 +38,7 @@ const handleNavigate = () => {
 
 <template>
   <main class="container container-customizing-1060 flex justify-between gap-5 my-[30px]">
-    <div class="w-full">
+    <div style="width: 790px">
       <BreadcrumbNav :breadcrumbs="breadcrumbData" />
       <TopicDetailCard @update-data="handleTitleUpdate" />
     </div>

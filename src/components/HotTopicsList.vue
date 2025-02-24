@@ -29,11 +29,12 @@ onMounted(() => {
     <h3 class="text-sm font-bold">熱門話題</h3>
     <ul>
       <li
-        v-for="topic in popularStore.popularTopicsData"
+        v-for="(topic, idx) in popularStore.popularTopicsData"
         :key="topic.id"
-        class="text-sm font-medium pt-5 pb-3 border-b hover:text-primary-blue"
+        class="text-sm font-medium pt-5 pb-3 hover:text-primary-blue line-clamp-2"
+        :class="{ 'border-b border-gray-250': idx !== popularStore.popularTopicsData.length - 1 }"
       >
-        <RouterLink :to="{ name: 'topicDetail', params: { id: topic.id } }">{{
+        <RouterLink :to="{ name: 'topicDetail', params: { id: topic.id } }" class="line-clamp-2">{{
           topic.title
         }}</RouterLink>
       </li>

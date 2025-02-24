@@ -9,9 +9,16 @@ const props = defineProps({
 </script>
 
 <template>
-  <section class="mb-5">
-    <ul class="text-sm text-gray-450 py-5px me-5 flex">
-      <li v-for="(item, idx) in props.breadcrumbs" :key="idx">
+  <section class="w-full mb-5">
+    <ul class="text-sm text-gray-450 py-5px flex truncate">
+      <!-- 如果是最後一項，添加 truncate w-full -->
+      <li
+        v-for="(item, idx) in props.breadcrumbs"
+        :key="idx"
+        :class="{
+          'truncate w-full': idx === breadcrumbs.length - 1,
+        }"
+      >
         <RouterLink
           v-if="item.path"
           :to="item.path"
