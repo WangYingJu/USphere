@@ -1,9 +1,16 @@
 <script setup>
+import { ref } from 'vue'
 import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useLoginUser } from '@/stores/useLoginUser'
+import { useLoginDialog } from '@/stores/useLoginDialog'
+import PopupConfirm from '@/components/PopupConfirm.vue'
+import { useToast } from 'vue-toastification'
+import { fetchLogout } from '@/apis/logout'
 
 const store = useTopicsStore()
 const loginUserStore = useLoginUser()
+const loginDialogStore = useLoginDialog()
+const toast = useToast()
 
 // 搜尋按鍵 變更 api 參數
 const handleSearch = () => {
@@ -21,6 +28,37 @@ const handleChange = (e) => {
   if (e.target.value !== '') return
 
   handleSearch()
+}
+
+// 是否顯示登出彈窗
+const showLogoutPopup = ref(false)
+// 取消登出
+const handleCancelLogout = () => {
+  showLogoutPopup.value = false
+}
+// 確認登出
+const handleConfirmLogout = async () => {
+  try {
+    const res = await fetchLogout()
+    localStorage.removeItem('usphere-token')
+    loginUserStore.setUserInfo('', '')
+    loginUserStore.setIsLogin(false)
+    showLogoutPopup.value = false
+    toast.success(res.message)
+    return res
+  } catch (error) {
+    console.log(error)
+    toast.error('登出失敗')
+  }
+}
+
+// 處理登入登出按鈕
+const handleAuthButton = () => {
+  if (!loginUserStore.isLogin) {
+    loginDialogStore.openDialog()
+  } else {
+    showLogoutPopup.value = true
+  }
 }
 </script>
 
@@ -80,7 +118,29 @@ const handleChange = (e) => {
             class="w-full h-full object-cover rounded-full"
           />
         </RouterLink>
+        <!-- 登入登出 icon -->
+        <button type="button" class="w-10 h-10" @click="handleAuthButton">
+          <img
+            :src="
+              loginUserStore.isLogin
+                ? '/USphere/src/assets/logout.svg'
+                : '/USphere/src/assets/login.svg'
+            "
+            :alt="loginUserStore.isLogin ? '登出' : '登入'"
+            class="w-6 h-6 block"
+          />
+        </button>
       </nav>
     </div>
   </header>
+  <!-- 登出彈窗 -->
+  <PopupConfirm
+    :show="showLogoutPopup"
+    title="請確認"
+    message="確定要登出嗎？"
+    :showCancelButton="true"
+    CancelButtonName="取消"
+    :onCancel="handleCancelLogout"
+    :onConfirm="handleConfirmLogout"
+  />
 </template>

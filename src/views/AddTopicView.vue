@@ -215,7 +215,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <PopupConfirm />
   <main class="container container-customizing-1060 flex justify-between gap-5 my-[30px]">
     <div style="width: 790px">
       <BreadcrumbNav :breadcrumbs="breadcrumbData" />

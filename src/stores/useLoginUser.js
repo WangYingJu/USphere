@@ -27,5 +27,13 @@ export const useLoginUser = defineStore('useLoginUser', () => {
     userInfo.value.pic = pic
   }
 
-  return { userName, userPic, setUserInfo }
+  // 是否登入
+  const isLogin = ref(false)
+
+  // 設定登入狀態
+  const setIsLogin = (status) => {
+    isLogin.value = status
+  }
+
+  return { userName, userPic, setUserInfo, isLogin, setIsLogin }
 })
