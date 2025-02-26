@@ -6,13 +6,18 @@ import { fetchLogin } from '@/apis/login'
 import { useToast } from 'vue-toastification'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
+import { ref } from 'vue'
 
 const toast = useToast()
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
+const isClicked = ref(false)
 
 // 提交成功時的處理
 const onSubmit = async (params) => {
+  // 防止重複點擊
+  if (isClicked.value) return
+  isClicked.value = true
   try {
     const res = await fetchLogin(params)
     loginDialogStore.closeDialog()
@@ -25,7 +30,12 @@ const onSubmit = async (params) => {
     return res
   } catch (error) {
     console.error(error)
+    // 400 帳號密碼有一個沒填
+    // 401 帳號密碼錯誤、帳號不存在
+    if (error.status === 401) return toast.error('帳號或密碼錯誤')
     toast.error('登入失敗')
+  } finally {
+    isClicked.value = false
   }
 }
 // 提交失敗時的處理
@@ -95,7 +105,9 @@ const schema = Yup.object().shape({
 
           <button
             class="submit-btn w-full text-base font-medium text-white bg-primary-blue rounded py-2 hover:opacity-90"
+            :class="{ 'disabled:bg-gray-400 disabled:hover:opacity-100': isClicked }"
             type="submit"
+            :disabled="isClicked === true"
           >
             登入
           </button>
