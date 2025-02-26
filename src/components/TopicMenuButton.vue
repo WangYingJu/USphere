@@ -32,7 +32,7 @@ const closeMenu = () => {
       v-if="isMenuVisible"
       class="absolute end-0 -translate-x-5 w-max popup-container z-50 bg-white border border-gray-250 shadow-lg rounded"
     >
-      <TopicMenu :topic="topicData" @topic-deleted="closeMenu" />
+      <TopicMenu :topic="topicData" @close-menu="closeMenu" />
     </div>
   </div>
 </template>

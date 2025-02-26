@@ -21,7 +21,7 @@ const checkWhoami = async () => {
 }
 
 onMounted(() => {
-  if(!localStorage.getItem('usphere-token')) return
+  if (!localStorage.getItem('usphere-token')) return
   checkWhoami()
 })
 </script>
