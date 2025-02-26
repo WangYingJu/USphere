@@ -27,6 +27,7 @@ const onSubmit = async (params) => {
     localStorage.setItem('usphere-token', token)
     // 將 user 資料存入 store
     loginUserStore.setUserInfo(res.user.name, res.user.pic)
+    loginUserStore.setAuthStatus(true)
     return res
   } catch (error) {
     console.error(error)

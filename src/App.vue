@@ -14,9 +14,11 @@ const checkWhoami = async () => {
   try {
     const res = await fetchUserInfo()
     loginUserStore.setUserInfo(res.user.name, res.user.pic)
+    loginUserStore.setAuthStatus(true)
     return res
   } catch (error) {
     console.log(error)
+    loginUserStore.setAuthStatus(false)
   }
 }
 

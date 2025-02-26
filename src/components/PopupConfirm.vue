@@ -26,7 +26,7 @@ watch(
   <Teleport to="body">
     <div
       v-if="show"
-      class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center z-99"
+      class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center z-50"
     >
       <main
         class="bg-white rounded border-gray-250 sm:w-[512px] sm:min-h-60 p-6 flex flex-col"
@@ -36,7 +36,9 @@ watch(
         <p class="text-base">{{ message }}</p>
         <div class="mt-auto">
           <div class="flex justify-end gap-10">
-            <button v-if="showCancelButton" type="button" class="text-gray-550" @click="onCancel">{{ CancelButtonName }}</button>
+            <button v-if="showCancelButton" type="button" class="text-gray-550" @click="onCancel">
+              {{ CancelButtonName }}
+            </button>
             <button type="button" class="text-primary-blue" @click="onConfirm">確定</button>
           </div>
         </div>
