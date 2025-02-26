@@ -30,20 +30,10 @@ export const useLoginUser = defineStore('useLoginUser', () => {
   // 是否登入
   const isLogin = ref(false)
 
-  // 計算登入狀態來決定顯示的圖示
-  const authIconPath = computed(() => {
-    return isLogin.value ? '/USphere/src/assets/logout.svg' : '/USphere/src/assets/login.svg'
-  })
-
-  // 計算登入狀態來決定顯示的名稱
-  const authIconName = computed(() => {
-    return isLogin.value ? '登出' : '登入'
-  })
-
   // 設定登入狀態
-  const setAuthStatus = (status) => {
+  const setIsLogin = (status) => {
     isLogin.value = status
   }
 
-  return { userName, userPic, setUserInfo, isLogin, authIconPath, authIconName, setAuthStatus }
+  return { userName, userPic, setUserInfo, isLogin, setIsLogin }
 })

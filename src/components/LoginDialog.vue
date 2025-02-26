@@ -27,7 +27,7 @@ const onSubmit = async (params) => {
     localStorage.setItem('usphere-token', token)
     // 將 user 資料存入 store
     loginUserStore.setUserInfo(res.user.name, res.user.pic)
-    loginUserStore.setAuthStatus(true)
+    loginUserStore.setIsLogin(true)
     return res
   } catch (error) {
     console.error(error)
@@ -108,7 +108,7 @@ const schema = Yup.object().shape({
             class="submit-btn w-full text-base font-medium text-white bg-primary-blue rounded py-2 hover:opacity-90"
             :class="{ 'disabled:bg-gray-400 disabled:hover:opacity-100': isClicked }"
             type="submit"
-            :disabled="isClicked === true"
+            :disabled="isClicked"
           >
             登入
           </button>

@@ -42,7 +42,7 @@ const handleConfirmLogout = async () => {
     const res = await fetchLogout()
     localStorage.removeItem('usphere-token')
     loginUserStore.setUserInfo('', '')
-    loginUserStore.setAuthStatus(false)
+    loginUserStore.setIsLogin(false)
     showLogoutPopup.value = false
     toast.success(res.message)
     return res
@@ -121,8 +121,12 @@ const handleAuthButton = () => {
         <!-- 登入登出 icon -->
         <button type="button" class="w-10 h-10" @click="handleAuthButton">
           <img
-            :src="loginUserStore.authIconPath"
-            :alt="loginUserStore.authIconName"
+            :src="
+              loginUserStore.isLogin
+                ? '/USphere/src/assets/logout.svg'
+                : '/USphere/src/assets/login.svg'
+            "
+            :alt="loginUserStore.isLogin ? '登出' : '登入'"
             class="w-6 h-6 block"
           />
         </button>
