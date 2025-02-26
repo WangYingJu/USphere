@@ -5,6 +5,7 @@ import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
 import PopupConfirm from '@/components/PopupConfirm.vue'
 import { useToast } from 'vue-toastification'
+import { fetchLogout } from '@/apis/logout'
 
 const store = useTopicsStore()
 const loginUserStore = useLoginUser()
@@ -36,12 +37,19 @@ const handleCancelLogout = () => {
   showLogoutPopup.value = false
 }
 // 確認登出
-const handleConfirmLogout = () => {
-  localStorage.removeItem('usphere-token')
-  loginUserStore.setUserInfo('', '')
-  loginUserStore.setAuthStatus(false)
-  showLogoutPopup.value = false
-  toast.success('登出成功')
+const handleConfirmLogout = async () => {
+  try {
+    const res = await fetchLogout()
+    localStorage.removeItem('usphere-token')
+    loginUserStore.setUserInfo('', '')
+    loginUserStore.setAuthStatus(false)
+    showLogoutPopup.value = false
+    toast.success(res.message)
+    return res
+  } catch (error) {
+    console.log(error)
+    toast.error('登出失敗')
+  }
 }
 
 // 處理登入登出按鈕
