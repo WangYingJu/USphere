@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
@@ -57,8 +57,8 @@ const handleCancelLogout = () => {
 }
 // 點擊確認 執行登出
 const handleConfirmLogout = async () => {
-  loadingStore.setLoading(true)
   try {
+    loadingStore.setLoading(true)
     const res = await fetchLogout()
     localStorage.removeItem('usphere-token')
     loginUserStore.setUserInfo('', '')
@@ -83,6 +83,16 @@ const handleAuthButton = () => {
     showLogoutPopup.value = true
   }
 }
+
+// 監聽 登入狀態來決定是否更新 can_edit_topics
+watch(
+  () => loginUserStore.isLogin,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      store.reFetchTopics()
+    }
+  },
+)
 </script>
 
 <template>
