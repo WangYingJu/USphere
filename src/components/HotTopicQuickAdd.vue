@@ -4,10 +4,12 @@ import { useLoginDialog } from '@/stores/useLoginDialog'
 import { fetchUserInfo } from '@/apis/whoami'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useToast } from 'vue-toastification'
+import { ref } from 'vue'
 
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 const toast = useToast()
+const isClickAddTopic = ref(false)
 
 // 確認 token 是否有效
 const checkWhoami = async () => {
@@ -24,6 +26,7 @@ const checkWhoami = async () => {
 // 自定義事件
 const emit = defineEmits(['navigate'])
 function handleAbandonClick() {
+  isClickAddTopic.value = true
   //  檢查是否有有效的 token
   checkWhoami()
     .then(() => {
@@ -36,6 +39,9 @@ function handleAbandonClick() {
       toast.warning('請先登入')
       loginDialogStore.openDialog()
     })
+    .finally(() => {
+      isClickAddTopic.value = false
+    })
 }
 </script>
 
@@ -47,6 +53,11 @@ function handleAbandonClick() {
       type="button"
       @click="handleAbandonClick"
       class="text-base leading-5 border rounded border-primary-blue bg-white hover:bg-primary-blue text-primary-blue hover:text-white w-full py-2.5 mb-4"
+      :class="{
+        ' disabled:bg-gray-400 disabled:border-gray-400 disabled:hover:none disabled:text-white':
+          isClickAddTopic,
+      }"
+      :disabled="isClickAddTopic"
     >
       發表新話題
     </button>
