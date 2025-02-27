@@ -140,16 +140,6 @@ onMounted(() => {
             </button>
             <p class="text-sm font-medium">{{ topic.likes }}</p>
           </div>
-          <div class="flex items-center">
-            <button
-              type="button"
-              @click.stop.prevent="managentTopic('珍藏')"
-              class="w-5 h-5 me-1 rounded-full z-10"
-            >
-              <img src="../assets/TopicBookmarkIcon.svg" alt="珍藏" class="w-full h-full" />
-            </button>
-            <p class="text-sm font-medium">{{ topic.bookmarks }}</p>
-          </div>
         </div>
       </li>
     </ul>

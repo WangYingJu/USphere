@@ -160,13 +160,6 @@ onMounted(() => {
           </button>
           <p class="text-sm font-medium">{{ topicDetail.likes }}</p>
         </div>
-        <!-- 典藏數 -->
-        <div class="flex">
-          <button type="button">
-            <img src="../assets/TopicBookmarkIcon.svg" alt="" class="w-5 h-auto me-1" />
-          </button>
-          <p class="text-sm font-medium">{{ topicDetail.bookmarks }}</p>
-        </div>
       </div>
     </div>
   </div>
