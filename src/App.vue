@@ -5,9 +5,12 @@ import { useLoginDialog } from './stores/useLoginDialog'
 import { fetchUserInfo } from './apis/whoami'
 import { useLoginUser } from './stores/useLoginUser'
 import { onMounted } from 'vue'
+import LoadingUI from './components/LoadingUI.vue'
+import { useLoading } from './stores/useLoading'
 
 const loginDialogStore = useLoginDialog()
 const loginUserStore = useLoginUser()
+const loadingStore = useLoading()
 
 // 確認 token 是否有效
 const checkWhoami = async () => {
@@ -32,4 +35,5 @@ onMounted(() => {
   <AppHeader />
   <RouterView />
   <LoginDialog v-if="loginDialogStore.isShowDialog" />
+  <LoadingUI v-if="loadingStore.isLoading" />
 </template>

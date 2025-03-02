@@ -6,11 +6,13 @@ import { useLoginDialog } from '@/stores/useLoginDialog'
 import PopupConfirm from '@/components/PopupConfirm.vue'
 import { useToast } from 'vue-toastification'
 import { fetchLogout } from '@/apis/logout'
+import { useLoading } from '@/stores/useLoading'
 
 const store = useTopicsStore()
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 const toast = useToast()
+const loadingStore = useLoading()
 
 // 搜尋按鍵 變更 api 參數
 const handleSearch = () => {
@@ -32,23 +34,27 @@ const handleChange = (e) => {
 
 // 是否顯示登出彈窗
 const showLogoutPopup = ref(false)
-// 取消登出
+// 點擊取消 關閉彈窗
 const handleCancelLogout = () => {
   showLogoutPopup.value = false
 }
-// 確認登出
+// 點擊確認 執行登出
 const handleConfirmLogout = async () => {
+  loadingStore.setLoading(true)
   try {
     const res = await fetchLogout()
     localStorage.removeItem('usphere-token')
     loginUserStore.setUserInfo('', '')
     loginUserStore.setIsLogin(false)
     showLogoutPopup.value = false
-    toast.success(res.message)
+    toast.success(res.data.message)
     return res
   } catch (error) {
     console.log(error)
     toast.error('登出失敗')
+  } finally {
+    loadingStore.setLoading(false)
+    handleCancelLogout()
   }
 }
 
