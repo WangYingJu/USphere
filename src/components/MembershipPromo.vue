@@ -26,7 +26,7 @@ const handleApplyRequest = () => {
       type="button"
       class="text-base leading-5 border rounded border-primary-blue bg-white hover:bg-primary-blue text-primary-blue hover:text-white w-full py-2.5 mb-4"
       :class="{
-        ' disabled:bg-gray-400 disabled:border-gray-400 disabled:hover:none disabled:text-white':
+        'disabled:bg-gray-400 disabled:border-gray-400 disabled:hover:none disabled:text-white':
           isClickApply,
       }"
       :disabled="isClickApply"
