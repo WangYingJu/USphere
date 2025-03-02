@@ -190,9 +190,12 @@ const breadcrumbData = [
 const getTopicDetail = async (id) => {
   try {
     const res = await fetchTopicDetail(id)
+    tempTopicTitle.value = res.title
+    tempTopicContent.value = res.content
     return res
   } catch (error) {
     console.log(error)
+    toast.error('獲取話題失敗')
     throw error
   }
 }
@@ -201,14 +204,6 @@ onMounted(() => {
   // 如果有 id 則代表是編輯話題頁面
   if (route.query.id) {
     getTopicDetail(route.query.id)
-      .then((res) => {
-        tempTopicTitle.value = res.title
-        tempTopicContent.value = res.content
-      })
-      .catch((error) => {
-        console.log(error)
-        toast.error('獲取話題失敗')
-      })
   }
 })
 
