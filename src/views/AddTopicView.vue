@@ -38,7 +38,10 @@ const tempTopicTitle = ref('')
 const tempTopicContent = ref('')
 
 const canPublish = () =>
-  tempTopicContent.value.length <= contentMaxLength && tempTopicTitle.value.length <= titleMaxLength
+  tempTopicTitle.value.trim().length > 0 &&
+  tempTopicContent.value.trim().length > 0 &&
+  tempTopicContent.value.length <= contentMaxLength &&
+  tempTopicTitle.value.length <= titleMaxLength
 const isSubmit = ref(false)
 
 // 字數計算方法
