@@ -7,23 +7,31 @@ import PopupConfirm from '@/components/PopupConfirm.vue'
 import { useToast } from 'vue-toastification'
 import { fetchLogout } from '@/apis/logout'
 import { useLoading } from '@/stores/useLoading'
+import { useRouter } from 'vue-router'
 
 const store = useTopicsStore()
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 const toast = useToast()
 const loadingStore = useLoading()
+const router = useRouter()
 
 // 搜尋按鍵 變更 api 參數
 const handleSearch = () => {
   if (store.keywordString.trim() === '') return
 
-  store.getTopicsData({
-    keyword: store.keywordString.trim(),
-    sort: 'null',
-    limit: 3,
-    page: 1,
-  })
+  loadingStore.setLoading(true)
+  store
+    .getTopicsData({
+      keyword: store.keywordString.trim(),
+      sort: 'null',
+      limit: 3,
+      page: 1,
+    })
+    .finally(() => {
+      router.push('/')
+      loadingStore.setLoading(false)
+    })
 }
 // store.keywordString 值為空字串時執行
 const handleChange = (e) => {
