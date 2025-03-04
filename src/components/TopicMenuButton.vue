@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref, nextTick } from 'vue'
+import { defineProps, ref } from 'vue'
 import TopicMenu from './TopicMenu.vue'
 import { onClickOutside } from '@vueuse/core'
 
@@ -22,10 +22,11 @@ const closeMenu = () => {
 }
 // 點擊外部關閉菜單
 const menuRef = ref(null)
-onClickOutside(menuRef, async () => {
-  await nextTick()
-  // closeMenu() 會等 Vue 更新完 DOM 後下一次再執行，才不會影響 toggleMenu()
-  closeMenu()
+onClickOutside(menuRef, () => {
+  // closeMenu() 會延遲到下一個 tick（ Vue 更新完 DOM 後 ），才不會影響 toggleMenu()
+  setTimeout(() => {
+    closeMenu()
+  }, 0)
 })
 </script>
 
