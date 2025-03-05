@@ -1,5 +1,7 @@
 <script setup>
-import { watch } from 'vue'
+import { watch, toRef, ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
+
 const props = defineProps({
   title: String, // 彈窗主標
   message: String, // 彈窗內文
@@ -9,21 +11,26 @@ const props = defineProps({
   onCancel: Function, // 點擊“取消”按鈕時的回調
   onConfirm: Function, // 點擊“確定”按鈕時的回調
 })
+
+const showRef = toRef(props, 'show')
 // 阻止背景滾動
-watch(
-  () => props.show,
-  (newVal) => {
-    if (newVal) {
-      document.body.classList.add('overflow-hidden') // 禁止滾動
-    } else {
-      document.body.classList.remove('overflow-hidden') // 恢復滾動
-    }
-  },
-)
+watch(showRef, (newVal) => {
+  if (newVal) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+})
+
+const popupRef = ref(null)
+// 點擊外部關閉彈窗
+onClickOutside(popupRef, () => {
+  props.onCancel()
+})
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport to="#app">
     <div
       v-if="show"
       class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center z-50"
@@ -31,6 +38,7 @@ watch(
       <main
         class="bg-white rounded border-gray-250 sm:w-[512px] sm:min-h-60 p-6 flex flex-col"
         @click.stop
+        ref="popupRef"
       >
         <h3 class="text-xl mb-8">{{ title }}</h3>
         <p class="text-base">{{ message }}</p>
@@ -46,9 +54,3 @@ watch(
     </div>
   </Teleport>
 </template>
-
-<style>
-.overflow-hidden {
-  overflow: hidden;
-}
-</style>

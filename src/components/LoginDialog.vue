@@ -6,8 +6,8 @@ import { fetchLogin } from '@/apis/login'
 import { useToast } from 'vue-toastification'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
-import { ref } from 'vue'
 import { useLoading } from '@/stores/useLoading'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const toast = useToast()
 const loginUserStore = useLoginUser()
@@ -57,10 +57,19 @@ const schema = Yup.object().shape({
   email: Yup.string().email().required(),
   password: Yup.string().min(6).required(),
 })
+
+// dialog 渲染時 阻止背景滾動
+onMounted(() => {
+  document.body.style.overflow = 'hidden'
+})
+// dialog 卸載時 解除背景滾動
+onUnmounted(() => {
+  document.body.style.overflow = ''
+})
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport to="#app">
     <div class="fixed inset-0 bg-primary-bg flex justify-center items-center z-50">
       <div class="relative bg-white rounded border border-gray-250 px-5 py-10">
         <h2 class="text-xl font-bold text-primary-blue text-center mb-9">歡迎回到 USphere!</h2>

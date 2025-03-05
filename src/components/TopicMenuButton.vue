@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps, ref } from 'vue'
 import TopicMenu from './TopicMenu.vue'
+import { onClickOutside } from '@vueuse/core'
 
 const { topicData } = defineProps({
   topicData: {
@@ -19,6 +20,14 @@ const toggleMenu = () => {
 const closeMenu = () => {
   isMenuVisible.value = false
 }
+// 點擊外部關閉菜單
+const menuRef = ref(null)
+onClickOutside(menuRef, () => {
+  // closeMenu() 會延遲到下一個 tick（ Vue 更新完 DOM 後 ），才不會影響 toggleMenu()
+  setTimeout(() => {
+    closeMenu()
+  }, 0)
+})
 </script>
 
 <template>
@@ -30,6 +39,7 @@ const closeMenu = () => {
     <!-- 菜單選項 -->
     <div
       v-if="isMenuVisible"
+      ref="menuRef"
       class="absolute end-0 -translate-x-5 w-max popup-container z-50 bg-white border border-gray-250 shadow-lg rounded"
     >
       <TopicMenu :topic="topicData" @close-menu="closeMenu" />

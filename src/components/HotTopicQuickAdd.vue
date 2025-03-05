@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits } from 'vue'
+import { defineEmits, ref } from 'vue'
 import { useLoginDialog } from '@/stores/useLoginDialog'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useToast } from 'vue-toastification'
@@ -7,16 +7,19 @@ import { useToast } from 'vue-toastification'
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 const toast = useToast()
+const isClickAddTopic = ref(false)
 
 // 自定義事件
 const emit = defineEmits(['navigate'])
 function handleAbandonClick() {
+  isClickAddTopic.value = true
   if (loginUserStore.isLogin) {
     emit('navigate')
   } else {
     toast.warning('請先登入')
     loginDialogStore.openDialog()
   }
+  isClickAddTopic.value = false
 }
 </script>
 
