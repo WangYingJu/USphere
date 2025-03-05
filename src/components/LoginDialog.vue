@@ -84,15 +84,17 @@ onUnmounted(() => {
             name="email"
             type="email"
             label="E-MAIL"
-            placeholder="Your email address"
-            success-message="Got it, we won't spam you!"
+            placeholder="請輸入電子郵件地址"
+            success-message="看起來沒問題！"
+            error-message="請輸入正確的電子郵件地址"
           />
           <TextInput
             name="password"
             type="password"
             label="密碼"
-            placeholder="Your password"
-            success-message="Nice and secure!"
+            placeholder="請輸入密碼"
+            success-message="看起來沒問題！"
+            error-message="密碼必須是至少 6 個字元"
           />
 
           <div class="flex items-center gap-2">
