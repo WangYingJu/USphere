@@ -2,7 +2,7 @@
   <Teleport to="#app">
     <div
       role="status"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-25"
+      class="fixed inset-0 z-99 flex items-center justify-center bg-black bg-opacity-25"
     >
       <svg
         aria-hidden="true"

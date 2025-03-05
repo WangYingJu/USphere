@@ -26,6 +26,7 @@ const checkWhoami = async () => {
 }
 
 onMounted(() => {
+  // 沒有 token 的話就 return
   if (!localStorage.getItem('usphere-token')) return
   checkWhoami()
 })

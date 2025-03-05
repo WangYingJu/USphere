@@ -1,47 +1,22 @@
 <script setup>
 import { defineEmits } from 'vue'
 import { useLoginDialog } from '@/stores/useLoginDialog'
-import { fetchUserInfo } from '@/apis/whoami'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useToast } from 'vue-toastification'
-import { useLoading } from '@/stores/useLoading'
 
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 const toast = useToast()
-const loadingStore = useLoading()
-
-// 確認 token 是否有效
-const checkWhoami = async () => {
-  try {
-    const res = await fetchUserInfo()
-    loginUserStore.setUserInfo(res.user.name, res.user.pic)
-    return res
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
 
 // 自定義事件
 const emit = defineEmits(['navigate'])
 function handleAbandonClick() {
-  loadingStore.setLoading(true)
-  //  檢查是否有有效的 token
-  checkWhoami()
-    .then(() => {
-      // 有有效的 token
-      emit('navigate')
-    })
-    .catch((error) => {
-      // 沒有 token 或無效的 token
-      console.log(error)
-      toast.warning('請先登入')
-      loginDialogStore.openDialog()
-    })
-    .finally(() => {
-      loadingStore.setLoading(false)
-    })
+  if (loginUserStore.isLogin) {
+    emit('navigate')
+  } else {
+    toast.warning('請先登入')
+    loginDialogStore.openDialog()
+  }
 }
 </script>
 
