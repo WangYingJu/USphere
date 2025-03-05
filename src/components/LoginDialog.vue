@@ -8,7 +8,6 @@ import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
 import { useLoading } from '@/stores/useLoading'
 import { ref, onMounted, onUnmounted } from 'vue'
-import { onClickOutside } from '@vueuse/core'
 
 const toast = useToast()
 const loginUserStore = useLoginUser()
@@ -59,13 +58,6 @@ const schema = Yup.object().shape({
   password: Yup.string().min(6).required(),
 })
 
-const dialogRef = ref(null)
-// 點擊外部關閉 dialog
-onClickOutside(dialogRef, () => {
-  loginDialogStore.closeDialog()
-  console.log('被點擊了')
-})
-
 // dialog 渲染時 阻止背景滾動
 onMounted(() => {
   document.body.style.overflow = 'hidden'
@@ -79,7 +71,7 @@ onUnmounted(() => {
 <template>
   <Teleport to="#app">
     <div class="fixed inset-0 bg-primary-bg flex justify-center items-center z-50">
-      <div class="relative bg-white rounded border border-gray-250 px-5 py-10" ref="dialogRef">
+      <div class="relative bg-white rounded border border-gray-250 px-5 py-10">
         <h2 class="text-xl font-bold text-primary-blue text-center mb-9">歡迎回到 USphere!</h2>
         <Form
           @submit="onSubmit"
