@@ -37,8 +37,22 @@ const showUnsavedEditPopup = ref(false)
 const tempTopicTitle = ref('')
 const tempTopicContent = ref('')
 
-const canPublish = () =>
-  tempTopicContent.value.length <= contentMaxLength && tempTopicTitle.value.length <= titleMaxLength
+const canPublish = () => {
+  // 標題或內容 沒輸入 則不可發布
+  if (tempTopicTitle.value.trim().length === 0 || tempTopicContent.value.trim().length === 0) {
+    return false
+  }
+  // 標題或內容 字數超過限制 則不可發布
+  if (
+    tempTopicTitle.value.length > titleMaxLength ||
+    tempTopicContent.value.length > contentMaxLength
+  ) {
+    return false
+  }
+
+  return true
+}
+
 const isSubmit = ref(false)
 
 // 字數計算方法
