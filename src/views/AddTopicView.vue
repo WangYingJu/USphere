@@ -12,6 +12,7 @@ import { useToast } from 'vue-toastification'
 import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
+import { fetchTopicDetail } from '@/apis/topicDetail'
 
 const toast = useToast()
 const route = useRoute()
@@ -185,12 +186,24 @@ const breadcrumbData = [
   { name: pageName.value, path: null },
 ]
 
+// 獲取 topics 詳細內容資料 api
+const getTopicDetail = async (id) => {
+  try {
+    const res = await fetchTopicDetail(id)
+    tempTopicTitle.value = res.title
+    tempTopicContent.value = res.content
+    return res
+  } catch (error) {
+    console.log(error)
+    toast.error('獲取話題失敗')
+    throw error
+  }
+}
+
 onMounted(() => {
   // 如果有 id 則代表是編輯話題頁面
   if (route.query.id) {
-    tempTopicTitle.value = route.query.title
-    tempTopicContent.value = route.query.content
-    router.push({ query: { id: route.query.id } })
+    getTopicDetail(route.query.id)
   }
 })
 
