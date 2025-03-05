@@ -55,7 +55,7 @@ const handleConfirmLogout = async () => {
     loginUserStore.setUserInfo('', '')
     loginUserStore.setIsLogin(false)
     showLogoutPopup.value = false
-    toast.success(res.data.message)
+    toast.success(res.message)
     return res
   } catch (error) {
     console.log(error)

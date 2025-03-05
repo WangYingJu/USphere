@@ -26,11 +26,7 @@ const checkWhoami = async () => {
 // 自定義事件
 const emit = defineEmits(['navigate'])
 function handleAbandonClick() {
-<<<<<<< HEAD
-  isClickAddTopic.value = true
-=======
   loadingStore.setLoading(true)
->>>>>>> 5a3394b (feat: add global loading UI and integrate useLoading store.)
   //  檢查是否有有效的 token
   checkWhoami()
     .then(() => {
@@ -44,11 +40,7 @@ function handleAbandonClick() {
       loginDialogStore.openDialog()
     })
     .finally(() => {
-<<<<<<< HEAD
-      isClickAddTopic.value = false
-=======
       loadingStore.setLoading(false)
->>>>>>> 5a3394b (feat: add global loading UI and integrate useLoading store.)
     })
 }
 </script>
