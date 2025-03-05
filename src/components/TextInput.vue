@@ -2,6 +2,7 @@
 import { defineProps } from 'vue'
 import { toRef } from 'vue'
 import { useField } from 'vee-validate'
+import { computed } from 'vue'
 
 const props = defineProps({
   type: {
@@ -21,6 +22,10 @@ const props = defineProps({
     required: true,
   },
   successMessage: {
+    type: String,
+    default: '',
+  },
+  errorMessage: {
     type: String,
     default: '',
   },
@@ -45,6 +50,16 @@ const {
   // undefined 這裡沒有傳入驗證規則，所以會使用 Form 上的 validationSchema
   initialValue: props.value, // 初始值為父元件的 props.value
 })
+
+const messageStatus = computed(() => {
+  if (errorMessage.value) {
+    return props.errorMessage
+  }
+  if (meta.valid) {
+    return props.successMessage
+  }
+  return ''
+})
 </script>
 
 <template>
@@ -67,10 +82,13 @@ const {
     />
     <span
       class="absolute top-0 right-0 text-sm leading-5 m-0"
-      v-show="errorMessage || meta.valid"
-      :class="{ 'text-red-500': errorMessage, 'text-green-500': meta.valid }"
+      v-show="messageStatus"
+      :class="{
+        'text-red-500': errorMessage,
+        'text-green-500': meta.valid,
+      }"
     >
-      {{ errorMessage || successMessage }}
+      {{ messageStatus }}
     </span>
   </div>
 </template>
