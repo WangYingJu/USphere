@@ -34,6 +34,9 @@ export default {
           'customizing-1060': '1060px',
         }
       },
+      zIndex: {
+        99: 99
+      }
     },
     colors: {
       transparent: 'transparent',
