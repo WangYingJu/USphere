@@ -11,7 +11,7 @@ const router = useRouter()
 const topicTitle = ref('')
 
 // 接收來自子元件 TopicDetailCard 的資料
-function handleTitleUpdate(newTitle) {
+const handleTitleUpdate = (newTitle) => {
   topicTitle.value = newTitle
 }
 const breadcrumbData = computed(() => [
