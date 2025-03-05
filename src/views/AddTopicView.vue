@@ -21,7 +21,7 @@ const store = useTopicsStore()
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 
-function addContentHeight(event) {
+const addContentHeight = (event) => {
   // 重設textarea高度，防止高度不斷累加
   event.target.style.height = 'auto'
   // 設定textarea為自動增長的高度
@@ -71,12 +71,12 @@ watch(tempTopicContent, (newVal) => {
 })
 
 // 點擊'忍痛放棄'
-function handleAbandonClick() {
+const handleAbandonClick = () => {
   showUnsavedPopup.value = true
 }
 
 // 點擊'發表新話題'
-function handlePublishTopic() {
+const handlePublishTopic = () => {
   if (canPublish()) {
     isSubmit.value = true
     postTopic({
@@ -114,12 +114,12 @@ const postTopic = async (params) => {
 }
 
 // 點擊'取消'
-function handleCancel() {
+const handleCancel = () => {
   showUnsavedPopup.value = false
 }
 
 // 點擊showUnsavedPopup的'確定'
-function handleConfirmAbandon() {
+const handleConfirmAbandon = () => {
   showUnsavedPopup.value = false
   clearTemp()
   setTimeout(() => {
@@ -132,18 +132,18 @@ function handleConfirmAbandon() {
 }
 
 // 點擊 showUnsavedEditPopup的'取消'
-function handleCancelEdit() {
+const handleCancelEdit = () => {
   showUnsavedEditPopup.value = false
 }
 
 // 點擊 showUnsavedEditPopup的'確定'
-function handleConfirmAbandonEdit() {
+const handleConfirmAbandonEdit = () => {
   const id = route.query.id
   router.replace(`/topics/${id}`)
 }
 
 // 點擊 儲存編輯
-function handleSaveEdit() {
+const handleSaveEdit = () => {
   if (canPublish()) {
     isSubmit.value = true
     patchTopic(route.query.id, {
@@ -180,12 +180,12 @@ const patchTopic = async (id, params) => {
 }
 
 // 點擊 放棄編輯
-function handleUnsavedEdit() {
+const handleUnsavedEdit = () => {
   showUnsavedEditPopup.value = true
 }
 
 // 清空輸入框邏輯
-function clearTemp() {
+const clearTemp = () => {
   tempTopicTitle.value = ''
   tempTopicContent.value = ''
 }
