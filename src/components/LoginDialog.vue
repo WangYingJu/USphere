@@ -7,17 +7,20 @@ import { useToast } from 'vue-toastification'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
 import { ref } from 'vue'
+import { useLoading } from '@/stores/useLoading'
 
 const toast = useToast()
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 const isClicked = ref(false)
+const loadingStore = useLoading()
 
 // 提交成功時的處理
 const onSubmit = async (params) => {
   // 防止重複點擊
   if (isClicked.value) return
   isClicked.value = true
+  loadingStore.setLoading(true)
   try {
     const res = await fetchLogin(params)
     loginDialogStore.closeDialog()
@@ -36,6 +39,7 @@ const onSubmit = async (params) => {
     if (error.status === 401) return toast.error('帳號或密碼錯誤')
     toast.error('登入失敗')
   } finally {
+    loadingStore.setLoading(false)
     isClicked.value = false
   }
 }

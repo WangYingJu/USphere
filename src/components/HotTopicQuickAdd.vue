@@ -4,12 +4,12 @@ import { useLoginDialog } from '@/stores/useLoginDialog'
 import { fetchUserInfo } from '@/apis/whoami'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useToast } from 'vue-toastification'
-import { ref } from 'vue'
+import { useLoading } from '@/stores/useLoading'
 
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 const toast = useToast()
-const isClickAddTopic = ref(false)
+const loadingStore = useLoading()
 
 // 確認 token 是否有效
 const checkWhoami = async () => {
@@ -26,7 +26,11 @@ const checkWhoami = async () => {
 // 自定義事件
 const emit = defineEmits(['navigate'])
 function handleAbandonClick() {
+<<<<<<< HEAD
   isClickAddTopic.value = true
+=======
+  loadingStore.setLoading(true)
+>>>>>>> 5a3394b (feat: add global loading UI and integrate useLoading store.)
   //  檢查是否有有效的 token
   checkWhoami()
     .then(() => {
@@ -40,7 +44,11 @@ function handleAbandonClick() {
       loginDialogStore.openDialog()
     })
     .finally(() => {
+<<<<<<< HEAD
       isClickAddTopic.value = false
+=======
+      loadingStore.setLoading(false)
+>>>>>>> 5a3394b (feat: add global loading UI and integrate useLoading store.)
     })
 }
 </script>
