@@ -1,5 +1,6 @@
 <script setup>
 import AppHeader from './components/AppHeader.vue'
+import AppFooter from './components/AppFooter.vue'
 import LoginDialog from './components/LoginDialog.vue'
 import { useLoginDialog } from './stores/useLoginDialog'
 import { fetchUserInfo } from './apis/whoami'
@@ -33,8 +34,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <AppHeader />
-  <RouterView />
+  <div class="flex flex-col min-h-screen">
+    <AppHeader />
+    <RouterView />
+    <AppFooter />
+  </div>
   <LoginDialog v-if="loginDialogStore.isShowDialog" />
   <LoadingUI v-if="loadingStore.isLoading" />
 </template>

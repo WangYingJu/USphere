@@ -1,15 +1,5 @@
 <template>
-  <div class="avatar">
-    <h1 class="mx-auto">會員頁尚未開放！</h1>
+  <div class="flex flex-grow justify-center items-center h-40">
+    <h2>會員頁尚未開放！</h2>
   </div>
 </template>
-
-<style>
-@media (min-width: 1024px) {
-  .avatar {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
-</style>
