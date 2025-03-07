@@ -6,6 +6,7 @@ import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useLoginDialog } from '@/stores/useLoginDialog'
+import { useLoading } from '@/stores/useLoading'
 
 const props = defineProps({
   topic: {
@@ -18,6 +19,7 @@ const router = useRouter()
 const toast = useToast()
 const store = useTopicsStore()
 const loginDialogStore = useLoginDialog()
+const loadingStore = useLoading()
 // 定義 關閉菜單 編輯菜單 事件
 const emit = defineEmits(['close-menu'])
 
@@ -40,6 +42,7 @@ const isClicked = ref(false)
 const handleDeleteConfirm = async (id) => {
   try {
     if (isClicked.value) return
+    loadingStore.setLoading(true)
     isClicked.value = true
     await deleteTopic(id)
     store.getTopicsData({
@@ -59,6 +62,7 @@ const handleDeleteConfirm = async (id) => {
     }
     toast.error('刪除失敗')
   } finally {
+    loadingStore.setLoading(false)
     isClicked.value = false
     emit('close-menu')
   }

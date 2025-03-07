@@ -13,6 +13,7 @@ import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
 import { fetchTopicDetail } from '@/apis/topicDetail'
+import { useLoading } from '@/stores/useLoading'
 
 const toast = useToast()
 const route = useRoute()
@@ -20,6 +21,7 @@ const router = useRouter()
 const store = useTopicsStore()
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
+const loadingStore = useLoading()
 
 const addContentHeight = (event) => {
   // 重設textarea高度，防止高度不斷累加
@@ -78,10 +80,13 @@ const handleAbandonClick = () => {
 // 點擊'發表新話題'
 const handlePublishTopic = () => {
   if (canPublish()) {
+    loadingStore.setLoading(true)
     isSubmit.value = true
     postTopic({
       title: tempTopicTitle.value,
       content: tempTopicContent.value,
+    }).finally(() => {
+      loadingStore.setLoading(false)
     })
   } else {
     toast.warning('標題及內容不符合規定')
@@ -217,7 +222,10 @@ const getTopicDetail = async (id) => {
 onMounted(() => {
   // 如果有 id 則代表是編輯話題頁面
   if (route.query.id) {
-    getTopicDetail(route.query.id)
+    loadingStore.setLoading(true)
+    getTopicDetail(route.query.id).finally(() => {
+      loadingStore.setLoading(false)
+    })
   }
 })
 
