@@ -24,8 +24,10 @@ export const useTopicsStore = defineStore('useTopicsStore', () => {
       } else {
         topicsData.value = res
       }
+      return res
     } catch (error) {
       console.log(error)
+      throw error
     }
   }
   // 清空 topics api 資料

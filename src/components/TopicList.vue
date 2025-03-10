@@ -2,26 +2,34 @@
 import TopicMenuButton from './TopicMenuButton.vue'
 import timeToNow from '@/time'
 import { ref, onMounted } from 'vue'
+import { useToast } from 'vue-toastification'
 
 // 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
 // 寫入 Pinia store
 const topicsStore = useTopicsStore()
 const isLoading = ref(false)
+const toast = useToast()
 
 // 載入更多按鍵 變更 api page參數
-const more = () => {
+const more = async () => {
   isLoading.value = true
-  topicsStore
-    .getTopicsData({
+  try {
+    const res = await topicsStore.getTopicsData({
       keyword: topicsStore.keywordString,
       sort: topicsStore.sortSelect,
       limit: 3,
       page: topicsStore.pageNum + 1,
     })
-    .finally(() => {
-      isLoading.value = false
-    })
+    if (res.length === 0) {
+      toast.warning('沒有更多了')
+    }
+  } catch (error) {
+    toast.error('查詢更多話題失敗')
+    console.log(error)
+  } finally {
+    isLoading.value = false
+  }
 }
 const activeSort = ref('')
 // 點擊排序
