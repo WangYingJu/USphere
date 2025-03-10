@@ -106,7 +106,7 @@ onMounted(() => {
           :to="{ name: 'topicDetail', params: { id: topic.id } }"
           class="absolute inset-0"
         />
-        <div class="flex mb-4.5">
+        <div class="flex mb-[18px]">
           <img
             :src="topic.author_pic"
             alt="User Avatar"
@@ -158,7 +158,7 @@ onMounted(() => {
         :key="item"
         class="border rounded border-gray-250 bg-white p-5 mb-5 w-full"
       >
-        <div class="flex mb-4.5">
+        <div class="flex mb-[18px]">
           <svg
             class="w-9 h-9 me-2 text-gray-200"
             aria-hidden="true"
@@ -176,7 +176,7 @@ onMounted(() => {
           </div>
         </div>
         <div class="flex flex-col gap-3">
-          <div class="bg-gray-200 h-4.5 w-48 rounded-full"></div>
+          <div class="bg-gray-200 h-[18px] w-48 rounded-full"></div>
           <div class="bg-gray-200 h-4 w-full rounded-full"></div>
           <div class="bg-gray-200 h-4 w-full rounded-full"></div>
           <div class="bg-gray-200 h-4 w-3/4 rounded-full"></div>

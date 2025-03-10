@@ -44,11 +44,11 @@ const onSubmit = async (params) => {
   }
 }
 // 提交失敗時的處理
+const isInvalidSubmit = ref(false)
 const onInvalidSubmit = () => {
-  const submitBtn = document.querySelector('.submit-btn')
-  submitBtn.classList.add('invalid')
+  isInvalidSubmit.value = true
   setTimeout(() => {
-    submitBtn.classList.remove('invalid')
+    isInvalidSubmit.value = false
   }, 1000)
 }
 
@@ -121,7 +121,10 @@ onUnmounted(() => {
 
           <button
             class="submit-btn w-full text-base font-medium text-white bg-primary-blue rounded py-2 hover:opacity-90"
-            :class="{ 'disabled:bg-gray-400 disabled:hover:opacity-100': isClicked }"
+            :class="{
+              'disabled:bg-gray-400 disabled:hover:opacity-100': isClicked,
+              'animate-shake': isInvalidSubmit,
+            }"
             type="submit"
             :disabled="isClicked"
           >
@@ -138,50 +141,3 @@ onUnmounted(() => {
     </div>
   </Teleport>
 </template>
-
-<style scoped>
-.submit-btn {
-  transition: transform 0.3s ease-in-out;
-}
-.submit-btn.invalid {
-  animation: shake 0.5s;
-  /* When the animation is finished, start again */
-  animation-iteration-count: infinite;
-}
-
-@keyframes shake {
-  0% {
-    transform: translate(1px, 1px);
-  }
-  10% {
-    transform: translate(-1px, -2px);
-  }
-  20% {
-    transform: translate(-3px, 0px);
-  }
-  30% {
-    transform: translate(3px, 2px);
-  }
-  40% {
-    transform: translate(1px, -1px);
-  }
-  50% {
-    transform: translate(-1px, 2px);
-  }
-  60% {
-    transform: translate(-3px, 1px);
-  }
-  70% {
-    transform: translate(3px, 1px);
-  }
-  80% {
-    transform: translate(-1px, -1px);
-  }
-  90% {
-    transform: translate(1px, 2px);
-  }
-  100% {
-    transform: translate(1px, -2px);
-  }
-}
-</style>

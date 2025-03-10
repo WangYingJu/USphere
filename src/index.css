@@ -2,31 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #fafbff;
-}
-
-input[type='search']:focus {
-  outline: none;
-}
-
-.bell-icon::before {
-  content: '1';
-  font-size: 12px;
-  font-weight: bold;
-  text-align: center;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  color: #fff;
-  background-color: #ff4f4f;
-  position: absolute;
-  z-index: 50;
-  top: 4px;
-  right: 4px;
-}
-
 [type='search']::-webkit-search-cancel-button {
   -webkit-appearance: none;
   background-color: #9ca3af;
@@ -36,6 +11,10 @@ input[type='search']:focus {
   height: 16px;
   width: 16px;
   cursor: pointer;
+}
+
+.bell-icon::before {
+  @apply content-['1'] w-4 h-4 rounded-full bg-red-500 absolute z-50 top-1 right-1 text-xs text-white text-center font-bold inline-block;
 }
 
 .Vue-Toastification__toast.toast-custom {

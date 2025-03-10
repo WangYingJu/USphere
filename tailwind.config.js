@@ -1,29 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 import colors from 'tailwindcss/colors'
 import scrollbarHide from 'tailwind-scrollbar-hide'
-import lineClamp from '@tailwindcss/line-clamp'
 
 export default {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
-  // purge: [],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      spacing: {
-        '5px': '5px',
-        '13px': '13px',
-        '30px': '30px',
-        '340px': '340px',
-        '372px': '372px',
-        '512px': '512px',
-        4.5: '18px'
-      },
-      fontSize: {
-        '2.5xl': '2rem',
-      },
       lineHeight: {
         '11': '2.8125rem',
         '6.5': '1.625rem',
@@ -36,6 +21,24 @@ export default {
       },
       zIndex: {
         99: 99
+      },
+      keyframes: {
+        shake: {
+          '0%': { transform: 'translate(1px, 1px)' },
+          '10%': { transform: 'translate(-1px, -2px)' },
+          '20%': { transform: 'translate(-3px, 0px)' },
+          '30%': { transform: 'translate(3px, 2px)' },
+          '40%': { transform: 'translate(1px, -1px)' },
+          '50%': { transform: 'translate(-1px, 2px)' },
+          '60%': { transform: 'translate(-3px, 1px)' },
+          '70%': { transform: 'translate(3px, 1px)' },
+          '80%': { transform: 'translate(-1px, 1px)' },
+          '90%': { transform: 'translate(1px, 2px)' },
+          '100%': { transform: 'translate(1px, -2px)' },
+        }
+      },
+      animation: {
+        shake: 'shake 0.5s linear infinite',
       }
     },
     colors: {
@@ -60,11 +63,7 @@ export default {
       'primary-bg': '#FAFBFF',
     }
   },
-  variants: {
-    extend: {},
-  },
   plugins: [
     scrollbarHide,
-    lineClamp,
   ],
 }
