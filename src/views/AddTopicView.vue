@@ -13,6 +13,7 @@ import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
 import { fetchTopicDetail } from '@/apis/topicDetail'
+import { useLoading } from '@/stores/useLoading'
 
 const toast = useToast()
 const route = useRoute()
@@ -20,6 +21,7 @@ const router = useRouter()
 const store = useTopicsStore()
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
+const loadingStore = useLoading()
 
 const addContentHeight = (event) => {
   // 重設textarea高度，防止高度不斷累加
@@ -91,6 +93,7 @@ const handlePublishTopic = () => {
 // 發布話題邏輯 post
 const postTopic = async (params) => {
   try {
+    loadingStore.setLoading(true)
     const res = await createTopic(params)
     // 儲存取得的 id
     const topicId = res.id
@@ -109,6 +112,7 @@ const postTopic = async (params) => {
     }
     toast.error('發佈失敗')
   } finally {
+    loadingStore.setLoading(false)
     isSubmit.value = false
   }
 }
@@ -203,6 +207,7 @@ const breadcrumbData = [
 // 獲取 topics 詳細內容資料 api
 const getTopicDetail = async (id) => {
   try {
+    loadingStore.setLoading(true)
     const res = await fetchTopicDetail(id)
     tempTopicTitle.value = res.title
     tempTopicContent.value = res.content
@@ -211,6 +216,8 @@ const getTopicDetail = async (id) => {
     console.log(error)
     toast.error('獲取話題失敗')
     throw error
+  } finally {
+    loadingStore.setLoading(false)
   }
 }
 
