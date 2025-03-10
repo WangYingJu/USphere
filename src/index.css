@@ -13,6 +13,10 @@
   cursor: pointer;
 }
 
+.bell-icon::before {
+  @apply content-['1'] w-4 h-4 rounded-full bg-red-500 absolute z-50 top-1 right-1 text-xs text-white text-center font-bold inline-block;
+}
+
 .Vue-Toastification__toast.toast-custom {
   border-radius: 0.25rem;
 }

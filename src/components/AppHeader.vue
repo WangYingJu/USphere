@@ -131,7 +131,7 @@ const handleAuthButton = () => {
         <!-- 系統通知 -->
         <RouterLink
           to="/avatar"
-          class="bell-icon relative w-10 h-10 flex justify-center items-center before:content-['1'] before:w-4 before:h-4 before:rounded-full before:bg-red-500 before:absolute before:z-50 before:top-1 before:right-1 before:text-xs before:text-white before:text-center before:font-bold before:inline-block"
+          class="bell-icon relative w-10 h-10 flex justify-center items-center"
         >
           <img alt="bellIcon" class="w-6 h-6 block" src="@/assets/bellIcon.svg" />
         </RouterLink>
