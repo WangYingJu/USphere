@@ -80,13 +80,10 @@ const handleAbandonClick = () => {
 // 點擊'發表新話題'
 const handlePublishTopic = () => {
   if (canPublish()) {
-    loadingStore.setLoading(true)
     isSubmit.value = true
     postTopic({
       title: tempTopicTitle.value,
       content: tempTopicContent.value,
-    }).finally(() => {
-      loadingStore.setLoading(false)
     })
   } else {
     toast.warning('標題及內容不符合規定')
@@ -96,6 +93,7 @@ const handlePublishTopic = () => {
 // 發布話題邏輯 post
 const postTopic = async (params) => {
   try {
+    loadingStore.setLoading(true)
     const res = await createTopic(params)
     // 儲存取得的 id
     const topicId = res.id
@@ -114,6 +112,7 @@ const postTopic = async (params) => {
     }
     toast.error('發佈失敗')
   } finally {
+    loadingStore.setLoading(false)
     isSubmit.value = false
   }
 }
@@ -208,6 +207,7 @@ const breadcrumbData = [
 // 獲取 topics 詳細內容資料 api
 const getTopicDetail = async (id) => {
   try {
+    loadingStore.setLoading(true)
     const res = await fetchTopicDetail(id)
     tempTopicTitle.value = res.title
     tempTopicContent.value = res.content
@@ -216,16 +216,15 @@ const getTopicDetail = async (id) => {
     console.log(error)
     toast.error('獲取話題失敗')
     throw error
+  } finally {
+    loadingStore.setLoading(false)
   }
 }
 
 onMounted(() => {
   // 如果有 id 則代表是編輯話題頁面
   if (route.query.id) {
-    loadingStore.setLoading(true)
-    getTopicDetail(route.query.id).finally(() => {
-      loadingStore.setLoading(false)
-    })
+    getTopicDetail(route.query.id)
   }
 })
 
