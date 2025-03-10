@@ -25,6 +25,7 @@ const more = async () => {
       toast.warning('沒有更多了')
     }
   } catch (error) {
+    toast.error('查詢更多話題失敗')
     console.log(error)
   } finally {
     isLoading.value = false
