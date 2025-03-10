@@ -40,6 +40,15 @@ const handleChange = (e) => {
   handleSearch()
 }
 
+// 處理搜尋 bar 的 focus blur 狀態
+const isFocus = ref(false)
+const handleFocus = () => {
+  isFocus.value = true
+}
+const handleBlur = () => {
+  isFocus.value = false
+}
+
 // 是否顯示登出彈窗
 const showLogoutPopup = ref(false)
 // 點擊取消 關閉彈窗
@@ -87,6 +96,7 @@ const handleAuthButton = () => {
       <form
         @submit.prevent
         class="container flex justify-between items-center border rounded-full bg-gray-input-bg border-gray-250 py-3 px-4"
+        :class="{ 'outline outline-1 outline-primary-blue border-primary-blue': isFocus }"
         style="width: 520px"
       >
         <input
@@ -95,10 +105,11 @@ const handleAuthButton = () => {
           action="/search"
           method="get"
           name="search-bar"
-          id="search-bar"
           placeholder="尋找話題？試著輸入......寶可夢！"
-          class="w-full bg-gray-input-bg placeholder-gray-300"
+          class="w-full bg-gray-input-bg placeholder-gray-300 focus:outline-none"
           @input="handleChange"
+          @focus="handleFocus"
+          @blur="handleBlur"
         />
         <button type="button" @click="handleSearch">
           <svg
@@ -120,7 +131,7 @@ const handleAuthButton = () => {
         <!-- 系統通知 -->
         <RouterLink
           to="/avatar"
-          class="bell-icon relative w-10 h-10 flex justify-center items-center"
+          class="bell-icon relative w-10 h-10 flex justify-center items-center before:content-['1'] before:w-4 before:h-4 before:rounded-full before:bg-red-500 before:absolute before:z-50 before:top-1 before:right-1 before:text-xs before:text-white before:text-center before:font-bold before:inline-block"
         >
           <img alt="bellIcon" class="w-6 h-6 block" src="@/assets/bellIcon.svg" />
         </RouterLink>
