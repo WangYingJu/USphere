@@ -276,7 +276,7 @@ onUnmounted(() => {
           <textarea
             v-model="tempTopicTitle"
             placeholder="請輸入標題(英文字元50個、中文25字)"
-            class="w-full text-2.5xl leading-11 font-bold placeholder-black outline-none break-words whitespace-pre-wrap resize-none overflow-y-auto"
+            class="w-full text-[2rem] leading-11 font-bold placeholder-black outline-none break-words whitespace-pre-wrap resize-none overflow-y-auto"
             rows="1"
             @input="addContentHeight"
           ></textarea>

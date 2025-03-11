@@ -132,7 +132,7 @@ onMounted(() => {
         <TopicMenuButton :topicData="topicDetail" />
       </div>
       <!-- 主標 -->
-      <h2 class="text-2.5xl leading-11 font-bold mb-2 break-words whitespace-pre-wrap truncate">
+      <h2 class="text-[2rem] leading-11 font-bold mb-2 break-words whitespace-pre-wrap truncate">
         {{ topicDetail.title }}
       </h2>
       <!-- 內文 -->
