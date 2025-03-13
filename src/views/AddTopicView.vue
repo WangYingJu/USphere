@@ -246,6 +246,16 @@ onMounted(() => {
 onUnmounted(() => {
   formDirtyStore.setFormDirty(false)
 })
+
+// 如果在此頁面登出 導回上ㄧ頁
+watch(
+  () => loginUserStore.isLogin,
+  (newVal) => {
+    if (newVal === false) {
+      router.go(-1)
+    }
+  },
+)
 </script>
 
 <template>

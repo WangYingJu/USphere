@@ -27,6 +27,13 @@ export const useLoginUser = defineStore('useLoginUser', () => {
     userInfo.value.pic = pic
   }
 
+  // 是否正在讀取資料 預設是 true，/add-topic 導航守衛會用到
+  const isfetchUser = ref(true)
+  // whoami api會用到 setIsFetchUser
+  const setIsFetchUser = (status) => {
+    isfetchUser.value = status
+  }
+
   // 是否登入
   const isLogin = ref(false)
 
@@ -35,5 +42,5 @@ export const useLoginUser = defineStore('useLoginUser', () => {
     isLogin.value = status
   }
 
-  return { userName, userPic, setUserInfo, isLogin, setIsLogin }
+  return { userName, userPic, setUserInfo, isLogin, setIsLogin, isfetchUser, setIsFetchUser }
 })
