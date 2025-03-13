@@ -90,7 +90,7 @@ const postLike = async (id, type) => {
         <!-- 留言者名稱、時間 -->
         <div class="flex mb-2">
           <p class="text-sm font-medium me-3">{{ comment.user_name }}</p>
-          <time class="text-sm text-gray-450">{{ timeToNow(comment.updated_at) }}</time>
+          <time class="text-sm text-gray-450">{{ timeToNow(comment.created_at) }}</time>
         </div>
         <!-- 留言內容 -->
         <p class="text-sm text-gray-650 mb-2 break-words whitespace-pre-wrap truncate text-wrap">
