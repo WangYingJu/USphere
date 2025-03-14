@@ -146,14 +146,12 @@ const handleAuthButton = () => {
         <!-- 登入登出 icon -->
         <button type="button" class="w-10 h-10" @click="handleAuthButton">
           <img
-            :src="
-              loginUserStore.isLogin
-                ? '/USphere/src/assets/logout.svg'
-                : '/USphere/src/assets/login.svg'
-            "
-            :alt="loginUserStore.isLogin ? '登出' : '登入'"
+            v-if="loginUserStore.isLogin"
+            src="@/assets/logout.svg"
+            alt="登出"
             class="w-6 h-6 block"
           />
+          <img v-else src="@/assets/login.svg" alt="登入" class="w-6 h-6 block" />
         </button>
       </nav>
     </div>
