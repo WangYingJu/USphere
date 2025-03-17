@@ -9,7 +9,9 @@ import { triggerLike } from '@/apis/like'
 import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useToast } from 'vue-toastification'
 import { useLoginDialog } from '@/stores/useLoginDialog'
+import { useLoginUser } from '@/stores/useLoginUser'
 
+const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 const topicsStore = useTopicsStore()
 const toast = useToast()
@@ -86,6 +88,30 @@ const getCommentsCount = (newVal) => {
 onMounted(() => {
   getTopicDetail()
 })
+
+// 重新獲取 topics 的 can_edit_topics
+const reFetchTopicDetail = async () => {
+  try {
+    const res = await fetchTopicDetail(route.params.id)
+    topicDetail.value.can_edit_topics = res.can_edit_topics
+    const topic = topicsStore.topicsData.find((item) => item.id === route.params.id)
+    if (topic) {
+      return (topic.can_edit_topics = res.can_edit_topics)
+    }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+// 監聽 登入狀態來決定是否更新 can_edit_topics
+watch(
+  () => loginUserStore.isLogin,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      reFetchTopicDetail()
+    }
+  },
+)
 </script>
 
 <template>

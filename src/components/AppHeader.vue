@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useTopicsStore } from '@/stores/useTopicsStore'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
@@ -9,7 +9,7 @@ import { fetchLogout } from '@/apis/logout'
 import { useLoading } from '@/stores/useLoading'
 import { useRouter } from 'vue-router'
 
-const store = useTopicsStore()
+const topicsStore = useTopicsStore()
 const loginUserStore = useLoginUser()
 const loginDialogStore = useLoginDialog()
 const toast = useToast()
@@ -18,12 +18,12 @@ const router = useRouter()
 
 // 搜尋按鍵 變更 api 參數
 const handleSearch = () => {
-  if (store.keywordString.trim() === '') return
+  if (topicsStore.keywordString.trim() === '') return
 
   loadingStore.setLoading(true)
-  store
+  topicsStore
     .getTopicsData({
-      keyword: store.keywordString.trim(),
+      keyword: topicsStore.keywordString.trim(),
       sort: 'null',
       limit: 3,
       page: 1,
@@ -57,8 +57,8 @@ const handleCancelLogout = () => {
 }
 // 點擊確認 執行登出
 const handleConfirmLogout = async () => {
-  loadingStore.setLoading(true)
   try {
+    loadingStore.setLoading(true)
     const res = await fetchLogout()
     localStorage.removeItem('usphere-token')
     loginUserStore.setUserInfo('', '')
@@ -83,6 +83,16 @@ const handleAuthButton = () => {
     showLogoutPopup.value = true
   }
 }
+
+// 監聽 登入狀態來決定是否更新 can_edit_topics
+watch(
+  () => loginUserStore.isLogin,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      topicsStore.reFetchTopics()
+    }
+  },
+)
 </script>
 
 <template>
@@ -100,7 +110,7 @@ const handleAuthButton = () => {
         style="width: 520px"
       >
         <input
-          v-model="store.keywordString"
+          v-model="topicsStore.keywordString"
           type="search"
           action="/search"
           method="get"

@@ -1,5 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { fetchUserInfo } from '@/apis/whoami'
+import { useLoading } from './useLoading'
 
 export const useLoginUser = defineStore('useLoginUser', () => {
   // 預設名稱與頭像
@@ -35,5 +37,28 @@ export const useLoginUser = defineStore('useLoginUser', () => {
     isLogin.value = status
   }
 
-  return { userName, userPic, setUserInfo, isLogin, setIsLogin }
+  const loadingStore = useLoading()
+  // 確認 token 是否有效
+  const checkWhoami = async () => {
+    if (!localStorage.getItem('usphere-token')) {
+      setIsLogin(false) // 沒有 token，直接回傳未登入
+      return
+    }
+    if (isLogin.value) return // 已登入，不重複執行打 API
+
+    try {
+      loadingStore.setLoading(true)
+      const res = await fetchUserInfo()
+      setUserInfo(res.user.name, res.user.pic)
+      setIsLogin(true)
+      return res
+    } catch (error) {
+      console.log(error)
+      setIsLogin(false)
+    } finally {
+      loadingStore.setLoading(false)
+    }
+  }
+
+  return { userName, userPic, setUserInfo, isLogin, setIsLogin, checkWhoami }
 })
