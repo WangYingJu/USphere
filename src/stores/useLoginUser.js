@@ -6,7 +6,7 @@ import { useLoading } from './useLoading'
 export const useLoginUser = defineStore('useLoginUser', () => {
   // 預設名稱與頭像
   const defaltName = '匿名使用者'
-  const defaltPic = '/USphere/src/assets/avatarDefault.png'
+  const defaltPic = new URL('@/assets/avatarDefault.png', import.meta.url).href
 
   // 儲存使用者資訊
   const userInfo = ref({
