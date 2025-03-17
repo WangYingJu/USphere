@@ -38,13 +38,14 @@ export const useLoginUser = defineStore('useLoginUser', () => {
   }
 
   const loadingStore = useLoading()
-  const isFetching = ref(true)
   // 確認 token 是否有效
   const checkWhoami = async () => {
     if (!localStorage.getItem('usphere-token')) {
-      isFetching.value = false
-      return false // 沒有 token，視為未登入
+      setIsLogin(false) // 沒有 token，直接回傳未登入
+      return
     }
+    if (isLogin.value) return // 已登入，不重複執行打 API
+
     try {
       loadingStore.setLoading(true)
       const res = await fetchUserInfo()
@@ -55,10 +56,9 @@ export const useLoginUser = defineStore('useLoginUser', () => {
       console.log(error)
       setIsLogin(false)
     } finally {
-      isFetching.value = false
       loadingStore.setLoading(false)
     }
   }
 
-  return { userName, userPic, setUserInfo, isLogin, setIsLogin, isFetching, checkWhoami }
+  return { userName, userPic, setUserInfo, isLogin, setIsLogin, checkWhoami }
 })
