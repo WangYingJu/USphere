@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AvatarView from '../views/AvatarView.vue'
 import TopicDetailView from '../views/TopicDetailView.vue'
@@ -6,7 +6,7 @@ import AddTopicView from '@/views/AddTopicView.vue'
 import { useLoginUser } from '@/stores/useLoginUser'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
