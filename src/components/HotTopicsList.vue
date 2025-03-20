@@ -25,7 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="border rounded border-gray-250 bg-white p-5" style="width: 250px">
+  <div class="border rounded border-gray-250 bg-white p-5">
     <h3 class="text-sm font-bold">熱門話題</h3>
     <ul>
       <li

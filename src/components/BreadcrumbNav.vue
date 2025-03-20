@@ -9,7 +9,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <section class="w-full mb-5">
+  <section class="mb-5">
     <ul class="text-sm text-gray-450 py-[5px] flex truncate">
       <!-- 如果是最後一項，添加 truncate w-full -->
       <li
