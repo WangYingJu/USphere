@@ -115,7 +115,7 @@ watch(
 </script>
 
 <template>
-  <div class="w-full border rounded border-gray-250 bg-white py-[30px] px-10 mb-[30px]">
+  <div class="border rounded border-gray-250 bg-white py-[30px] px-10 mb-[30px]">
     <!-- loading UI -->
     <div v-if="isLoading" class="animate-pulse">
       <div class="flex mb-5">

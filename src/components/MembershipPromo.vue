@@ -15,7 +15,7 @@ const handleApplyRequest = () => {
 </script>
 
 <template>
-  <div class="border rounded border-gray-250 bg-white p-5" style="width: 250px; height: 100%">
+  <div class="border rounded border-gray-250 bg-white p-5">
     <h2 class="text-lg font-semibold leading-6 mb-4">
       <span class="font-extrabold text-primary-blue">US plus</span><br />獨家功能解鎖影響力
     </h2>

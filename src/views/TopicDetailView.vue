@@ -37,12 +37,12 @@ const handleNavigate = () => {
 </script>
 
 <template>
-  <main class="container container-customizing-1060 flex justify-between gap-5 my-[30px]">
-    <div style="width: 790px">
+  <main class="container grid grid-cols-4 gap-5 my-[30px]">
+    <div class="col-span-3">
       <BreadcrumbNav :breadcrumbs="breadcrumbData" />
       <TopicDetailCard @update-data="handleTitleUpdate" />
     </div>
-    <div class="right-sidebar">
+    <div class="col-span-1">
       <HotTopicQuickAdd @navigate="handleNavigate" />
       <HotTopicsList />
     </div>

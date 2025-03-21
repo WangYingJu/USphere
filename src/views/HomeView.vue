@@ -28,10 +28,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="container container-customizing-1060 flex justify-between my-[30px]">
-    <MembershipPromo />
-    <TopicList />
-    <div class="right-sidebar">
+  <main class="container grid grid-cols-4 gap-5 my-[30px]">
+    <div class="col-span-1">
+      <MembershipPromo />
+    </div>
+    <div class="col-span-2">
+      <TopicList />
+    </div>
+    <div class="col-span-1">
       <HotTopicQuickAdd @navigate="handleNavigate" />
       <HotTopicsList />
     </div>

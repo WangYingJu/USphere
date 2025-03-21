@@ -96,18 +96,17 @@ watch(
 </script>
 
 <template>
-  <header class="justify-center bg-white border-b border-gray-250 py-5">
-    <div class="container container-customizing-1060 flex justify-between items-center">
+  <header class="bg-white border-b border-gray-250 py-5">
+    <div class="container grid grid-cols-4 gap-5 items-center">
       <!-- logo -->
-      <RouterLink to="/">
+      <RouterLink to="/" class="col-span-1">
         <img alt="USphere logo" class="logo" src="@/assets/USphere.svg" width="100" height="auto" />
       </RouterLink>
       <!-- 搜尋bar -->
       <form
         @submit.prevent
-        class="container flex justify-between items-center border rounded-full bg-gray-input-bg border-gray-250 py-3 px-4"
+        class="col-span-2 flex justify-between items-center border rounded-full bg-gray-input-bg border-gray-250 py-3 px-4"
         :class="{ 'outline outline-1 outline-primary-blue border-primary-blue': isFocus }"
-        style="width: 520px"
       >
         <input
           v-model="topicsStore.keywordString"
@@ -137,7 +136,7 @@ watch(
         </button>
       </form>
       <!-- 會員區 -->
-      <nav class="flex items-center gap-2">
+      <nav class="col-span-1 flex justify-end items-center gap-2">
         <!-- 系統通知 -->
         <RouterLink
           to="/avatar"
