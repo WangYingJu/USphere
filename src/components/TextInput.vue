@@ -64,7 +64,9 @@ const messageStatus = computed(() => {
 
 <template>
   <div class="relative w-full" :class="{ 'has-error': !!errorMessage, success: meta.valid }">
-    <label :for="name" class="inline-block w-full text-base leading-5 mb-2">{{ label }}</label>
+    <label :for="name" class="inline-block w-full text-sm sm:text-base sm:leading-5 align-top mb-1 sm:mb-2">{{
+      label
+    }}</label>
     <input
       :name="name"
       :id="name"
@@ -73,7 +75,7 @@ const messageStatus = computed(() => {
       :placeholder="placeholder"
       @input="handleChange"
       @blur="handleBlur"
-      class="w-full rounded border text-base leading-none py-3 px-3"
+      class="w-full rounded border text-sm sm:text-base p-2 sm:p-2.5"
       :class="{
         'border-gray-250 focus:outline-primary-blue': !errorMessage && !meta.valid,
         'bg-red-100 text-red-500 border-red-500 focus:outline-red-500': errorMessage,
@@ -81,7 +83,7 @@ const messageStatus = computed(() => {
       }"
     />
     <span
-      class="absolute top-0 right-0 text-sm leading-5 m-0"
+      class="absolute top-0 right-0 text-xs sm:text-sm leading-5"
       v-show="messageStatus"
       :class="{
         'text-red-500': errorMessage,
