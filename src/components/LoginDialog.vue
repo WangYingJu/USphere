@@ -71,7 +71,7 @@ onUnmounted(() => {
 <template>
   <Teleport to="#app">
     <div class="fixed inset-0 bg-primary-bg flex justify-center items-center z-50">
-      <div class="container sm:grid sm:grid-cols-4 md:grid-cols-3 sm:gap-5 p-6 sm:p-0">
+      <div class="container grid grid-cols-1 sm:grid-cols-4 md:grid-cols-3 sm:gap-5">
         <div
           class="sm:col-start-2 md:col-start-2 sm:w-[calc(100%_+_2.5rem)] sm:left-[-1.25rem] sm:col-span-2 md:col-span-1 relative bg-white rounded border border-gray-250 px-5 py-11 sm:py-10"
         >

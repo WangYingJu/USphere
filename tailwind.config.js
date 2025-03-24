@@ -16,8 +16,9 @@ export default {
       container: {
         center: true,
         screens: {
-          'customizing-1060': '1060px',
-        }
+          sm: '100%',
+          md: '1060px',
+        },
       },
       zIndex: {
         99: 99
