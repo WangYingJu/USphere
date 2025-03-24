@@ -71,72 +71,79 @@ onUnmounted(() => {
 <template>
   <Teleport to="#app">
     <div class="fixed inset-0 bg-primary-bg flex justify-center items-center z-50">
-      <div class="relative bg-white rounded border border-gray-250 px-5 py-10">
-        <h2 class="text-xl font-bold text-primary-blue text-center mb-9">歡迎回到 USphere!</h2>
-        <Form
-          @submit="onSubmit"
-          :validation-schema="schema"
-          @invalid-submit="onInvalidSubmit"
-          class="flex flex-col gap-3 w-[340px]"
-          @click.stop
+      <div class="container sm:grid sm:grid-cols-4 md:grid-cols-3 sm:gap-5 p-6 sm:p-0">
+        <div
+          class="sm:col-start-2 md:col-start-2 sm:w-[calc(100%_+_2.5rem)] sm:left-[-1.25rem] sm:col-span-2 md:col-span-1 relative bg-white rounded border border-gray-250 px-5 py-11 sm:py-10"
         >
-          <TextInput
-            name="email"
-            type="email"
-            label="E-MAIL"
-            placeholder="請輸入電子郵件地址"
-            success-message="看起來沒問題！"
-            error-message="請輸入正確的電子郵件地址"
-          />
-          <TextInput
-            name="password"
-            type="password"
-            label="密碼"
-            placeholder="請輸入密碼"
-            success-message="看起來沒問題！"
-            error-message="密碼必須是至少 6 個字元"
-          />
-
-          <div class="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="remember-me"
-              name="remember-me"
-              class="appearance-none relative peer shrink-0 w-6 h-6 rounded border border-gray-250 outline-gray-250 bg-white checked:bg-primary-blue checked:border-0"
-            />
-            <label for="remember-me" class="text-sm font-medium">記住我的資訊</label>
-            <svg
-              class="absolute w-4 h-4 mt-0.5 ms-1 hidden peer-checked:block pointer-events-none"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="20 6 9 17 4 12" class="text-white"></polyline>
-            </svg>
-          </div>
-
-          <button
-            class="submit-btn w-full text-base font-medium text-white bg-primary-blue rounded py-2 hover:opacity-90"
-            :class="{
-              'disabled:bg-gray-400 disabled:hover:opacity-100': isClicked,
-              'animate-shake': isInvalidSubmit,
-            }"
-            type="submit"
-            :disabled="isClicked"
+          <h2 class="sm:text-xl font-bold text-primary-blue text-center mb-5 sm:mb-9">
+            歡迎回到 USphere!
+          </h2>
+          <Form
+            @submit="onSubmit"
+            :validation-schema="schema"
+            @invalid-submit="onInvalidSubmit"
+            class="flex flex-col gap-2 sm:gap-3 mb-4 sm:mb-3"
+            @click.stop
           >
-            登入
-          </button>
-          <RouterLink to="/avatar" class="text-sm font-normal text-primary-blue text-center"
+            <TextInput
+              name="email"
+              type="email"
+              label="E-MAIL"
+              placeholder="請輸入電子郵件地址"
+              success-message="看起來沒問題！"
+              error-message="請輸入正確的電子郵件地址"
+            />
+            <TextInput
+              name="password"
+              type="password"
+              label="密碼"
+              placeholder="請輸入密碼"
+              success-message="看起來沒問題！"
+              error-message="密碼必須是至少 6 個字元"
+            />
+
+            <div class="flex items-center gap-1 sm:gap-2">
+              <input
+                type="checkbox"
+                id="remember-me"
+                name="remember-me"
+                class="appearance-none relative peer shrink-0 w-5 sm:w-6 h-5 sm:h-6 rounded border border-gray-250 outline-gray-250 bg-white checked:bg-primary-blue checked:border-0"
+              />
+              <label for="remember-me" class="text-sm font-medium">記住我的資訊</label>
+              <svg
+                class="absolute w-4 h-4 mt-0.5 ms-1 hidden peer-checked:block pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" class="text-white"></polyline>
+              </svg>
+            </div>
+
+            <button
+              class="submit-btn w-full text-sm sm:text-base font-medium text-white bg-primary-blue rounded py-2 sm:py-2.5 border border-primary-blue hover:opacity-90"
+              :class="{
+                'disabled:border-gray-400 disabled:bg-gray-400 disabled:hover:opacity-100':
+                  isClicked,
+                'animate-shake': isInvalidSubmit,
+              }"
+              type="submit"
+              :disabled="isClicked"
+            >
+              登入
+            </button>
+          </Form>
+          <RouterLink to="/avatar" class="block text-sm font-normal text-primary-blue text-center"
             >還不是會員嗎?</RouterLink
           >
-        </Form>
-        <button type="button" @click="loginDialogStore.closeDialog()">
-          <img src="../assets/CloseIcon.svg" alt="" class="absolute top-5 right-5 w-6 h-auto" />
-        </button>
+          <button type="button" @click="loginDialogStore.closeDialog()">
+            <img src="../assets/CloseIcon.svg" alt="" class="absolute top-5 right-5 w-6 h-auto" />
+          </button>
+        </div>
       </div>
     </div>
   </Teleport>
