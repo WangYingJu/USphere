@@ -24,7 +24,16 @@ function handleAbandonClick() {
 </script>
 
 <template>
-  <div class="border rounded border-gray-250 bg-white p-5 mb-8">
+  <div class="fixed bottom-11 right-6 sm:hidden rounded-full bg-primary-blue p-1">
+    <button
+      type="button"
+      @click="handleAbandonClick"
+      class="w-9 h-9 text-[36px] leading-none text-white text-center align-middle"
+    >
+      ＋
+    </button>
+  </div>
+  <div class="hidden sm:block border rounded border-gray-250 bg-white p-5 mb-8">
     <h2 class="text-lg font-extrabold leading-6 mb-4">USphere<br />這是屬於我們的圈子</h2>
     <p class="text-base leading-6 text-gray-350 mb-4">快來發起新話題，加入我們的圈子吧！</p>
     <button
