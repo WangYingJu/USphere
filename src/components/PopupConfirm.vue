@@ -35,7 +35,7 @@ onClickOutside(popupRef, () => {
       v-if="show"
       class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center z-50"
     >
-      <div class="container sm:grid sm:grid-cols-4 sm:gap-5 p-6 sm:p-0">
+      <div class="container grid grid-cols-1 sm:grid-cols-4 sm:gap-5">
         <main
           class="sm:col-start-2 sm:col-span-2 bg-white rounded border-gray-250 min-h-60 p-5 sm:p-6 flex flex-col"
           @click.stop
