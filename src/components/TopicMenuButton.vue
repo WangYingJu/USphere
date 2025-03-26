@@ -33,7 +33,7 @@ onClickOutside(menuRef, () => {
 <template>
   <div class="ms-auto relative">
     <!-- menu 按鈕 -->
-    <button type="button" class="w-5 h-5" @click.stop.prevent="toggleMenu">
+    <button type="button" class="w-[18px] sm:w-5 h-[18px] sm:h-5" @click.stop.prevent="toggleMenu">
       <img src="../assets/moreIcon.svg" alt="管理" class="w-full h-full" />
     </button>
     <!-- 菜單選項 -->

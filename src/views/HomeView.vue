@@ -28,14 +28,18 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="container grid grid-cols-4 gap-5 my-[30px]">
-    <div class="col-span-1">
+  <main
+    class="relative container grid grid-cols-1 sm:grid-cols-5 md:grid-cols-4 gap-5 sm:pb-[30px]"
+  >
+    <div class="hidden md:block sm:col-span-1 pt-[159px] sm:pt-[121px]">
       <MembershipPromo />
     </div>
-    <div class="col-span-2">
+    <div
+      class="relative w-[calc(100%_+_3rem)] left-[-1.5rem] sm:w-full sm:left-0 sm:col-span-3 md:col-span-2 pt-[159px] sm:pt-[91px]"
+    >
       <TopicList />
     </div>
-    <div class="col-span-1">
+    <div class="hidden sm:block sm:col-span-2 md:col-span-1 pt-[159px] sm:pt-[121px]">
       <HotTopicQuickAdd @navigate="handleNavigate" />
       <HotTopicsList />
     </div>
