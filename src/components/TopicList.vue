@@ -10,6 +10,20 @@ import { useTopicsStore } from '@/stores/useTopicsStore'
 const topicsStore = useTopicsStore()
 const isLoading = ref(false)
 const toast = useToast()
+const topicTabs = [
+  {
+    name: 'newest',
+    text: '最新',
+  },
+  {
+    name: 'oldest',
+    text: '最舊',
+  },
+  {
+    name: 'popular',
+    text: '熱門',
+  },
+]
 
 // 載入更多按鍵 變更 api page參數
 const more = async () => {
@@ -34,6 +48,9 @@ const more = async () => {
 const activeSort = ref('')
 // 點擊排序
 const sort = (sortName) => {
+  // 避免重複打 api
+  if (activeSort.value === sortName) return
+
   isLoading.value = true
   activeSort.value = sortName
   topicsStore.clearTopicsData()
@@ -76,26 +93,21 @@ onMounted(() => {
   <div
     class="py-5 sm:pt-[30px] px-6 sm:px-0 fixed top-[159px] left-0 w-full bg-primary-bg z-40 sm:static sm:top-auto sm:left-auto sm:w-auto"
   >
-    <button
-      @click="sort('newest')"
-      type="button"
-      :class="{
-        'text-sm text-gray-450 hover:text-primary-blue border rounded-full border-gray-250 hover:border-primary-blue bg-white px-4 py-1 me-4': true,
-        'text-primary-blue border-primary-blue': activeSort === 'newest',
-      }"
-    >
-      最新
-    </button>
-    <button
-      @click="sort('oldest')"
-      type="button"
-      :class="{
-        'text-sm text-gray-450 hover:text-primary-blue border rounded-full border-gray-250 hover:border-primary-blue bg-white px-4 py-1 me-4': true,
-        'text-primary-blue border-primary-blue': activeSort === 'oldest',
-      }"
-    >
-      最舊
-    </button>
+    <ul class="flex gap-4">
+      <li v-for="tab in topicTabs" :key="tab.name">
+        <button
+          @click="sort(tab.name)"
+          type="button"
+          class="topic-tab"
+          :class="{
+            active: activeSort === tab.name,
+            'sm:hidden': tab.name === 'popular',
+          }"
+        >
+          {{ tab.text }}
+        </button>
+      </li>
+    </ul>
   </div>
   <div
     class="max-h-none h-[calc(100vh_-_290px)] sm:max-h-[calc(100vh_-_41px)] overflow-y-auto mt-[71px] sm:mt-0"
