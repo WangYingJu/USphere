@@ -123,7 +123,7 @@ onMounted(() => {
           <!-- 管理貼文 -->
           <TopicMenuButton :topicData="topic" @click="addData(topic)" />
         </div>
-        <p class="test-base sm:text-lg font-semibold mb-5 sm:mb-3 sm:truncate">{{ topic.title }}</p>
+        <p class="text-base sm:text-lg font-semibold mb-5 sm:mb-3 sm:truncate">{{ topic.title }}</p>
         <p class="text-sm sm:text-base sm:leading-6.5 text-gray-450 mb-4 sm:mb-3 truncate">
           {{ topic.content }}
         </p>
