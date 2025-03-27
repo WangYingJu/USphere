@@ -259,18 +259,25 @@ watch(
 </script>
 
 <template>
-  <main class="container grid grid-cols-4 gap-5 my-[30px]">
-    <div class="col-span-3">
-      <BreadcrumbNav :breadcrumbs="breadcrumbData" />
+  <main
+    class="container grid grid-cols-1 sm:grid-cols-5 md:grid-cols-4 gap-5 pt-[166px] sm:pt-[121px] sm:pb-[30px]"
+  >
+    <div
+      class="relative w-[calc(100%_+_3rem)] left-[-1.5rem] sm:w-full sm:left-0 sm:col-span-3 md:col-span-3"
+    >
+      <div class="hidden sm:block">
+        <BreadcrumbNav :breadcrumbs="breadcrumbData" />
+      </div>
+      <!-- 新增/編輯話題卡片 -->
       <div
-        class="border rounded border-gray-250 bg-white py-[30px] px-10 mb-[30px] flex flex-col justify-between"
+        class="border-t border-b sm:border sm:rounded border-gray-250 bg-white py-5 sm:py-[30px] px-6 sm:px-10"
       >
         <!-- 發表者資訊 -->
         <div class="flex items-center mb-5">
           <img
             :src="loginUserStore.userPic"
             alt="User Avatar"
-            class="w-10 h-10 object-cover rounded-full me-2"
+            class="w-9 sm:w-10 h-9 sm:h-10 object-cover rounded-full me-3 sm:me-2"
           />
           <div>
             <p class="text-sm leading-4 font-medium">
@@ -286,8 +293,7 @@ watch(
           <textarea
             v-model="tempTopicTitle"
             placeholder="請輸入標題(英文字元50個、中文25字)"
-            class="w-full text-[2rem] leading-11 font-bold placeholder-black outline-none break-words whitespace-pre-wrap resize-none overflow-y-auto"
-            rows="1"
+            class="w-full h-auto resize-none outline-none text-base sm:text-[2rem] sm:leading-11 font-medium sm:font-bold placeholder-black"
             @input="addContentHeight"
           ></textarea>
           <span
@@ -301,7 +307,7 @@ watch(
           <textarea
             v-model="tempTopicContent"
             placeholder="請輸入內容(英文字元600個、中文300字)"
-            class="w-full h-auto resize-none overflow-y-scroll scrollbar-hide focus:outline-none text-base leading-6.5 text-gray-450 max-h-52"
+            class="w-full h-auto resize-none outline-none text-sm sm:text-base sm:leading-6.5 text-gray-450 max-h-56 sm:max-h-52"
             rows="5"
             @input="addContentHeight"
           ></textarea>
@@ -313,7 +319,7 @@ watch(
         </div>
         <!-- 編輯選項 -->
         <div class="mt-auto">
-          <div class="flex justify-end items-center gap-10">
+          <div class="flex justify-end items-center gap-5 sm:gap-10">
             <button
               type="button"
               class="text-sm text-gray-550"
@@ -333,7 +339,7 @@ watch(
         </div>
       </div>
     </div>
-    <div class="col-span-1">
+    <div class="hidden sm:block sm:col-span-2 md:col-span-1">
       <HotTopicQuickAdd @navigate="handleNavigate" v-if="route.query.id" />
       <HotTopicsList />
     </div>
