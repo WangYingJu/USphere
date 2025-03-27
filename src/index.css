@@ -20,6 +20,16 @@
 }
 
 @tailwind components;
+
+@layer components {
+  .topic-tab {
+    @apply text-sm text-gray-450 hover:text-primary-blue border rounded-full border-gray-250 hover:border-primary-blue bg-white px-4 py-1;
+  }
+  .topic-tab.active {
+    @apply text-primary-blue border-primary-blue;
+  }
+}
+
 @tailwind utilities;
 
 [type='search']::-webkit-search-cancel-button {
