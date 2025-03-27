@@ -96,7 +96,9 @@ watch(
 </script>
 
 <template>
-  <header class="bg-white border-b border-gray-250 pt-7 pb-6 sm:py-5">
+  <header
+    class="fixed top-0 left-0 w-full z-50 bg-white border-b border-gray-250 pt-7 pb-6 sm:py-5"
+  >
     <div class="container grid grid-cols-4 gap-6 sm:gap-5 items-center relative">
       <!-- logo -->
       <RouterLink
@@ -143,7 +145,10 @@ watch(
         class="absolute top-0 right-6 sm:static sm:top-auto sm:right-auto sm:col-span-1 flex flex-row-reverse sm:flex-row justify-start sm:justify-end items-center gap-2"
       >
         <!-- 系統通知 -->
-        <RouterLink class="bell-icon relative w-10 h-10 hidden sm:flex justify-center items-center">
+        <RouterLink
+          to="/avatar"
+          class="bell-icon relative w-10 h-10 hidden sm:flex justify-center items-center"
+        >
           <img alt="bellIcon" class="w-6 h-6 block" src="@/assets/bellIcon.svg" />
         </RouterLink>
         <!-- 會員 -->
