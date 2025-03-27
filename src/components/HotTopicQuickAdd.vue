@@ -24,7 +24,14 @@ function handleAbandonClick() {
 </script>
 
 <template>
-  <div class="border rounded border-gray-250 bg-white p-5 mb-8">
+  <button
+    type="button"
+    class="fixed bottom-11 right-6 sm:hidden rounded-full bg-primary-blue p-3"
+    @click="handleAbandonClick"
+  >
+    <img src="@/assets/createTopic.svg" alt="新增話題" class="w-6 h-6 block" />
+  </button>
+  <div class="hidden sm:block border rounded border-gray-250 bg-white p-5 mb-8">
     <h2 class="text-lg font-extrabold leading-6 mb-4">USphere<br />這是屬於我們的圈子</h2>
     <p class="text-base leading-6 text-gray-350 mb-4">快來發起新話題，加入我們的圈子吧！</p>
     <button

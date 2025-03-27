@@ -334,7 +334,7 @@ watch(
       </div>
     </div>
     <div class="col-span-1">
-      <HotTopicQuickAdd @navigate="handleNavigate" />
+      <HotTopicQuickAdd @navigate="handleNavigate" v-if="route.query.id" />
       <HotTopicsList />
     </div>
     <!-- 彈窗 -->
