@@ -58,7 +58,7 @@ const postLike = async (id, type) => {
   <ul v-if="isLoading" class="animate-pulse">
     <li v-for="item in loadingCount" :key="item" class="flex mb-5">
       <svg
-        class="w-10 h-10 me-2 text-gray-200"
+        class="w-9 sm:w-10 h-9 sm:h-10 me-3 sm:me-2 text-gray-200"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
@@ -78,18 +78,18 @@ const postLike = async (id, type) => {
       </div>
     </li>
   </ul>
-  <ul v-else>
-    <li v-for="comment in props.commentsList" :key="comment.id" class="flex mb-5">
+  <ul v-else class="flex flex-col gap-3 sm:gap-5">
+    <li v-for="comment in props.commentsList" :key="comment.id" class="flex">
       <!-- 留言者頭像 -->
       <img
         :src="comment.user_pic"
         alt="User Avatar"
-        class="w-10 h-10 object-cover rounded-full me-2"
+        class="w-9 sm:w-10 h-9 sm:h-10 object-cover rounded-full me-3 sm:me-2"
       />
       <div>
         <!-- 留言者名稱、時間 -->
         <div class="flex mb-2">
-          <p class="text-sm font-medium me-3">{{ comment.user_name }}</p>
+          <p class="text-sm font-bold sm:font-medium me-3">{{ comment.user_name }}</p>
           <time class="text-sm text-gray-450">{{ timeToNow(comment.created_at) }}</time>
         </div>
         <!-- 留言內容 -->
@@ -101,7 +101,7 @@ const postLike = async (id, type) => {
           type="button"
           @click="postLike(comment.id, 'comment')"
           :disabled="disabledCommentId[comment.id]"
-          class="text-[13px] font-medium text-gray-450 disabled:opacity-50"
+          class="text-sm sm:text-[13px] font-medium text-gray-450 disabled:opacity-50"
         >
           讚({{ comment.likes }})
         </button>
