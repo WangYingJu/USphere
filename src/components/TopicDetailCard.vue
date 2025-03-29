@@ -115,12 +115,14 @@ watch(
 </script>
 
 <template>
-  <div class="border rounded border-gray-250 bg-white py-[30px] px-10 mb-[30px]">
+  <div
+    class="border-t border-b sm:border sm:rounded border-gray-250 bg-white py-5 sm:py-[30px] px-6 sm:px-10 mb-2 sm:mb-[30px]"
+  >
     <!-- loading UI -->
     <div v-if="isLoading" class="animate-pulse">
       <div class="flex mb-5">
         <svg
-          class="w-10 h-10 me-2 text-gray-200"
+          class="w-9 sm:w-10 h-9 sm:h-10 me-3 sm:me-2 text-gray-200"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -136,10 +138,10 @@ watch(
         </div>
       </div>
       <div class="flex flex-col gap-3">
-        <div class="bg-gray-200 h-8 w-1/2 rounded-full"></div>
-        <div class="bg-gray-200 h-4 w-full rounded-full"></div>
-        <div class="bg-gray-200 h-4 w-full rounded-full"></div>
-        <div class="bg-gray-200 h-4 w-3/4 rounded-full"></div>
+        <div class="bg-gray-200 h-4 sm:h-8 w-1/2 rounded-full"></div>
+        <div class="bg-gray-200 h-3.5 sm:h-4 w-full rounded-full"></div>
+        <div class="bg-gray-200 h-3.5 sm:h-4 w-full rounded-full"></div>
+        <div class="bg-gray-200 h-3.5 sm:h-4 w-3/4 rounded-full"></div>
       </div>
     </div>
     <div v-else>
@@ -148,7 +150,7 @@ watch(
         <img
           :src="topicDetail.author_pic"
           alt="User Avatar"
-          class="w-10 h-10 object-cover rounded-full me-2"
+          class="w-9 sm:w-10 h-9 sm:h-10 object-cover rounded-full me-3 sm:me-2"
         />
         <div>
           <p class="text-sm leading-4 font-medium">{{ topicDetail.author }}</p>
@@ -158,11 +160,15 @@ watch(
         <TopicMenuButton :topicData="topicDetail" />
       </div>
       <!-- 主標 -->
-      <h2 class="text-[2rem] leading-11 font-bold mb-2 break-words whitespace-pre-wrap truncate">
+      <h2
+        class="text-base sm:text-[2rem] sm:leading-11 font-medium sm:font-bold mb-[10px] sm:mb-2 break-words whitespace-pre-wrap truncate"
+      >
         {{ topicDetail.title }}
       </h2>
       <!-- 內文 -->
-      <p class="text-base leading-6.5 text-gray-450 mb-6 break-words whitespace-pre-wrap truncate">
+      <p
+        class="text-sm sm:text-base leading-[18px] sm:leading-6.5 text-gray-450 mb-[18px] sm:mb-6 break-words whitespace-pre-wrap truncate"
+      >
         {{ topicDetail.content }}
       </p>
       <!-- icon -->
@@ -170,7 +176,7 @@ watch(
         <!-- 留言數 -->
         <div class="flex">
           <button type="button">
-            <img src="../assets/TopicCommentIcon.svg" alt="" class="w-5 h-auto me-1" />
+            <img src="../assets/TopicCommentIcon.svg" alt="" class="w-[18px] sm:w-5 h-auto me-1" />
           </button>
           <p class="text-sm font-medium">{{ topicDetail.comments }}</p>
         </div>
@@ -182,14 +188,12 @@ watch(
             :disabled="isClickLike"
             class="disabled:opacity-50"
           >
-            <img src="../assets/TopicLikeIcon.svg" alt="" class="w-5 h-auto me-1" />
+            <img src="../assets/TopicLikeIcon.svg" alt="" class="w-[18px] sm:w-5 h-auto me-1" />
           </button>
           <p class="text-sm font-medium">{{ topicDetail.likes }}</p>
         </div>
       </div>
     </div>
   </div>
-  <div class="mb-4">
-    <CommentSection :topic="topicDetail" @update-comments="getCommentsCount" />
-  </div>
+  <CommentSection :topic="topicDetail" @update-comments="getCommentsCount" />
 </template>

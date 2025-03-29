@@ -37,12 +37,18 @@ const handleNavigate = () => {
 </script>
 
 <template>
-  <main class="container grid grid-cols-4 gap-5 my-[30px]">
-    <div class="col-span-3">
-      <BreadcrumbNav :breadcrumbs="breadcrumbData" />
+  <main
+    class="container grid grid-cols-1 sm:grid-cols-5 md:grid-cols-4 gap-5 pt-[166px] sm:pt-[121px] sm:pb-[30px]"
+  >
+    <div
+      class="relative w-[calc(100%_+_3rem)] left-[-1.5rem] sm:w-full sm:left-0 sm:col-span-3 md:col-span-3"
+    >
+      <div class="hidden sm:block">
+        <BreadcrumbNav :breadcrumbs="breadcrumbData" />
+      </div>
       <TopicDetailCard @update-data="handleTitleUpdate" />
     </div>
-    <div class="col-span-1">
+    <div class="hidden sm:block sm:col-span-2 md:col-span-1">
       <HotTopicQuickAdd @navigate="handleNavigate" />
       <HotTopicsList />
     </div>

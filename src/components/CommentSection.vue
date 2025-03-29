@@ -107,22 +107,26 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="border rounded border-gray-250 bg-white p-10 mb-4">
-    <h3 class="text-lg font-bold mb-[30px]">
+  <section
+    class="border-t border-b sm:border sm:rounded border-gray-250 bg-white py-5 px-6 sm:p-10"
+  >
+    <h3 class="text-base sm:text-lg font-bold mb-6 sm:mb-[30px]">
       留言 ({{ props.topic.comments ? props.topic.comments : 0 }})
     </h3>
     <!-- 寫下留言 -->
-    <div class="flex mb-5">
+    <div class="flex mb-2 sm:mb-5">
       <img
         :src="loginUserStore.userPic"
         alt="User Avatar"
-        class="w-10 h-10 object-cover rounded-full me-2"
+        class="w-9 sm:w-10 h-9 sm:h-10 object-cover rounded-full me-3 sm:me-2"
       />
-      <div class="w-full min-h-20 border-2 rounded border-gray-250 bg-white p-3">
+      <div
+        class="w-full min-h-20 border sm:border-2 rounded border-gray-250 bg-primary-bg sm:bg-white p-3"
+      >
         <textarea
           v-model="tempComment"
           placeholder="寫下你的留言...(英文字元280個、中文140字)"
-          class="w-full max-h-52 resize-none overflow-x-hidden focus:outline-none text-base text-gray-550 break-words whitespace-pre-wrap truncate text-wrap"
+          class="w-full max-h-52 resize-none overflow-x-hidden focus:outline-none text-sm sm:text-base text-gray-550 bg-primary-bg sm:bg-white break-words whitespace-pre-wrap text-wrap"
           rows="4"
         ></textarea>
         <div class="flex justify-between">
@@ -133,7 +137,7 @@ onUnmounted(() => {
             type="button"
             @click="addComment"
             :disabled="charCount > maxLength || isSubimtComment"
-            class="text-base leading-5 text-primary-blue disabled:opacity-50"
+            class="text-sm sm:text-base leading-5 text-primary-blue disabled:opacity-50"
           >
             送出留言
           </button>
