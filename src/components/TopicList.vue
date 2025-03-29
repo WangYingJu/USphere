@@ -3,6 +3,9 @@ import TopicMenuButton from './TopicMenuButton.vue'
 import timeToNow from '@/time'
 import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
+import { triggerLike } from '@/apis/like'
+import { useLoginDialog } from '@/stores/useLoginDialog'
+import { useLoginUser } from '@/stores/useLoginUser'
 
 // 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
@@ -10,6 +13,8 @@ import { useTopicsStore } from '@/stores/useTopicsStore'
 const topicsStore = useTopicsStore()
 const isLoading = ref(false)
 const toast = useToast()
+const loginDialogStore = useLoginDialog()
+const loginUserStore = useLoginUser()
 const topicTabs = [
   {
     name: 'newest',
@@ -64,10 +69,30 @@ const sort = (sortName) => {
       isLoading.value = false
     })
 }
-// 點擊讚、回覆、珍藏
-const managentTopic = (string) => {
-  console.log(`${string}被點擊了`)
+
+const isClickLike = ref(new Map())
+// 點擊 likeIcon 對話題按讚/取消讚
+const postLike = async (id, type) => {
+  if (!loginUserStore.isLogin) return loginDialogStore.openDialog()
+  try {
+    isClickLike.value.set(id, true)
+    const res = await triggerLike({ id, type })
+    // 更新按讚數
+    topicsStore.topicsData.find((item) => item.id === id).likes = res.data.likes
+    toast.success(res.message)
+    return res
+  } catch (error) {
+    console.log(error)
+    if (error.status === 403) {
+      toast.warning('請先登入')
+      return loginDialogStore.openDialog()
+    }
+    toast.error('操作失敗')
+  } finally {
+    isClickLike.value.set(id, false)
+  }
 }
+
 // 菜單要帶入的貼文資料
 const topicData = ref({})
 const addData = (topic) => {
@@ -110,7 +135,7 @@ onMounted(() => {
     </ul>
   </div>
   <div
-    class="max-h-none h-[calc(100vh_-_290px)] sm:max-h-[calc(100vh_-_41px)] overflow-y-auto mt-[71px] sm:mt-0"
+    class="max-h-none h-[calc(100vh_-_292px)] sm:max-h-[calc(100vh_-_40px)] overflow-y-auto mt-[70px] sm:mt-0"
   >
     <ul class="flex flex-col">
       <li
@@ -149,18 +174,19 @@ onMounted(() => {
           <div class="flex items-center">
             <button
               type="button"
-              @click.stop.prevent="managentTopic('回覆')"
+              @click.stop.prevent=""
               class="w-[18px] sm:w-5 h-[18px] sm:h-5 me-1 rounded-full z-10"
             >
-              <img src="../assets/TopicCommentIcon.svg" alt="讚" class="w-full h-full" />
+              <img src="../assets/TopicCommentIcon.svg" alt="留言" class="w-full h-full" />
             </button>
             <p class="text-sm font-medium">{{ topic.comments }}</p>
           </div>
           <div class="flex items-center">
             <button
               type="button"
-              @click.stop.prevent="managentTopic('讚')"
-              class="w-[18px] sm:w-5 h-[18px] sm:h-5 me-1 rounded-full z-10"
+              @click.stop.prevent="postLike(topic.id, 'topic')"
+              :disabled="isClickLike.get(topic.id) || false"
+              class="w-[18px] sm:w-5 h-[18px] sm:h-5 me-1 rounded-full z-10 disabled:opacity-50"
             >
               <img src="../assets/TopicLikeIcon.svg" alt="讚" class="w-full h-full" />
             </button>
@@ -194,10 +220,10 @@ onMounted(() => {
           </div>
         </div>
         <div class="flex flex-col gap-3">
-          <div class="bg-gray-200 h-[18px] w-48 rounded-full"></div>
-          <div class="bg-gray-200 h-4 w-full rounded-full"></div>
-          <div class="bg-gray-200 h-4 w-full rounded-full"></div>
-          <div class="bg-gray-200 h-4 w-3/4 rounded-full"></div>
+          <div class="bg-gray-200 h-4 sm:h-[18px] w-48 rounded-full"></div>
+          <div class="bg-gray-200 h-3.5 sm:h-4 w-full rounded-full"></div>
+          <div class="bg-gray-200 h-3.5 sm:h-4 w-full rounded-full"></div>
+          <div class="bg-gray-200 h-3.5 sm:h-4 w-3/4 rounded-full"></div>
         </div>
       </li>
     </ul>
