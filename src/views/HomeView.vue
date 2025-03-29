@@ -39,7 +39,7 @@ onUnmounted(() => {
     >
       <TopicList />
     </div>
-    <div class="col-span-none sm:col-span-2 md:col-span-1 sm:pt-[121px]">
+    <div class="sm:col-span-2 md:col-span-1 sm:pt-[121px]">
       <HotTopicQuickAdd @navigate="handleNavigate" />
       <div class="hidden sm:block">
         <HotTopicsList />
