@@ -35,7 +35,7 @@ onUnmounted(() => {
       <MembershipPromo />
     </div>
     <div
-      class="relative w-[calc(100%_+_3rem)] left-[-1.5rem] sm:w-full sm:left-0 sm:col-span-3 md:col-span-2 pt-[159px] sm:pt-[91px]"
+      class="relative w-[calc(100%_+_3rem)] left-[-1.5rem] sm:w-full sm:left-0 sm:col-span-3 md:col-span-2 pt-[159px] sm:pt-[90px]"
     >
       <TopicList />
     </div>
