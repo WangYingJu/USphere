@@ -6,10 +6,10 @@ import { useToast } from 'vue-toastification'
 import { triggerLike } from '@/apis/like'
 import { useLoginDialog } from '@/stores/useLoginDialog'
 import { useLoginUser } from '@/stores/useLoginUser'
-
-// 匯入 useTopicsStore
 import { useTopicsStore } from '@/stores/useTopicsStore'
-// 寫入 Pinia store
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 const topicsStore = useTopicsStore()
 const isLoading = ref(false)
 const toast = useToast()
@@ -68,6 +68,11 @@ const sort = (sortName) => {
     .finally(() => {
       isLoading.value = false
     })
+}
+
+// 點擊留言 icon，跳轉到話題詳情頁面
+const goToDetailPage = (id) => {
+  router.push({ name: 'topicDetail', params: { id }, hash: '#commentSection' })
 }
 
 const isClickLike = ref(new Map())
@@ -174,7 +179,7 @@ onMounted(() => {
           <div class="flex items-center">
             <button
               type="button"
-              @click.stop.prevent=""
+              @click.stop.prevent="goToDetailPage(topic.id)"
               class="w-[18px] sm:w-5 h-[18px] sm:h-5 me-1 rounded-full z-10"
             >
               <img src="../assets/TopicCommentIcon.svg" alt="留言" class="w-full h-full" />

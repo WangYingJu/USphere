@@ -46,6 +46,15 @@ watch(
   },
 )
 
+// 點擊 留言 icon，滾動到留言區
+const goToCommentSection = () => {
+  const commentSection = document.querySelector('#comment-section')
+  if (!commentSection) return
+  commentSection.scrollIntoView({
+    behavior: 'smooth',
+  })
+}
+
 // 對話題按讚 post
 const postLike = async (type) => {
   isClickLike.value = true
@@ -175,8 +184,12 @@ watch(
       <div class="flex items-center gap-4">
         <!-- 留言數 -->
         <div class="flex">
-          <button type="button">
-            <img src="../assets/TopicCommentIcon.svg" alt="" class="w-[18px] sm:w-5 h-auto me-1" />
+          <button type="button" @click="goToCommentSection()">
+            <img
+              src="../assets/TopicCommentIcon.svg"
+              alt="留言"
+              class="w-[18px] sm:w-5 h-auto me-1"
+            />
           </button>
           <p class="text-sm font-medium">{{ topicDetail.comments }}</p>
         </div>
@@ -188,12 +201,14 @@ watch(
             :disabled="isClickLike"
             class="disabled:opacity-50"
           >
-            <img src="../assets/TopicLikeIcon.svg" alt="" class="w-[18px] sm:w-5 h-auto me-1" />
+            <img src="../assets/TopicLikeIcon.svg" alt="讚" class="w-[18px] sm:w-5 h-auto me-1" />
           </button>
           <p class="text-sm font-medium">{{ topicDetail.likes }}</p>
         </div>
       </div>
     </div>
   </div>
-  <CommentSection :topic="topicDetail" @update-comments="getCommentsCount" />
+  <div id="comment-section">
+    <CommentSection :topic="topicDetail" @update-comments="getCommentsCount" />
+  </div>
 </template>
