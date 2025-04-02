@@ -8,6 +8,7 @@ import { useToast } from 'vue-toastification'
 import { defineEmits } from 'vue'
 import { useLoginUser } from '@/stores/useLoginUser'
 import { useLoginDialog } from '@/stores/useLoginDialog'
+import { useRoute } from 'vue-router'
 
 const props = defineProps({
   topic: {
@@ -21,6 +22,7 @@ const loginDialogStore = useLoginDialog()
 const emit = defineEmits(['update-comments'])
 const isLoading = ref(false)
 const loadingCount = ref(0)
+const route = useRoute()
 
 // 獲取 留言列表
 const commentsList = ref([])
@@ -29,6 +31,14 @@ const getCommentsList = async (id) => {
   try {
     const res = await fetchComments(id)
     commentsList.value = res
+
+    if (!route.hash) return // 如果沒有 hash 值，就不需要滾動到留言區
+
+    const commentSection = document.querySelector('#comment-section')
+    if (!commentSection) return
+    commentSection.scrollIntoView({
+      behavior: 'smooth',
+    })
   } catch (error) {
     console.log(error)
   } finally {
